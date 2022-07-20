@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="de-CH">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Auswertung Zeitmessung</title>
+  </head>
+  <body>
+    <style>
+      body {
+        font-family: Roobert, -apple-system, BlinkMacSystemFont, "Segoe UI",
+          Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
+          "Segoe UI Symbol";
+      }
+      .big-button {
+        appearance: none;
+        background-color: transparent;
+        border: 2px solid #1a1a1a;
+        border-radius: 15px;
+        box-sizing: border-box;
+        color: #3b3b3b;
+        cursor: pointer;
+        display: inline-block;
+
+        font-size: 16px;
+        font-weight: 600;
+        line-height: normal;
+        margin: 5px;
+        min-height: 30px;
+        min-width: 0;
+        outline: none;
+        padding: 10px 16px;
+        text-align: center;
+        text-decoration: none;
+        transition: all 300ms cubic-bezier(0.23, 1, 0.32, 1);
+        user-select: none;
+        -webkit-user-select: none;
+        touch-action: manipulation;
+        will-change: transform;
+      }
+
+      .big-button:disabled {
+        pointer-events: none;
+      }
+
+      .big-button:hover {
+        color: #fff;
+        background-color: #1a1a1a;
+        box-shadow: rgba(0, 0, 0, 0.25) 0 8px 15px;
+        transform: translateY(-2px);
+      }
+
+      .big-button:active {
+        box-shadow: none;
+        transform: translateY(0);
+      }
+
+      .container-row {
+        display: flex;
+      }
+
+      input[type="file"] {
+        font-size: 0.9em;
+        padding-top: 0.35rem;
+      }
+      /* The snackbar - position it at the bottom and in the middle of the screen */
+      #snackbar {
+        visibility: hidden; /* Hidden by default. Visible on click */
+        min-width: 250px; /* Set a default minimum width */
+        margin-left: -125px; /* Divide value of min-width by 2 */
+        background-color: rgb(255, 0, 0); /* red background color */
+        color: #fff; /* White text color */
+        text-align: center; /* Centered text */
+        border-radius: 10px; /* Rounded borders */
+        padding: 16px; /* Padding */
+        position: fixed; /* Sit on at the bottom of the screen */
+        z-index: 10; /* Add a z-index if needed */
+        left: 50%; /* Center the snackbar */
+        bottom: 30px; /* 30px from the bottom */
+      }
+
+      /* Show the snackbar when clicking on a button (class added with JavaScript) */
+      #snackbar.show {
+        visibility: visible; /* Show the snackbar */
+        /* Add animation: Take 0.5 seconds to fade in and out the snackbar.
+  However, delay the fade out process for 2.5 seconds */
+        -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+        animation: fadein 0.5s, fadeout 0.5s 2.5s;
+      }
+
+      /* Animations to fade the snackbar in and out */
+      @-webkit-keyframes fadein {
+        from {
+          bottom: 0;
+          opacity: 0;
+        }
+        to {
+          bottom: 30px;
+          opacity: 1;
+        }
+      }
+
+      @keyframes fadein {
+        from {
+          bottom: 0;
+          opacity: 0;
+        }
+        to {
+          bottom: 30px;
+          opacity: 1;
+        }
+      }
+
+      @-webkit-keyframes fadeout {
+        from {
+          bottom: 30px;
+          opacity: 1;
+        }
+        to {
+          bottom: 0;
+          opacity: 0;
+        }
+      }
+
+      @keyframes fadeout {
+        from {
+          bottom: 30px;
+          opacity: 1;
+        }
+        to {
+          bottom: 0;
+          opacity: 0;
+        }
+      }
+    </style>
+    <script>
+      function calculate() {
+        if (!validateFiles()) return;
+
+        Promise.all(
+          new Array(
+            Array.from(document.getElementById("start-file").files)[0].text(),
+            Array.from(document.getElementById("finish-file").files)[0].text()
+          )
+        ).then((fileContents) => {
+          let startTimeStamps = JSON.parse(fileContents[0]);
+          let finishTimeStamps = JSON.parse(fileContents[1]);
+          if (startTimeStamps.length != finishTimeStamps.length) {
+            showSnackbar("Start und Ziel Datei sind nicht gleich lang");
+            return;
+          }
+
+          if (!validateTimes(startTimeStamps, finishTimeStamps)) return;
+
+          let results = calculateDifference(startTimeStamps, finishTimeStamps);
+          sortByTime(results);
+          results = results.map((item, i) => {
+            return { rank: i + 1, ...item };
+          });
+          results.forEach(
+            (x) =>
+              (x.result = isNaN(x.result) ? x.result : x.result / 1000 + " s")
+          );
+          fillTable(results);
+          exportResults(results);
+        });
+
+        function validateTimes(startTimeStamps, finishTimeStamps) {
+          if (
+            Math.min(
+              ...startTimeStamps.filter((x) => !!x).map((x) => Date.parse(x))
+            ) >
+            Math.min(
+              ...finishTimeStamps.filter((x) => !!x).map((x) => Date.parse(x))
+            )
+          ) {
+            showSnackbar("Start und Ziel Datei sind vertauscht!");
+            return false;
+          }
+          return true;
+        }
+
+        function calculateDifference(startTimeStamps, finishTimeStamps) {
+          return zip(startTimeStamps, finishTimeStamps).map(function (e, i) {
+            var result;
+            if (!e[0]) result = "DNS";
+            else if (!e[1]) result = "DNF";
+            else result = Date.parse(e[1]) - Date.parse(e[0]);
+            return {
+              number: i + 1,
+              result,
+            };
+          });
+        }
+
+        function zip(list1, list2) {
+          return list1.map(function (e, i) {
+            return [e, list2[i]];
+          });
+        }
+
+        function validateFiles() {
+          if (!document.getElementById("start-file")?.value) {
+            showSnackbar("Startfile fehlt!");
+            return false;
+          }
+          if (!document.getElementById("finish-file")?.value) {
+            showSnackbar("Zielfile fehlt!");
+            return false;
+          }
+          return true;
+        }
+
+        /**
+         * 1. smallest time
+         * 2. DNF
+         * 3. DNS
+         */
+        function sortByTime(results) {
+          results.sort((a, b) => {
+            if (a.result == "DNS" && b.result == "DNF") return 1;
+            if (a.result == "DNF" && b.result == "DNS") return -1;
+            if (!isNaN(a.result) && isNaN(b.result)) return -1;
+            if (isNaN(a.result) && !isNaN(b.result)) return 1;
+            return a.result < b.result;
+          });
+        }
+
+        function exportResults(results) {
+          var dataStr =
+            "data:text/json;charset=utf-8," +
+            encodeURIComponent(JSON.stringify(results));
+          var dlAnchorElem = document.getElementById("downloadAnchorElem");
+          dlAnchorElem.setAttribute("href", dataStr);
+          dlAnchorElem.setAttribute("download", `Results_${Date.now()}.json`);
+          dlAnchorElem.click();
+        }
+
+        function fillTable(results) {
+          let headers = ["Rang", "Startnummer", "Rennzeit"];
+
+          const container = document.getElementById("container");
+          container.innerHTML = "";
+
+          let table = document.createElement("table");
+          let headerRow = document.createElement("tr");
+          headers.forEach((headerText) => {
+            let header = document.createElement("th");
+            let textNode = document.createTextNode(headerText);
+            header.appendChild(textNode);
+            headerRow.appendChild(header);
+          });
+          table.appendChild(headerRow);
+          results.forEach((emp) => {
+            let row = document.createElement("tr");
+            Object.values(emp).forEach((text) => {
+              let cell = document.createElement("td");
+              let textNode = document.createTextNode(text);
+              cell.appendChild(textNode);
+              row.appendChild(cell);
+            });
+            table.appendChild(row);
+          });
+          container.appendChild(table);
+        }
+
+        function showSnackbar(text) {
+          var snackbar = document.getElementById("snackbar");
+          snackbar.innerText = text;
+
+          snackbar.className = "show";
+
+          setTimeout(function () {
+            snackbar.className = snackbar.className.replace("show", "");
+          }, 3000);
+        }
+      }
+    </script>
+
+    <label for="start-file">Startzeiten:</label>
+
+    <input type="file" id="start-file" accept=".json" multiple="false" />
+
+    <label for="finish-file">Zielzeiten:</label>
+
+    <input type="file" id="finish-file" accept=".json" multiple="false" />
+
+    <button
+      type="button"
+      id="evaluate"
+      class="big-button"
+      onclick="calculate()"
+    >
+      Auswerten
+    </button>
+
+    <div id="container"></div>
+    <a id="downloadAnchorElem" style="display: none"></a>
+
+    <div id="snackbar">Some text some message..</div>
+  </body>
+</html>
