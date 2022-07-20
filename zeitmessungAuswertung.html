@@ -157,12 +157,18 @@
             return { rank: i + 1, ...item };
           });
           results.forEach(
-            (x) =>
-              (x.result = isNaN(x.result) ? x.result : x.result / 1000 + " s")
+            (x) => (x.result = isNaN(x.result) ? x.result : msToTime(x.result))
           );
           fillTable(results);
           exportResults(results);
         });
+
+        /**
+         * Format the given milliseconds to HH:mm:ss.s
+         */
+        function msToTime(ms) {
+          return new Date(ms).toISOString().substring(11, 21);
+        }
 
         function validateTimes(startTimeStamps, finishTimeStamps) {
           if (
@@ -277,13 +283,11 @@
     </script>
 
     <label for="start-file">Startzeiten:</label>
-
     <input type="file" id="start-file" accept=".json" multiple="false" />
-
+    <br />
     <label for="finish-file">Zielzeiten:</label>
-
     <input type="file" id="finish-file" accept=".json" multiple="false" />
-
+    <br />
     <button
       type="button"
       id="evaluate"
