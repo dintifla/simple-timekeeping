@@ -62,6 +62,12 @@
         font-size: 0.9em;
         padding-top: 0.35rem;
       }
+
+      th,
+      td {
+        padding: 10px;
+      }
+
       /* The snackbar - position it at the bottom and in the middle of the screen */
       #snackbar {
         visibility: hidden; /* Hidden by default. Visible on click */
@@ -149,16 +155,26 @@
             return;
           }
 
-          if (!validateTimes(startTimeStamps, finishTimeStamps)) return;
+          if (
+            !validateTimes(
+              startTimeStamps.map((x) => x.time),
+              finishTimeStamps.map((x) => x.time)
+            )
+          )
+            return;
 
           let results = calculateDifference(startTimeStamps, finishTimeStamps);
           sortByTime(results);
           results = results.map((item, i) => {
             return { rank: i + 1, ...item };
           });
-          results.forEach(
-            (x) => (x.result = isNaN(x.result) ? x.result : msToTime(x.result))
-          );
+          results.forEach((x) => {
+            x.start = isNaN(x.start) ? x.start : msToTime(x.start.getTime());
+            x.finish = isNaN(x.finish)
+              ? x.finish
+              : msToTime(x.finish.getTime());
+            x.result = isNaN(x.result) ? x.result : msToTime(x.result);
+          });
           fillTable(results);
           exportResults(results);
         });
@@ -186,15 +202,18 @@
         }
 
         function calculateDifference(startTimeStamps, finishTimeStamps) {
-          return zip(startTimeStamps, finishTimeStamps).map(function (e, i) {
-            var result;
-            if (!e[0]) result = "DNS";
-            else if (!e[1]) result = "DNF";
-            else result = Date.parse(e[1]) - Date.parse(e[0]);
-            return {
-              number: i + 1,
-              result,
+          return zip(startTimeStamps, finishTimeStamps).map(function (x) {
+            var entry = {
+              numberPlate: x[0].numberPlate,
+              name: x[0].name,
+              start: x[0].time,
+              finish: x[1].time,
             };
+            if (!entry.start) entry.result = "DNS";
+            else if (!entry.finish) entry.result = "DNF";
+            else
+              entry.result = Date.parse(entry.finish) - Date.parse(entry.start);
+            return entry;
           });
         }
 
@@ -243,7 +262,14 @@
         }
 
         function fillTable(results) {
-          let headers = ["Rang", "Startnummer", "Rennzeit"];
+          let headers = [
+            "Rang",
+            "Startnummer",
+            "Name",
+            "Startzeit",
+            "Zielzeit",
+            "Rennzeit",
+          ];
 
           const container = document.getElementById("container");
           container.innerHTML = "";
@@ -284,10 +310,10 @@
     </script>
 
     <label for="start-file">Startzeiten:</label>
-    <input type="file" id="start-file" accept=".json" multiple="false" />
+    <input type="file" id="start-file" accept=".json" />
     <br />
     <label for="finish-file">Zielzeiten:</label>
-    <input type="file" id="finish-file" accept=".json" multiple="false" />
+    <input type="file" id="finish-file" accept=".json" />
     <br />
     <button
       type="button"
