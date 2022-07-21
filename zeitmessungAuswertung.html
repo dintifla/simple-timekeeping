@@ -255,6 +255,11 @@
         }
 
         function exportResults(results) {
+          exportAsJson(results);
+          exportAsCsv(results);
+        }
+
+        function exportAsJson(results) {
           var dataStr =
             "data:text/json;charset=utf-8," +
             encodeURIComponent(JSON.stringify(results));
@@ -262,6 +267,31 @@
           dlAnchorElem.setAttribute("href", dataStr);
           dlAnchorElem.setAttribute("download", `Results_${Date.now()}.json`);
           dlAnchorElem.click();
+        }
+
+        function exportAsCsv(results) {
+          var dataStr = "data:text/csv;charset=utf-8," + toCsv(results);
+          encodeURIComponent(JSON.stringify(results));
+          var dlAnchorElem = document.getElementById("downloadAnchorElem");
+          dlAnchorElem.setAttribute("href", dataStr);
+          dlAnchorElem.setAttribute("download", `Results_${Date.now()}.csv`);
+          dlAnchorElem.click();
+        }
+
+        function toCsv(data) {
+          const csvRows = [];
+
+          const headers = Object.keys(data[0]);
+          csvRows.push(headers.join(","));
+
+          for (const row of data) {
+            const values = headers.map((header) => {
+              return row[header];
+            });
+
+            csvRows.push(values.join(","));
+          }
+          return csvRows.join("\n");
         }
 
         function fillTable(results) {
