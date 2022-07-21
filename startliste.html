@@ -124,11 +124,17 @@
         numberPlate.id = `numberplate-${rowNumber}`;
         numberPlate.innerText = plateValue
           ? plateValue
-          : _participants
-              .map((p) => p.numberPlate)
-              .reduce((a, b) => Math.max(a, b), 0) + 1;
+          : getNextNumberPlateNumber(_participants);
         row.appendChild(numberPlate);
         return numberPlate;
+      }
+
+      function getNextNumberPlateNumber(participants) {
+        return (
+          participants
+            .map((p) => p.numberPlate)
+            .reduce((a, b) => Math.max(a, b), 0) + 1
+        );
       }
 
       function createNameField(rowNumber, row, nameValue) {
@@ -184,7 +190,7 @@
       }
 
       function load(participants) {
-        _participants = participants;
+        _participants = participants.filter((p) => !p.isSpare);
         if (!_participants) return;
 
         const container = document.getElementById("container");
@@ -200,7 +206,7 @@
       function exportParticipants() {
         var dataStr =
           "data:text/json;charset=utf-8," +
-          encodeURIComponent(JSON.stringify(_participants));
+          encodeURIComponent(JSON.stringify(getWithSpare(_participants)));
         var dlAnchorElem = document.getElementById("downloadAnchorElem");
         dlAnchorElem.setAttribute("href", dataStr);
         dlAnchorElem.setAttribute(
