@@ -227,7 +227,8 @@
             if (a.result == "DNF" && b.result == "DNS") return -1;
             if (!isNaN(a.result) && isNaN(b.result)) return -1;
             if (isNaN(a.result) && !isNaN(b.result)) return 1;
-            return a.result < b.result;
+            if (a.result === b.result) return 0;
+            return a.result < b.result ? -1 : 1;
           });
         }
 
