@@ -152,32 +152,15 @@
       }
     </style>
     <script>
-      let timestamps;
-      let measurementLocation;
+      let _entries = [];
+      let _measurementLocation;
 
-      function newMeasurement() {
-        const participants = parseInt(
-          document.getElementById("participants").value
-        );
-
-        if (!participants) {
-          showSnackbar("Keine Teilnehmerzahl angegeben!");
-          return;
-        }
-        const container = document.getElementById("container");
-        container.innerHTML = "";
-        clearTimestamps(participants);
-        measurementLocation = document.getElementById(
-          "selectMeasurementLocation"
-        ).value;
-        for (let i = 0; i < participants; i++) {
-          let containerRow = createContainerRow(i, container);
-          createButton(i, containerRow, measurementLocation);
-          createDisplay(i, containerRow);
-        }
-      }
-
-      function createContainerRow(rowNumber, container) {
+      function createContainerRow(
+        rowNumber,
+        container,
+        numberPlateValue,
+        nameValue
+      ) {
         let containerRow = document.getElementById(
           `container-row-${rowNumber}`
         );
@@ -188,9 +171,12 @@
           containerRow.classList.add("container-row");
 
           container.appendChild(containerRow);
-          var label = document.createElement("div");
-          label.innerText = rowNumber + 1;
-          containerRow.appendChild(label);
+          var numberPlate = document.createElement("div");
+          numberPlate.innerText = numberPlateValue;
+          containerRow.appendChild(numberPlate);
+          var name = document.createElement("div");
+          name.innerText = nameValue;
+          containerRow.appendChild(name);
         }
         return containerRow;
       }
@@ -220,7 +206,8 @@
           display.onchange = function () {
             try {
               const rowNumber = parseInt(this.id.match(/\d+/g)[0]);
-              timestamps[rowNumber] = parseTime(display.value);
+              _entries[rowNumber].time = parseTime(display.value);
+              saveEntries();
             } catch (error) {}
           };
           container.appendChild(display);
@@ -239,52 +226,86 @@
 
       function addTimestamp(rowNumber) {
         let display = document.getElementById(`timestamp-${rowNumber}`);
-        timestamps[rowNumber] = new Date();
-        display.value = formatDateToTimeString(timestamps[rowNumber]);
-        saveTimestamps();
+        _entries[rowNumber].time = new Date();
+        display.value = formatDateToTimeString(_entries[rowNumber].time);
+        saveEntries();
       }
 
-      function saveTimestamps() {
+      function saveEntries() {
         localStorage.setItem(
-          `measurement-${measurementLocation}`,
-          JSON.stringify(timestamps)
+          `measurement-${_measurementLocation}`,
+          JSON.stringify(_entries)
         );
       }
 
-      function clearTimestamps(participantCount) {
-        timestamps = new Array(participantCount);
-        localStorage.removeItem(`measurement-${measurementLocation}`);
+      function clearEntries() {
+        _entries = [];
+        localStorage.removeItem(`measurement-${_measurementLocation}`);
       }
 
       function loadFromStorage() {
-        measurementLocation = document.getElementById(
-          "selectMeasurementLocation"
+        _measurementLocation = document.getElementById(
+          "select-measurement-location"
         ).value;
-        timestamps = JSON.parse(
-          localStorage.getItem(`measurement-${measurementLocation}`)
+        load(
+          JSON.parse(
+            localStorage.getItem(`measurement-${_measurementLocation}`)
+          )
         );
-        if (!timestamps) return;
+      }
+
+      function loadFromFile() {
+        _measurementLocation = document.getElementById(
+          "select-measurement-location"
+        ).value;
+        clearEntries();
+        Array.from(document.getElementById("load-file").files)[0]
+          .text()
+          .then((text) => {
+            load(JSON.parse(text));
+            saveEntries();
+          });
+      }
+
+      function load(entries) {
+        entries.forEach((e) => delete e.isSpare);
+        _entries = entries;
+        if (!_entries) return;
 
         const container = document.getElementById("container");
         container.innerHTML = "";
-        for (let i = 0; i < timestamps.length; i++) {
-          let containerRow = createContainerRow(i, container);
-          createButton(i, containerRow, measurementLocation);
+        for (let i = 0; i < _entries.length; i++) {
+          let containerRow = createContainerRow(
+            i,
+            container,
+            _entries[i].numberPlate,
+            _entries[i].name
+          );
+          createButton(i, containerRow, _measurementLocation);
           let display = createDisplay(i, containerRow);
-          if (timestamps[i]) {
-            display.value = formatDateToTimeString(timestamps[i]);
+          if (_entries[i].time) {
+            display.value = formatDateToTimeString(
+              Date.parse(_entries[i].time)
+            );
           }
         }
+      }
+
+      function reset() {
+        _entries = [];
+        const container = document.getElementById("container");
+        container.innerHTML = "";
+        document.getElementById("load-file").value = "";
       }
       function exportMeasurements() {
         var dataStr =
           "data:text/json;charset=utf-8," +
-          encodeURIComponent(JSON.stringify(timestamps));
+          encodeURIComponent(JSON.stringify(_entries));
         var dlAnchorElem = document.getElementById("downloadAnchorElem");
         dlAnchorElem.setAttribute("href", dataStr);
         dlAnchorElem.setAttribute(
           "download",
-          `${measurementLocation}_${Date.now()}.json`
+          `${_measurementLocation}_${Date.now()}.json`
         );
         dlAnchorElem.click();
       }
@@ -313,27 +334,24 @@
       }
     </script>
 
-    <label for="participants">Teilnehmer:</label>
-    <input
-      type="number"
-      id="participants"
-      class="big-text-box"
-      min="1"
-      max="5000"
-    />
-    <select id="selectMeasurementLocation" class="big-select">
+    <label for="select-measurement-location">Messort:</label>
+    <select
+      id="select-measurement-location"
+      class="big-select"
+      onchange="reset()"
+    >
       <option>Start</option>
       <option>Ziel</option>
     </select>
 
-    <button
-      type="button"
-      id="new-measurement"
-      class="big-button"
-      onclick="newMeasurement()"
-    >
-      Neu
-    </button>
+    <br />
+    <label for="load-file">Lade Startliste:</label>
+    <input
+      type="file"
+      id="load-file"
+      accept=".json"
+      onchange="loadFromFile()"
+    />
 
     <button
       type="button"

@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="de-CH">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Startliste</title>
+  </head>
+  <body>
+    <style>
+      body {
+        font-family: Roobert, -apple-system, BlinkMacSystemFont, "Segoe UI",
+          Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
+          "Segoe UI Symbol";
+      }
+      .big-button {
+        appearance: none;
+        background-color: transparent;
+        border: 2px solid #1a1a1a;
+        border-radius: 15px;
+        box-sizing: border-box;
+        color: #3b3b3b;
+        cursor: pointer;
+        display: inline-block;
+
+        font-size: 16px;
+        font-weight: 600;
+        line-height: normal;
+        margin: 5px;
+        min-height: 30px;
+        min-width: 0;
+        outline: none;
+        padding: 10px 16px;
+        text-align: center;
+        text-decoration: none;
+        transition: all 300ms cubic-bezier(0.23, 1, 0.32, 1);
+        user-select: none;
+        -webkit-user-select: none;
+        touch-action: manipulation;
+        will-change: transform;
+      }
+
+      .big-button:disabled {
+        pointer-events: none;
+      }
+
+      .big-button:hover {
+        color: #fff;
+        background-color: #1a1a1a;
+        box-shadow: rgba(0, 0, 0, 0.25) 0 8px 15px;
+        transform: translateY(-2px);
+      }
+
+      .big-button:active {
+        box-shadow: none;
+        transform: translateY(0);
+      }
+
+      :root {
+        --input-border: #8b8a8b;
+        --input-focus-h: 245;
+        --input-focus-s: 100%;
+        --input-focus-l: 42%;
+      }
+
+      input {
+        font-size: 16px;
+        font-size: max(16px, 1em);
+        font-family: inherit;
+        padding: 0.25em 0.5em;
+        background-color: #fff;
+        border: 2px solid var(--input-border);
+        border-radius: 4px;
+      }
+
+      .container-row {
+        display: flex;
+        width: 200px;
+      }
+      button {
+        margin: 10px;
+      }
+      div {
+        margin: 10px;
+      }
+    </style>
+    <script>
+      let _participants = [];
+
+      function newParticipantList() {
+        if (_participants.length > 0) exportParticipants();
+        clearParticipants();
+        const container = document.getElementById("container");
+        container.innerHTML = "";
+        appendHeader(container);
+      }
+
+      function appendHeader(container) {
+        const row = document.createElement("div");
+        row.className = "container-row";
+        container.appendChild(row);
+        const numberPlateHeader = document.createElement("div");
+        numberPlateHeader.innerText = "Startnummer";
+        row.appendChild(numberPlateHeader);
+        const nameHeader = document.createElement("div");
+        nameHeader.innerText = "Name";
+        row.appendChild(nameHeader);
+      }
+
+      function createParticipantField() {
+        const container = document.getElementById("container");
+        const rowNumber = _participants.length;
+        let row = createContainerRow(rowNumber, container);
+        const numberPlate = createNumberPlateField(rowNumber, row);
+        createNameField(rowNumber, row);
+
+        _participants.push({
+          numberPlate: parseInt(numberPlate.innerText),
+          name: "",
+        });
+        saveParticipants();
+      }
+
+      function createNumberPlateField(rowNumber, row, plateValue) {
+        let numberPlate = document.createElement("div");
+        numberPlate.id = `numberplate-${rowNumber}`;
+        numberPlate.innerText = plateValue
+          ? plateValue
+          : getNextNumberPlateNumber(_participants);
+        row.appendChild(numberPlate);
+        return numberPlate;
+      }
+
+      function getNextNumberPlateNumber(participants) {
+        return (
+          participants
+            .map((p) => p.numberPlate)
+            .reduce((a, b) => Math.max(a, b), 0) + 1
+        );
+      }
+
+      function createNameField(rowNumber, row, nameValue) {
+        let name = document.createElement("input");
+        name.setAttribute("type", "text");
+        name.id = `participant-name-${rowNumber}`;
+        name.onchange = function () {
+          try {
+            const rowNumber = parseInt(this.id.match(/\d+/g)[0]);
+            _participants[rowNumber].name = name.value;
+            saveParticipants();
+          } catch (error) {}
+        };
+        if (nameValue) name.value = nameValue;
+        row.appendChild(name);
+        return name;
+      }
+
+      function createContainerRow(rowNumber, container) {
+        let containerRow = document.getElementById(
+          `container-row-${rowNumber}`
+        );
+
+        if (!containerRow) {
+          containerRow = document.createElement("div");
+          containerRow.id = `container-row-${rowNumber}`;
+          containerRow.classList.add("container-row");
+          container.appendChild(containerRow);
+        }
+        return containerRow;
+      }
+
+      function saveParticipants() {
+        localStorage.setItem(`participants`, JSON.stringify(_participants));
+      }
+
+      function clearParticipants() {
+        _participants = [];
+        localStorage.removeItem("participants");
+      }
+
+      function loadFromStorage() {
+        load(JSON.parse(localStorage.getItem("participants")));
+      }
+
+      function loadFromFile() {
+        Array.from(document.getElementById("load-file").files)[0]
+          .text()
+          .then((text) => {
+            load(JSON.parse(text));
+            saveParticipants();
+          });
+      }
+
+      function load(participants) {
+        _participants = participants.filter((p) => !p.isSpare);
+        if (!_participants) return;
+
+        const container = document.getElementById("container");
+        container.innerHTML = "";
+        appendHeader(container);
+        for (let i = 0; i < _participants.length; i++) {
+          let row = createContainerRow(i, container);
+          createNumberPlateField(i, row, _participants[i].numberPlate);
+          createNameField(i, row, _participants[i].name);
+        }
+      }
+
+      function exportParticipants() {
+        var dataStr =
+          "data:text/json;charset=utf-8," +
+          encodeURIComponent(JSON.stringify(getWithSpare(_participants)));
+        var dlAnchorElem = document.getElementById("downloadAnchorElem");
+        dlAnchorElem.setAttribute("href", dataStr);
+        dlAnchorElem.setAttribute(
+          "download",
+          `participants_${Date.now()}.json`
+        );
+        dlAnchorElem.click();
+      }
+
+      function getWithSpare(participants) {
+        const SPARE_COUNT = 20;
+        let withSpares = participants.map((p) => p);
+        for (let i = 0; i < SPARE_COUNT; ++i)
+          withSpares.push({
+            numberPlate: getNextNumberPlateNumber(withSpares),
+            name: "",
+            isSpare: true,
+          });
+        return withSpares;
+      }
+    </script>
+
+    <button
+      type="button"
+      id="new-participantList"
+      class="big-button"
+      onclick="newParticipantList()"
+    >
+      Neu
+    </button>
+
+    <button
+      type="button"
+      id="load-participants"
+      class="big-button"
+      onclick="loadFromStorage()"
+    >
+      Load
+    </button>
+    <a id="downloadAnchorElem" style="display: none"></a>
+
+    <button
+      type="button"
+      id="export-participants"
+      class="big-button"
+      onclick="exportParticipants()"
+    >
+      Export
+    </button>
+    <br />
+    <label for="load-file">Lade Startliste:</label>
+    <input
+      type="file"
+      id="load-file"
+      accept=".json"
+      onchange="loadFromFile()"
+    />
+    <br />
+    <button
+      type="button"
+      id="new-participant"
+      class="big-button"
+      onclick="createParticipantField()"
+    >
+      + Teilnehmer
+    </button>
+    <div id="container"></div>
+  </body>
+</html>
