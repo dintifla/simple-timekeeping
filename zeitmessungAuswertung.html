@@ -169,15 +169,18 @@
             return { rank: i + 1, ...item };
           });
           results.forEach((x) => {
-            x.start = isNaN(x.start) ? x.start : msToTime(x.start.getTime());
-            x.finish = isNaN(x.finish)
-              ? x.finish
-              : msToTime(x.finish.getTime());
+            x.start = formatTimestampValue(x.start);
+            x.finish = formatTimestampValue(x.finish);
             x.result = isNaN(x.result) ? x.result : msToTime(x.result);
           });
           fillTable(results);
           exportResults(results);
         });
+
+        function formatTimestampValue(value) {
+          if (!value) return "---";
+          return isNaN(value) ? value : msToTime(value.getTime());
+        }
 
         /**
          * Format the given milliseconds to HH:mm:ss.s
