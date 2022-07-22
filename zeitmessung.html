@@ -268,6 +268,8 @@
       }
 
       function load(entries) {
+        if (!validate(entries)) return;
+
         entries.forEach((e) => delete e.isSpare);
         _entries = entries;
         if (!_entries) return;
@@ -291,6 +293,18 @@
         }
       }
 
+      function validate(entries) {
+        if (!(entries instanceof Array)) {
+          console.log("participants is not an array");
+          return false;
+        }
+        if (!entries.every((p) => "numberPlate" in p && "name" in p)) {
+          showSnackbar("Falsches Datenformat");
+          return false;
+        }
+        return true;
+      }
+      
       function reset() {
         _entries = [];
         const container = document.getElementById("container");
