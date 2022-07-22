@@ -155,13 +155,7 @@
             return;
           }
 
-          if (
-            !validateTimes(
-              startTimeStamps.map((x) => x.time),
-              finishTimeStamps.map((x) => x.time)
-            )
-          )
-            return;
+          if (!validate(startTimeStamps, finishTimeStamps)) return;
 
           let results = calculateDifference(startTimeStamps, finishTimeStamps);
           sortByTime(results);
@@ -189,13 +183,42 @@
           return new Date(ms).toISOString().substring(11, 21);
         }
 
-        function validateTimes(startTimeStamps, finishTimeStamps) {
+        function validate(startTimeStamps, finishTimeStamps) {
+          if (!(startTimeStamps instanceof Array)) {
+            showSnackbar("Start datei ist kein array!");
+            return false;
+          }
+
+          if (!(finishTimeStamps instanceof Array)) {
+            showSnackbar("Ziel datei ist kein array!");
+            return false;
+          }
+          if (
+            !startTimeStamps.every((p) => "numberPlate" in p && "name" in p)
+          ) {
+            showSnackbar("Startdatei hat falsches format!");
+            return false;
+          }
+
+          if (
+            !finishTimeStamps.every((p) => "numberPlate" in p && "name" in p)
+          ) {
+            showSnackbar("Zieldatei hat falsches format!");
+            return false;
+          }
+
           if (
             Math.min(
-              ...startTimeStamps.filter((x) => !!x).map((x) => Date.parse(x))
+              ...startTimeStamps
+                .map((x) => x.time)
+                .filter((x) => !!x)
+                .map((x) => Date.parse(x))
             ) >
             Math.min(
-              ...finishTimeStamps.filter((x) => !!x).map((x) => Date.parse(x))
+              ...finishTimeStamps
+                .map((x) => x.time)
+                .filter((x) => !!x)
+                .map((x) => Date.parse(x))
             )
           ) {
             showSnackbar("Start und Ziel Datei sind vertauscht!");
