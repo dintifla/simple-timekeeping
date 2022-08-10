@@ -159,9 +159,16 @@
 
           let results = calculateDifference(startTimeStamps, finishTimeStamps);
           sortByTime(results);
-          results = results.map((item, i) => {
-            return { rank: i + 1, ...item };
-          });
+          let delay = "---";
+          for (let i = 0; i < results.length; ++i) {
+            if (i !== 0)
+              delay = getDelay(
+                results[0].result,
+                results[i].result,
+                results[i - 1].result
+              );
+            results[i] = { rank: i + 1, ...results[i], delay };
+          }
           results.forEach((x) => {
             x.start = formatTimestampValue(x.start);
             x.finish = formatTimestampValue(x.finish);
@@ -170,6 +177,15 @@
           fillTable(results);
           exportResults(results);
         });
+
+        function getDelay(firstTime, currentTime, previousTime) {
+          if (isNaN(firstTime) || isNaN(currentTime)) return "---";
+
+          let toFirst = currentTime - firstTime;
+          let toPrevious = currentTime - previousTime;
+          if (!isNaN(currentTime))
+            return `+${msToTime(toFirst)} (+${msToTime(toPrevious)})`;
+        }
 
         function formatTimestampValue(value) {
           if (!value) return "---";
@@ -325,6 +341,7 @@
             "Startzeit",
             "Zielzeit",
             "Rennzeit",
+            "Rückstand",
           ];
 
           const container = document.getElementById("container");
