@@ -214,14 +214,23 @@
         d.setHours(parseInt(time[1]));
         d.setMinutes(parseInt(time[2]) || 0);
         d.setSeconds(parseInt(time[3]) || 0);
+        d.setMilliseconds(0);
         return d;
       }
 
       function addTimestamp(rowNumber) {
         let display = document.getElementById(`timestamp-${rowNumber}`);
-        _entries[rowNumber].time = new Date();
-        display.value = formatDateToTimeString(_entries[rowNumber].time);
+        var timestamp = roundTo100Ms(new Date());
+        _entries[rowNumber].time = timestamp;
+        display.value = formatDateToTimeString(timestamp);
         saveEntries();
+      }
+
+      function roundTo100Ms(timestamp) {
+        timestamp.setMilliseconds(
+          Math.round(timestamp.getMilliseconds() / 100) * 100
+        );
+        return timestamp;
       }
 
       function saveEntries() {
