@@ -71,14 +71,6 @@
         border-radius: 4px;
       }
 
-      .number-field {
-        min-width: 10px;
-      }
-
-      .name-field {
-        min-width: 60px;
-      }
-
       .container-row {
         display: flex;
       }
@@ -163,34 +155,19 @@
       let _entries = [];
       let _measurementLocation;
 
-      function createContainerRow(
-        rowNumber,
-        container,
-        numberPlateValue,
-        nameValue
-      ) {
-        let containerRow = document.getElementById(
-          `container-row-${rowNumber}`
-        );
-
-        if (!containerRow) {
-          containerRow = document.createElement("div");
-          containerRow.id = `container-row-${rowNumber}`;
-          containerRow.classList.add("container-row");
-
-          container.appendChild(containerRow);
-          var numberPlate = document.createElement("div");
-          numberPlate.innerText = numberPlateValue;
-          containerRow.appendChild(numberPlate);
-          var name = document.createElement("div");
-          name.className = "name-field"
-          name.innerText = nameValue;
-          containerRow.appendChild(name);
-        }
-        return containerRow;
+      function createTableRow(rowNumber, table, numberPlateValue, nameValue) {
+        const tableRow = table.insertRow();
+        const numberPlate = tableRow.insertCell();
+        numberPlate.innerText = numberPlateValue;
+        tableRow.appendChild(numberPlate);
+        var name = document.createElement("td");
+        name.className = "name-field";
+        name.innerText = nameValue;
+        tableRow.appendChild(name);
+        return tableRow;
       }
 
-      function createButton(rowNumber, container, label) {
+      function createButton(rowNumber, tableRow, label) {
         let button = document.getElementById(`button-${rowNumber}`);
         if (!button) {
           button = document.createElement("button");
@@ -200,12 +177,13 @@
             addTimestamp(rowNumber);
           };
           button.innerText = `${label} ${rowNumber + 1}`;
-          container.appendChild(button);
+          let tableData = tableRow.insertCell();
+          tableData.appendChild(button);
           return button;
         }
       }
 
-      function createDisplay(rowNumber, container) {
+      function createDisplay(rowNumber, tableRow) {
         let display = document.getElementById(`timestamp-${rowNumber}`);
 
         if (!display) {
@@ -224,8 +202,9 @@
               display.value = "";
             }
           };
-          container.appendChild(display);
         }
+        let tableData = tableRow.insertCell();
+        tableData.appendChild(display);
         return display;
       }
 
@@ -290,20 +269,32 @@
 
         const container = document.getElementById("container");
         container.innerHTML = "";
+        const table = document.createElement("table");
+        addHeader(table);
+        const tableBody = table.createTBody();
         for (let i = 0; i < _entries.length; i++) {
-          let containerRow = createContainerRow(
+          let tableRow = createTableRow(
             i,
-            container,
+            tableBody,
             _entries[i].numberPlate,
             _entries[i].name
           );
-          createButton(i, containerRow, _measurementLocation);
-          let display = createDisplay(i, containerRow);
+          createButton(i, tableRow, _measurementLocation);
+          let display = createDisplay(i, tableRow);
           if (_entries[i].time) {
             display.value = formatDateToTimeString(
               Date.parse(_entries[i].time)
             );
           }
+        }
+        container.appendChild(table);
+      }
+
+      function addHeader(table) {
+        var headerRow = table.createTHead().insertRow();
+        for (header of ["Nr.", "Name", "", "Zeit"]) {
+          let cell = headerRow.insertCell();
+          cell.innerText = header;
         }
       }
 
