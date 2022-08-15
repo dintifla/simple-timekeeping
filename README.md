@@ -35,7 +35,7 @@ At the end of an export, there are 20 spare places to be used for late registrat
 
 Once all participants are registered at the start and finished and both files are present. Proceed like this:
 
-1. Correct the gender in the "Start" file if some of the spares were female (set `gender: "F"`)
+1. Correct the category in the "Start" file if some of the spares were female (set `category: "F"`)
 2. Start `zeitmessungAuswertung.html`
 3. Import start- and finishing time files (the ones generated above)
 4. Click "Evaluate" ("Auswerten")
