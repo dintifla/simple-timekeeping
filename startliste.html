@@ -11,6 +11,9 @@
           Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
           "Segoe UI Symbol";
       }
+      .gender-selection {
+        display: flex;
+      }
       .big-button {
         appearance: none;
         background-color: transparent;
@@ -154,6 +157,10 @@
     </style>
     <script>
       let _participants = [];
+      let _gender = {
+        M: true,
+        F: false,
+      };
 
       function newParticipantList() {
         if (_participants.length > 0) exportParticipants();
@@ -170,6 +177,9 @@
         const numberPlateHeader = document.createElement("div");
         numberPlateHeader.innerText = "Startnummer";
         row.appendChild(numberPlateHeader);
+        const genderHeader = document.createElement("div");
+        genderHeader.innerText = "Geschlecht";
+        row.appendChild(genderHeader);
         const nameHeader = document.createElement("div");
         nameHeader.innerText = "Name";
         row.appendChild(nameHeader);
@@ -180,13 +190,46 @@
         const rowNumber = _participants.length;
         let row = createContainerRow(rowNumber, container);
         const numberPlate = createNumberPlateField(rowNumber, row);
+        createGenderSelector(rowNumber, row);
         createNameField(rowNumber, row);
 
         _participants.push({
           numberPlate: parseInt(numberPlate.innerText),
+          gender: "M",
           name: "",
         });
         saveParticipants();
+      }
+
+      function createGenderSelector(rowNumber, row, genderValue) {
+        let genderSelector = document.createElement("div");
+        genderSelector.className = "gender-selection";
+        for (let gender in _gender) {
+          let label = document.createElement("label");
+          label.innerText = gender;
+          let input = document.createElement("input");
+          input.type = "radio";
+          input.name = `gender-${rowNumber}`;
+          input.id = `gender-${gender}-${rowNumber}`;
+          if (genderValue != undefined) {
+            input.checked = gender === genderValue;
+          } else {
+            input.checked = _gender[gender];
+          }
+          input.onchange = function () {
+            const rowNumber = parseInt(this.id.match(/\d+/g)[0]);
+            if (gender === "M")
+              _participants[rowNumber].gender = input.checked ? "M" : "F";
+            else gender == "F";
+            _participants[rowNumber].gender = input.checked ? "F" : "M";
+            saveParticipants();
+          };
+          label.htmlFor = input.id;
+          genderSelector.appendChild(label);
+          genderSelector.appendChild(input);
+        }
+        row.appendChild(genderSelector);
+        return genderSelector;
       }
 
       function createNumberPlateField(rowNumber, row, plateValue) {
@@ -272,6 +315,7 @@
         for (let i = 0; i < _participants.length; i++) {
           let row = createContainerRow(i, container);
           createNumberPlateField(i, row, _participants[i].numberPlate);
+          createGenderSelector(i, row, _participants[i].gender);
           createNameField(i, row, _participants[i].name);
         }
       }
@@ -296,7 +340,7 @@
         dlAnchorElem.setAttribute("href", dataStr);
         dlAnchorElem.setAttribute(
           "download",
-          `participants_${Date.now()}.json`
+          `startListe_${Date.now()}.json`
         );
         dlAnchorElem.click();
       }
@@ -307,6 +351,7 @@
         for (let i = 0; i < SPARE_COUNT; ++i)
           withSpares.push({
             numberPlate: getNextNumberPlateNumber(withSpares),
+            gender: "M",
             name: "",
             isSpare: true,
           });
