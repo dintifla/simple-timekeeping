@@ -11,7 +11,7 @@
           Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
           "Segoe UI Symbol";
       }
-      .gender-selection {
+      .category-selection {
         display: flex;
       }
       .big-button {
@@ -157,7 +157,7 @@
     </style>
     <script>
       let _participants = [];
-      let _gender = {
+      let _categories = {
         M: true,
         F: false,
       };
@@ -177,9 +177,9 @@
         const numberPlateHeader = document.createElement("div");
         numberPlateHeader.innerText = "Startnummer";
         row.appendChild(numberPlateHeader);
-        const genderHeader = document.createElement("div");
-        genderHeader.innerText = "Geschlecht";
-        row.appendChild(genderHeader);
+        const categoryHeader = document.createElement("div");
+        categoryHeader.innerText = "Geschlecht";
+        row.appendChild(categoryHeader);
         const nameHeader = document.createElement("div");
         nameHeader.innerText = "Name";
         row.appendChild(nameHeader);
@@ -190,46 +190,46 @@
         const rowNumber = _participants.length;
         let row = createContainerRow(rowNumber, container);
         const numberPlate = createNumberPlateField(rowNumber, row);
-        createGenderSelector(rowNumber, row);
+        createCategorySelector(rowNumber, row);
         createNameField(rowNumber, row);
 
         _participants.push({
           numberPlate: parseInt(numberPlate.innerText),
-          gender: "M",
+          category: "M",
           name: "",
         });
         saveParticipants();
       }
 
-      function createGenderSelector(rowNumber, row, genderValue) {
-        let genderSelector = document.createElement("div");
-        genderSelector.className = "gender-selection";
-        for (let gender in _gender) {
+      function createCategorySelector(rowNumber, row, categoryValue) {
+        let categorySelector = document.createElement("div");
+        categorySelector.className = "category-selection";
+        for (let category in _categories) {
           let label = document.createElement("label");
-          label.innerText = gender;
+          label.innerText = category;
           let input = document.createElement("input");
           input.type = "radio";
-          input.name = `gender-${rowNumber}`;
-          input.id = `gender-${gender}-${rowNumber}`;
-          if (genderValue != undefined) {
-            input.checked = gender === genderValue;
+          input.name = `category-${rowNumber}`;
+          input.id = `category-${category}-${rowNumber}`;
+          if (categoryValue != undefined) {
+            input.checked = category === categoryValue;
           } else {
-            input.checked = _gender[gender];
+            input.checked = _categories[category];
           }
           input.onchange = function () {
             const rowNumber = parseInt(this.id.match(/\d+/g)[0]);
-            if (gender === "M")
-              _participants[rowNumber].gender = input.checked ? "M" : "F";
-            else gender == "F";
-            _participants[rowNumber].gender = input.checked ? "F" : "M";
+            if (category === "M")
+              _participants[rowNumber].category = input.checked ? "M" : "F";
+            else if (category === "F")
+              _participants[rowNumber].category = input.checked ? "F" : "M";
             saveParticipants();
           };
           label.htmlFor = input.id;
-          genderSelector.appendChild(label);
-          genderSelector.appendChild(input);
+          categorySelector.appendChild(label);
+          categorySelector.appendChild(input);
         }
-        row.appendChild(genderSelector);
-        return genderSelector;
+        row.appendChild(categorySelector);
+        return categorySelector;
       }
 
       function createNumberPlateField(rowNumber, row, plateValue) {
@@ -315,7 +315,7 @@
         for (let i = 0; i < _participants.length; i++) {
           let row = createContainerRow(i, container);
           createNumberPlateField(i, row, _participants[i].numberPlate);
-          createGenderSelector(i, row, _participants[i].gender);
+          createCategorySelector(i, row, _participants[i].category);
           createNameField(i, row, _participants[i].name);
         }
       }
@@ -338,10 +338,7 @@
           encodeURIComponent(JSON.stringify(getWithSpare(_participants)));
         var dlAnchorElem = document.getElementById("downloadAnchorElem");
         dlAnchorElem.setAttribute("href", dataStr);
-        dlAnchorElem.setAttribute(
-          "download",
-          `startListe_${Date.now()}.json`
-        );
+        dlAnchorElem.setAttribute("download", `startListe_${Date.now()}.json`);
         dlAnchorElem.click();
       }
 
@@ -351,7 +348,7 @@
         for (let i = 0; i < SPARE_COUNT; ++i)
           withSpares.push({
             numberPlate: getNextNumberPlateNumber(withSpares),
-            gender: "M",
+            category: "M",
             name: "",
             isSpare: true,
           });

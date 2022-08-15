@@ -165,8 +165,8 @@
             finishTimeStamps
           );
           allResults = {
-            male: tempResults.filter((r) => r.gender === "M"),
-            female: tempResults.filter((r) => r.gender === "F"),
+            male: tempResults.filter((r) => r.category === "M"),
+            female: tempResults.filter((r) => r.category === "F"),
           };
           for (key in allResults) {
             const results = allResults[key];
@@ -270,7 +270,7 @@
           return zip(startTimeStamps, finishTimeStamps).map(function (x) {
             var entry = {
               numberPlate: x[0].numberPlate,
-              gender: x[0].gender,
+              category: x[0].category,
               name: x[0].name,
               start: x[0].time,
               finish: x[1].time,
@@ -361,7 +361,7 @@
           let headers = [
             "Rang",
             "Startnummer",
-            "Geschlecht",
+            "Kategorie",
             "Name",
             "Startzeit",
             "Zielzeit",
