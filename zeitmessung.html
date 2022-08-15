@@ -71,6 +71,14 @@
         border-radius: 4px;
       }
 
+      .number-field {
+        min-width: 10px;
+      }
+
+      .name-field {
+        min-width: 60px;
+      }
+
       .container-row {
         display: flex;
       }
@@ -175,6 +183,7 @@
           numberPlate.innerText = numberPlateValue;
           containerRow.appendChild(numberPlate);
           var name = document.createElement("div");
+          name.className = "name-field"
           name.innerText = nameValue;
           containerRow.appendChild(name);
         }
