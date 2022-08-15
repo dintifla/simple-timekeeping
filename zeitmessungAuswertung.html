@@ -157,33 +157,48 @@
 
           if (!validate(startTimeStamps, finishTimeStamps)) return;
 
-          let results = calculateDifference(startTimeStamps, finishTimeStamps);
-          sortByTime(results);
-          let delay = "---";
-          let rank = 1;
-          for (let i = 0; i < results.length; ++i) {
-            rank = i + 1;
-            if (i !== 0) {
-              delay = getDelay(
-                results[0].result,
-                results[i].result,
-                results[i - 1].result
-              );
+          const container = document.getElementById("container");
+          container.innerHTML = "";
 
-              const hasSameTime =
-                results[i].result - results[i - 1].result < 100;
-              if (hasSameTime) rank = results[i - 1].rank;
+          let tempResults = calculateDifference(
+            startTimeStamps,
+            finishTimeStamps
+          );
+          allResults = {
+            male: tempResults.filter((r) => r.category === "M"),
+            female: tempResults.filter((r) => r.category === "F"),
+          };
+          for (key in allResults) {
+            const results = allResults[key];
+            sortByTime(results);
+            let delay = "---";
+            let rank = 1;
+            for (let i = 0; i < results.length; ++i) {
+              rank = i + 1;
+              if (i !== 0) {
+                delay = getDelay(
+                  results[0].result,
+                  results[i].result,
+                  results[i - 1].result
+                );
+
+                const hasSameTime =
+                  results[i].result - results[i - 1].result < 100;
+                if (hasSameTime) rank = results[i - 1].rank;
+              }
+
+              results[i] = { rank, ...results[i], delay };
             }
-
-            results[i] = { rank, ...results[i], delay };
+            results.forEach((x) => {
+              x.start = formatTimestampValue(x.start);
+              x.finish = formatTimestampValue(x.finish);
+              x.result = isNaN(x.result) ? x.result : msToTime(x.result);
+            });
+            container.appendChild
+            const title = key === "male" ? "Männer": "Frauen";
+            fillTable(title, results, container);
+            exportResults(title, results);
           }
-          results.forEach((x) => {
-            x.start = formatTimestampValue(x.start);
-            x.finish = formatTimestampValue(x.finish);
-            x.result = isNaN(x.result) ? x.result : msToTime(x.result);
-          });
-          fillTable(results);
-          exportResults(results);
         });
 
         function getDelay(firstTime, currentTime, previousTime) {
@@ -255,6 +270,7 @@
           return zip(startTimeStamps, finishTimeStamps).map(function (x) {
             var entry = {
               numberPlate: x[0].numberPlate,
+              category: x[0].category,
               name: x[0].name,
               start: x[0].time,
               finish: x[1].time,
@@ -301,27 +317,27 @@
           });
         }
 
-        function exportResults(results) {
-          exportAsJson(results);
-          exportAsCsv(results);
+        function exportResults(title, results) {
+          exportAsJson(title, results);
+          exportAsCsv(title, results);
         }
 
-        function exportAsJson(results) {
+        function exportAsJson(title, results) {
           var dataStr =
             "data:text/json;charset=utf-8," +
             encodeURIComponent(JSON.stringify(results));
           var dlAnchorElem = document.getElementById("downloadAnchorElem");
           dlAnchorElem.setAttribute("href", dataStr);
-          dlAnchorElem.setAttribute("download", `Results_${Date.now()}.json`);
+          dlAnchorElem.setAttribute("download", `Resultate_${title}_${Date.now()}.json`);
           dlAnchorElem.click();
         }
 
-        function exportAsCsv(results) {
+        function exportAsCsv(title, results) {
           var dataStr = "data:text/csv;charset=utf-8," + toCsv(results);
           encodeURIComponent(JSON.stringify(results));
           var dlAnchorElem = document.getElementById("downloadAnchorElem");
           dlAnchorElem.setAttribute("href", dataStr);
-          dlAnchorElem.setAttribute("download", `Results_${Date.now()}.csv`);
+          dlAnchorElem.setAttribute("download", `Resultate_${title}_${Date.now()}.csv`);
           dlAnchorElem.click();
         }
 
@@ -341,10 +357,11 @@
           return csvRows.join("\n");
         }
 
-        function fillTable(results) {
+        function fillTable(title, results, container) {
           let headers = [
             "Rang",
             "Startnummer",
+            "Kategorie",
             "Name",
             "Startzeit",
             "Zielzeit",
@@ -352,8 +369,9 @@
             "Rückstand",
           ];
 
-          const container = document.getElementById("container");
-          container.innerHTML = "";
+          const titleContainer = document.createElement("h1");
+          titleContainer.innerText = title;
+          container.appendChild(titleContainer);
 
           let table = document.createElement("table");
           let headerRow = document.createElement("tr");

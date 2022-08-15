@@ -17,7 +17,7 @@ Best is if the race has interval starts. E.g. a cycling hill climb.
 4. Export once finished, or to make a backup
 5. Select a file to continue on an existing list
 
-At the end of an export, there are 20 spare places to be used for late registrations
+At the end of an export, there are 20 spare places to be used for late registrations. The spares are set as "male".
 
 ### Measure times
 
@@ -35,10 +35,11 @@ At the end of an export, there are 20 spare places to be used for late registrat
 
 Once all participants are registered at the start and finished and both files are present. Proceed like this:
 
-1. Start `zeitmessungAuswertung.html`
-2. Import start- and finishing time files (the ones generated above)
-3. Click "Evaluate" ("Auswerten")
-4. See the result table as well the exported results as `.json` and `.csv`
+1. Correct the category in the "Start" file if some of the spares were female (set `category: "F"`)
+2. Start `zeitmessungAuswertung.html`
+3. Import start- and finishing time files (the ones generated above)
+4. Click "Evaluate" ("Auswerten")
+5. See the result table as well the exported results as `.json` and `.csv`
 
 ## Possible improvements
 
@@ -46,3 +47,4 @@ Once all participants are registered at the start and finished and both files ar
 - Save to (cloud) database instead of files
 - Better, more consistent styling
 - Automated testing
+- Better handling of female spares

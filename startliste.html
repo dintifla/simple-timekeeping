@@ -11,6 +11,9 @@
           Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
           "Segoe UI Symbol";
       }
+      .category-selection {
+        display: flex;
+      }
       .big-button {
         appearance: none;
         background-color: transparent;
@@ -154,6 +157,10 @@
     </style>
     <script>
       let _participants = [];
+      let _categories = {
+        M: true,
+        F: false,
+      };
 
       function newParticipantList() {
         if (_participants.length > 0) exportParticipants();
@@ -170,6 +177,9 @@
         const numberPlateHeader = document.createElement("div");
         numberPlateHeader.innerText = "Startnummer";
         row.appendChild(numberPlateHeader);
+        const categoryHeader = document.createElement("div");
+        categoryHeader.innerText = "Geschlecht";
+        row.appendChild(categoryHeader);
         const nameHeader = document.createElement("div");
         nameHeader.innerText = "Name";
         row.appendChild(nameHeader);
@@ -180,13 +190,46 @@
         const rowNumber = _participants.length;
         let row = createContainerRow(rowNumber, container);
         const numberPlate = createNumberPlateField(rowNumber, row);
+        createCategorySelector(rowNumber, row);
         createNameField(rowNumber, row);
 
         _participants.push({
           numberPlate: parseInt(numberPlate.innerText),
+          category: "M",
           name: "",
         });
         saveParticipants();
+      }
+
+      function createCategorySelector(rowNumber, row, categoryValue) {
+        let categorySelector = document.createElement("div");
+        categorySelector.className = "category-selection";
+        for (let category in _categories) {
+          let label = document.createElement("label");
+          label.innerText = category;
+          let input = document.createElement("input");
+          input.type = "radio";
+          input.name = `category-${rowNumber}`;
+          input.id = `category-${category}-${rowNumber}`;
+          if (categoryValue != undefined) {
+            input.checked = category === categoryValue;
+          } else {
+            input.checked = _categories[category];
+          }
+          input.onchange = function () {
+            const rowNumber = parseInt(this.id.match(/\d+/g)[0]);
+            if (category === "M")
+              _participants[rowNumber].category = input.checked ? "M" : "F";
+            else if (category === "F")
+              _participants[rowNumber].category = input.checked ? "F" : "M";
+            saveParticipants();
+          };
+          label.htmlFor = input.id;
+          categorySelector.appendChild(label);
+          categorySelector.appendChild(input);
+        }
+        row.appendChild(categorySelector);
+        return categorySelector;
       }
 
       function createNumberPlateField(rowNumber, row, plateValue) {
@@ -272,6 +315,7 @@
         for (let i = 0; i < _participants.length; i++) {
           let row = createContainerRow(i, container);
           createNumberPlateField(i, row, _participants[i].numberPlate);
+          createCategorySelector(i, row, _participants[i].category);
           createNameField(i, row, _participants[i].name);
         }
       }
@@ -294,10 +338,7 @@
           encodeURIComponent(JSON.stringify(getWithSpare(_participants)));
         var dlAnchorElem = document.getElementById("downloadAnchorElem");
         dlAnchorElem.setAttribute("href", dataStr);
-        dlAnchorElem.setAttribute(
-          "download",
-          `participants_${Date.now()}.json`
-        );
+        dlAnchorElem.setAttribute("download", `startListe_${Date.now()}.json`);
         dlAnchorElem.click();
       }
 
@@ -307,6 +348,7 @@
         for (let i = 0; i < SPARE_COUNT; ++i)
           withSpares.push({
             numberPlate: getNextNumberPlateNumber(withSpares),
+            category: "M",
             name: "",
             isSpare: true,
           });
