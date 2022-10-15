@@ -1,5 +1,5 @@
 import { Participant } from "./participant";
-import { showSnackbar } from "./snackbar";
+import { showSnackbar } from "./helpers/snackbar";
 import "./styles/styles.css";
 
 let _participants: Participant[] = [];

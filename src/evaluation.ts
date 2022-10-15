@@ -1,6 +1,6 @@
 import { Participant } from "./participant";
 import { Result } from "./result";
-import { showSnackbar } from "./snackbar";
+import { showSnackbar } from "./helpers/snackbar";
 import "./styles/styles.css";
 
 function calculate(): void {
