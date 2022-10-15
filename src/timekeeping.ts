@@ -1,12 +1,18 @@
-import css from "./styles/styles.css";
+import { Participant } from "./participant";
+import "./styles/styles.css";
 
-let _entries = [];
-let _measurementLocation;
+let _entries: Participant[] = [];
+let _measurementLocation: string;
 
-function createTableRow(rowNumber, table, numberPlateValue, nameValue) {
+function createTableRow(
+  rowNumber: number,
+  table: HTMLTableSectionElement,
+  numberPlateValue: number,
+  nameValue: string
+) {
   const tableRow = table.insertRow();
   const numberPlate = tableRow.insertCell();
-  numberPlate.innerText = numberPlateValue;
+  numberPlate.innerText = numberPlateValue.toString();
   tableRow.appendChild(numberPlate);
   const name = document.createElement("td");
   name.className = "name-field";
@@ -15,13 +21,21 @@ function createTableRow(rowNumber, table, numberPlateValue, nameValue) {
   return tableRow;
 }
 
-function createButton(rowNumber, tableRow, label) {
+function createButton(
+  rowNumber: number,
+  tableRow: HTMLTableRowElement,
+  label: string
+) {
   let button = document.getElementById(`button-${rowNumber}`);
   if (!button) {
     button = document.createElement("button");
     button.id = `button-${rowNumber}`;
-    button.onclick = function () {
-      const rowNumber = parseInt(this.id.match(/\d+/g)[0]);
+    button.onclick = function (e: Event) {
+      const elementId = (e.target as HTMLElement).id;
+      const matches = elementId.match(/\d+/g);
+      if (!matches || matches.length <= 0)
+        throw Error(`Couldn't resolve row number for ${elementId}`);
+      const rowNumber = parseInt(matches[0]);
       addTimestamp(rowNumber);
     };
     button.innerText = `${label} ${rowNumber + 1}`;
@@ -31,16 +45,22 @@ function createButton(rowNumber, tableRow, label) {
   }
 }
 
-function createDisplay(rowNumber, tableRow) {
-  let display = document.getElementById(`timestamp-${rowNumber}`);
+function createDisplay(rowNumber: number, tableRow: HTMLTableRowElement) {
+  let display = <HTMLInputElement>(
+    document.getElementById(`timestamp-${rowNumber}`)
+  );
 
   if (!display) {
     display = document.createElement("input");
     display.setAttribute("type", "text");
     display.id = `timestamp-${rowNumber}`;
-    display.onchange = function () {
+    display.onchange = function (e: Event) {
       try {
-        const rowNumber = parseInt(this.id.match(/\d+/g)[0]);
+        const elementId = (e.target as HTMLElement).id;
+        const matches = elementId.match(/\d+/g);
+        if (!matches || matches.length <= 0)
+          throw Error(`Couldn't resolve row number for ${elementId}`);
+        const rowNumber = parseInt(matches[0]);
         if (display.value) _entries[rowNumber].time = parseTime(display.value);
         else delete _entries[rowNumber].time;
         saveEntries();
@@ -55,9 +75,10 @@ function createDisplay(rowNumber, tableRow) {
   return display;
 }
 
-function parseTime(t) {
+function parseTime(t: string): Date {
   const d = new Date();
   const time = t.match(/(\d{1,2})(?:[:|.](\d{1,2}))?(?:[:|.](\d{1,2}))?/);
+  if (!time) return d;
   d.setHours(parseInt(time[1]));
   d.setMinutes(parseInt(time[2]) || 0);
   d.setSeconds(parseInt(time[3]) || 0);
@@ -65,54 +86,62 @@ function parseTime(t) {
   return d;
 }
 
-function addTimestamp(rowNumber) {
-  const display = document.getElementById(`timestamp-${rowNumber}`);
+function addTimestamp(rowNumber: number) {
+  const display = <HTMLInputElement>(
+    document.getElementById(`timestamp-${rowNumber}`)
+  );
   const timestamp = roundTo100Ms(new Date());
   _entries[rowNumber].time = timestamp;
   display.value = formatDateToTimeString(timestamp);
   saveEntries();
 }
 
-function roundTo100Ms(timestamp) {
+function roundTo100Ms(timestamp: Date): Date {
   timestamp.setMilliseconds(
     Math.round(timestamp.getMilliseconds() / 100) * 100
   );
   return timestamp;
 }
 
-function saveEntries() {
+function saveEntries(): void {
   localStorage.setItem(
     `measurement-${_measurementLocation}`,
     JSON.stringify(_entries)
   );
 }
 
-function clearEntries() {
+function clearEntries(): void {
   _entries = [];
   localStorage.removeItem(`measurement-${_measurementLocation}`);
 }
 
-function loadFromStorage() {
-  _measurementLocation = document.getElementById(
-    "select-measurement-location"
-  ).value;
-  load(JSON.parse(localStorage.getItem(`measurement-${_measurementLocation}`)));
+function loadFromStorage(): void {
+  _measurementLocation = (<HTMLSelectElement>(
+    document.getElementById("select-measurement-location")
+  )).value;
+  const measurements = localStorage.getItem(
+    `measurement-${_measurementLocation}`
+  );
+  if (measurements) load(JSON.parse(measurements));
 }
 
-function loadFromFile() {
-  _measurementLocation = document.getElementById(
-    "select-measurement-location"
-  ).value;
+function loadFromFile(): void {
+  _measurementLocation = (<HTMLSelectElement>(
+    document.getElementById("select-measurement-location")
+  )).value;
   clearEntries();
-  Array.from(document.getElementById("load-file").files)[0]
-    .text()
-    .then((text) => {
-      load(JSON.parse(text));
-      saveEntries();
-    });
+  const fileInput = <HTMLInputElement>document.getElementById("load-file");
+  if (fileInput && fileInput.files && fileInput.files.length > 0) {
+    const file = fileInput.files.item(0);
+    if (file)
+      file.text().then((text) => {
+        load(JSON.parse(text));
+        saveEntries();
+      });
+  }
 }
 
-function load(entries) {
+function load(entries: Participant[]) {
   if (!validate(entries)) return;
 
   entries.forEach((e) => delete e.isSpare);
@@ -120,6 +149,7 @@ function load(entries) {
   if (!_entries) return;
 
   const container = document.getElementById("container");
+  if (!container) throw Error("Container not found");
   container.innerHTML = "";
   const table = document.createElement("table");
   addHeader(table);
@@ -133,14 +163,16 @@ function load(entries) {
     );
     createButton(i, tableRow, _measurementLocation);
     const display = createDisplay(i, tableRow);
-    if (_entries[i].time) {
-      display.value = formatDateToTimeString(Date.parse(_entries[i].time));
+    if (_entries[i].time != undefined) {
+      display.value = formatDateToTimeString(
+        Date.parse(_entries[i].time as string)
+      );
     }
   }
   container.appendChild(table);
 }
 
-function addHeader(table) {
+function addHeader(table: HTMLTableElement) {
   const headerRow = table.createTHead().insertRow();
   for (let header of ["Nr.", "Name", "", "Zeit"]) {
     const cell = headerRow.insertCell();
@@ -148,7 +180,7 @@ function addHeader(table) {
   }
 }
 
-function validate(entries) {
+function validate(entries: Participant[]) {
   if (!(entries instanceof Array)) {
     console.log("participants is not an array");
     return false;
@@ -163,14 +195,16 @@ function validate(entries) {
 function reset() {
   _entries = [];
   const container = document.getElementById("container");
+  if (!container) throw Error("Container not found");
   container.innerHTML = "";
-  document.getElementById("load-file").value = "";
+  (<HTMLInputElement>document.getElementById("load-file")).value = "";
 }
 function exportMeasurements() {
   const dataStr = `data:text/json;charset=utf-8,${encodeURIComponent(
     JSON.stringify(_entries)
   )}`;
   const dlAnchorElem = document.getElementById("downloadAnchorElem");
+  if (!dlAnchorElem) throw Error("Download element not found");
   dlAnchorElem.setAttribute("href", dataStr);
   dlAnchorElem.setAttribute(
     "download",
@@ -179,8 +213,8 @@ function exportMeasurements() {
   dlAnchorElem.click();
 }
 
-function formatDateToTimeString(date) {
-  const dateOptions = {
+function formatDateToTimeString(date: number | Date): string {
+  const dateOptions: Intl.DateTimeFormatOptions = {
     timeZone: "Europe/Zurich",
     hour: "numeric",
     minute: "numeric",
@@ -191,8 +225,9 @@ function formatDateToTimeString(date) {
   return dateFormatter.format(date);
 }
 
-function showSnackbar(text) {
+function showSnackbar(text: string) {
   const snackbar = document.getElementById("snackbar");
+  if (!snackbar) throw Error("Snackbar not found");
   snackbar.innerText = text;
 
   snackbar.className = "show";
@@ -202,7 +237,7 @@ function showSnackbar(text) {
   }, 3000);
 }
 
-window.loadFromStorage = loadFromStorage;
-window.loadFromFile = loadFromFile;
-window.reset = reset;
-window.exportMeasurements = exportMeasurements;
+(window as any).loadFromStorage = loadFromStorage;
+(window as any).loadFromFile = loadFromFile;
+(window as any).reset = reset;
+(window as any).exportMeasurements = exportMeasurements;
