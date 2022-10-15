@@ -1,5 +1,6 @@
 import { Participant } from "./participant";
 import { Result } from "./result";
+import { showSnackbar } from "./snackbar";
 import "./styles/styles.css";
 
 function calculate(): void {
@@ -289,18 +290,6 @@ function calculate(): void {
       table.appendChild(row);
     });
     container.appendChild(table);
-  }
-
-  function showSnackbar(text: string) {
-    const snackbar = document.getElementById("snackbar");
-    if (!snackbar) throw Error("Snackbar not found");
-    snackbar.innerText = text;
-
-    snackbar.className = "show";
-
-    setTimeout(() => {
-      snackbar.className = snackbar.className.replace("show", "");
-    }, 3000);
   }
 }
 
