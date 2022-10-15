@@ -5,10 +5,7 @@ const path = require("path");
 const listOfComponents = ["startList", "timekeeping", "evaluation"];
 
 const entry = listOfComponents.reduce((entries, componentName) => {
-  entries[componentName] = path.join(
-    __dirname,
-    `src/${componentName}.ts`
-  );
+  entries[componentName] = path.join(__dirname, `src/${componentName}.ts`);
   return entries;
 }, {});
 
@@ -48,8 +45,5 @@ module.exports = {
     path: path.resolve(__dirname, "dist"),
     clean: true,
   },
-  plugins: [
-    ...htmlGenerators,
-    new InlineChunkHtmlPlugin([/.js$/])
-  ],
+  plugins: [...htmlGenerators, new InlineChunkHtmlPlugin([/.js$/])],
 };
