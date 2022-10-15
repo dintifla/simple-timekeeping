@@ -3,6 +3,8 @@ import { Result } from "./result";
 import { showSnackbar } from "./helpers/snackbar";
 import "./styles/styles.css";
 import { exportAsCsv, exportAsJson } from "./helpers/fileDownloader";
+import { msToTime } from "./helpers/time";
+import { validate } from "./resultValidator";
 
 function calculate(): void {
   if (!validateFiles()) return;
@@ -15,23 +17,18 @@ function calculate(): void {
   if (!finishFile) throw Error("Finish file not found");
   Promise.all(new Array(startFile[0].text(), finishFile[0].text())).then(
     (fileContents: any[]) => {
-      const startTimeStamps = JSON.parse(fileContents[0]);
-      const finishTimeStamps = JSON.parse(fileContents[1]);
-      if (startTimeStamps.length != finishTimeStamps.length) {
+      const starts = JSON.parse(fileContents[0]);
+      const finishes = JSON.parse(fileContents[1]);
+      if (starts.length != finishes.length) {
         showSnackbar("Start und Ziel Datei sind nicht gleich lang");
         return;
       }
 
-      if (!validate(startTimeStamps, finishTimeStamps)) return;
+      if (!validate(starts, finishes)) return;
 
-      const container = document.getElementById("container");
-      if (!container) throw Error("Container not found");
-      container.innerHTML = "";
+      const container = getEmptyContainer();
 
-      const tempResults = calculateDifference(
-        startTimeStamps,
-        finishTimeStamps
-      );
+      const tempResults = calculateDifference(starts, finishes);
       const allResults: any = {
         male: tempResults.filter((r) => r.category === "M"),
         female: tempResults.filter((r) => r.category === "F"),
@@ -44,7 +41,7 @@ function calculate(): void {
         for (let i = 0; i < results.length; ++i) {
           rank = i + 1;
           if (i !== 0) {
-            delay = getDelay(
+            delay = getDelayToPreviousAndFirst(
               results[0].result,
               results[i].result,
               results[i - 1].result
@@ -74,7 +71,14 @@ function calculate(): void {
     }
   );
 
-  function getDelay(
+  function getEmptyContainer(): HTMLElement {
+    const container = document.getElementById("container");
+    if (!container) throw Error("Container not found");
+    container.innerHTML = "";
+    return container;
+  }
+
+  function getDelayToPreviousAndFirst(
     firstTime: number | string | undefined,
     currentTime: number | string | undefined,
     previousTime: number | string | undefined
@@ -102,56 +106,6 @@ function calculate(): void {
     if (typeof value === "number")
       return isNaN(value) ? value.toString() : msToTime(value);
     return value;
-  }
-
-  /**
-   * Format the given milliseconds to HH:mm:ss.s
-   */
-  function msToTime(ms: number): string {
-    return new Date(ms).toISOString().substring(11, 21);
-  }
-
-  function validate(
-    startTimeStamps: Participant[],
-    finishTimeStamps: Participant[]
-  ) {
-    if (!(startTimeStamps instanceof Array)) {
-      showSnackbar("Start datei ist kein array!");
-      return false;
-    }
-
-    if (!(finishTimeStamps instanceof Array)) {
-      showSnackbar("Ziel datei ist kein array!");
-      return false;
-    }
-    if (!startTimeStamps.every((p) => "numberPlate" in p && "name" in p)) {
-      showSnackbar("Startdatei hat falsches format!");
-      return false;
-    }
-
-    if (!finishTimeStamps.every((p) => "numberPlate" in p && "name" in p)) {
-      showSnackbar("Zieldatei hat falsches format!");
-      return false;
-    }
-
-    if (
-      Math.min(
-        ...startTimeStamps
-          .map((x) => x.time)
-          .filter((x): x is string => !!x)
-          .map((x) => Date.parse(x))
-      ) >
-      Math.min(
-        ...finishTimeStamps
-          .map((x) => x.time)
-          .filter((x): x is string => !!x)
-          .map((x) => Date.parse(x))
-      )
-    ) {
-      showSnackbar("Start und Ziel Datei sind vertauscht!");
-      return false;
-    }
-    return true;
   }
 
   function calculateDifference(

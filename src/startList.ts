@@ -26,7 +26,7 @@ function appendHeader(container: HTMLElement): void {
   numberPlateHeader.innerText = "Startnummer";
   row.appendChild(numberPlateHeader);
   const categoryHeader = document.createElement("div");
-  categoryHeader.innerText = "Geschlecht";
+  categoryHeader.innerText = "Kategorie";
   row.appendChild(categoryHeader);
   const nameHeader = document.createElement("div");
   nameHeader.innerText = "Name";
@@ -71,16 +71,7 @@ function createCategorySelector(
     }
     input.onchange = function (e: Event) {
       const elementId = (e.target as HTMLElement).id;
-      const matches = elementId.match(/\d+/g);
-      if (!matches || matches.length <= 0)
-        throw Error(`Couldn't resolve row number for ${elementId}`);
-      const rowNumber = parseInt(matches[0]);
-      if (category === "M") {
-        _participants[rowNumber].category = input.checked ? "M" : "F";
-      } else if (category === "F") {
-        _participants[rowNumber].category = input.checked ? "F" : "M";
-      }
-      saveParticipants();
+      onCategoryChanged(elementId, category, input);
     };
     label.htmlFor = input.id;
     categorySelector.appendChild(label);
@@ -88,6 +79,19 @@ function createCategorySelector(
   }
   row.appendChild(categorySelector);
   return categorySelector;
+}
+
+function onCategoryChanged(elementId: string, category: string, input: HTMLInputElement) {
+  const matches = elementId.match(/\d+/g);
+  if (!matches || matches.length <= 0)
+    throw Error(`Couldn't resolve row number for ${elementId}`);
+  const rowNumber = parseInt(matches[0]);
+  if (category === "M") {
+    _participants[rowNumber].category = input.checked ? "M" : "F";
+  } else if (category === "F") {
+    _participants[rowNumber].category = input.checked ? "F" : "M";
+  }
+  saveParticipants();
 }
 
 function createNumberPlateField(

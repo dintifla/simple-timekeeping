@@ -2,12 +2,12 @@ import { Participant } from "./participant";
 import { showSnackbar } from "./helpers/snackbar";
 import "./styles/styles.css";
 import { exportAsJson } from "./helpers/fileDownloader";
+import { parseTime, roundTo100Ms } from "./helpers/time";
 
 let _entries: Participant[] = [];
 let _measurementLocation: string;
 
 function createTableRow(
-  rowNumber: number,
   table: HTMLTableSectionElement,
   numberPlateValue: number,
   nameValue: string
@@ -77,17 +77,6 @@ function createDisplay(rowNumber: number, tableRow: HTMLTableRowElement) {
   return display;
 }
 
-function parseTime(t: string): Date {
-  const d = new Date();
-  const time = t.match(/(\d{1,2})(?:[:|.](\d{1,2}))?(?:[:|.](\d{1,2}))?/);
-  if (!time) return d;
-  d.setHours(parseInt(time[1]));
-  d.setMinutes(parseInt(time[2]) || 0);
-  d.setSeconds(parseInt(time[3]) || 0);
-  d.setMilliseconds(0);
-  return d;
-}
-
 function addTimestamp(rowNumber: number) {
   const display = <HTMLInputElement>(
     document.getElementById(`timestamp-${rowNumber}`)
@@ -96,14 +85,7 @@ function addTimestamp(rowNumber: number) {
   _entries[rowNumber].time = timestamp;
   display.value = formatDateToTimeString(timestamp);
   saveEntries();
-}
-
-function roundTo100Ms(timestamp: Date): Date {
-  timestamp.setMilliseconds(
-    Math.round(timestamp.getMilliseconds() / 100) * 100
-  );
-  return timestamp;
-}
+  }
 
 function saveEntries(): void {
   localStorage.setItem(
@@ -158,7 +140,6 @@ function load(entries: Participant[]) {
   const tableBody = table.createTBody();
   for (let i = 0; i < _entries.length; i++) {
     const tableRow = createTableRow(
-      i,
       tableBody,
       _entries[i].numberPlate,
       _entries[i].name
