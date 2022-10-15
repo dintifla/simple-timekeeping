@@ -36,12 +36,11 @@ function calculate(): void {
       for (let key in allResults) {
         const results: Result[] = allResults[key];
         sortByTime(results);
-        let delay: string = "---";
         let rank: number | undefined = 1;
         for (let i = 0; i < results.length; ++i) {
           rank = i + 1;
           if (i !== 0) {
-            delay = getDelayToPreviousAndFirst(
+            results[i].delay = getDelayToPreviousAndFirst(
               results[0].result,
               results[i].result,
               results[i - 1].result
@@ -52,9 +51,8 @@ function calculate(): void {
                 (results[i - 1].result as number) <
               100;
             if (hasSameTime) rank = results[i - 1].rank;
+            results[i].rank = rank;
           }
-
-          results[i] = { rank, ...results[i], delay };
         }
         results.forEach((x: Result) => {
           x.startTime = formatTimestampValue(x.startTime);
@@ -79,9 +77,9 @@ function calculate(): void {
   }
 
   function getDelayToPreviousAndFirst(
-    firstTime: number | string | undefined,
-    currentTime: number | string | undefined,
-    previousTime: number | string | undefined
+    firstTime: number | string,
+    currentTime: number | string,
+    previousTime: number | string
   ): string {
     if (
       typeof firstTime !== "number" ||
@@ -101,41 +99,45 @@ function calculate(): void {
     return "---";
   }
 
-  function formatTimestampValue(value: number | string): string {
+  function formatTimestampValue(value: Date | string): string {
     if (!value) return "---";
-    if (typeof value === "number")
-      return isNaN(value) ? value.toString() : msToTime(value);
-    return value;
+    return typeof value === "string" ? value : value.toString();
   }
 
   function calculateDifference(
     startTimeStamps: Participant[],
     finishTimeStamps: Participant[]
   ): Result[] {
-    return zip<Participant, Participant, any>(
-      startTimeStamps,
-      finishTimeStamps
-    ).map((x) => {
-      const entry: Result = {
-        numberPlate: <number>x[0].numberPlate,
-        category: <string>x[0].category,
-        name: <string>x[0].name,
-        startTime: <number | string>x[0].time,
-        finishTime: <number | string>x[1].time,
-      };
-      if (!entry.startTime) entry.result = "DNS";
-      else if (!entry.finishTime) entry.result = "DNF";
-      else {
+    return mapStartToFinish(startTimeStamps, finishTimeStamps).map((entry) => {
+      if (
+        entry.startTime !== "DNS" &&
+        entry.finishTime !== "DNF"
+      ) {
         entry.result =
-          Date.parse(entry.finishTime as string) -
-          Date.parse(entry.startTime as string);
+          Date.parse(entry.finishTime) - Date.parse(entry.startTime);
       }
       return entry;
     });
   }
 
-  function zip<T1, T2, T3>(list1: T1[], list2: T2[]): T3[] {
-    return list1.map((e, i) => <T3>[e, list2[i]]);
+  function mapStartToFinish(
+    starts: Participant[],
+    finishes: Participant[]
+  ): Result[] {
+    return starts.map((s) => {
+      const res: Result = {
+        rank: 1,
+        numberPlate: s.numberPlate,
+        category: s.category,
+        name: s.name,
+        startTime: s.time as string || "DNS",
+        finishTime:
+          finishes.find((f) => f.numberPlate == s.numberPlate)?.time as string || "DNF",
+        result: "---",
+        delay: "---",
+      };
+      return res;
+    });
   }
 
   function validateFiles() {

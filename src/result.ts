@@ -1,10 +1,10 @@
 export interface Result {
-  rank?: number;
+  rank: number;
   numberPlate: number;
   category: string;
   name: string;
-  startTime: string | number;
-  finishTime: string | number;
-  result?: string | number;
-  delay?: string;
+  startTime: string;
+  finishTime: string;
+  result: string | number;
+  delay: string;
 }
