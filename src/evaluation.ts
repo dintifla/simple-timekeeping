@@ -2,6 +2,7 @@ import { Participant } from "./participant";
 import { Result } from "./result";
 import { showSnackbar } from "./helpers/snackbar";
 import "./styles/styles.css";
+import { exportAsCsv, exportAsJson } from "./helpers/fileDownloader";
 
 function calculate(): void {
   if (!validateFiles()) return;
@@ -50,7 +51,9 @@ function calculate(): void {
             );
 
             const hasSameTime: boolean =
-              (results[i].result as number) - (results[i - 1].result as number) < 100;
+              (results[i].result as number) -
+                (results[i - 1].result as number) <
+              100;
             if (hasSameTime) rank = results[i - 1].rank;
           }
 
@@ -80,7 +83,7 @@ function calculate(): void {
       typeof firstTime !== "number" ||
       isNaN(firstTime) ||
       typeof previousTime !== "number" ||
-      isNaN(previousTime)||
+      isNaN(previousTime) ||
       typeof currentTime !== "number" ||
       isNaN(currentTime)
     )
@@ -210,48 +213,9 @@ function calculate(): void {
   }
 
   function exportResults(title: string, results: Result[]) {
-    exportAsJson(title, results);
-    exportAsCsv(title, results);
-  }
-
-  function exportAsJson(title: string, results: Result[]) {
-    const dataStr = `data:text/json;charset=utf-8,${encodeURIComponent(
-      JSON.stringify(results)
-    )}`;
-    const dlAnchorElem = document.getElementById("downloadAnchorElem");
-    if (!dlAnchorElem) throw Error("Download element not found");
-    dlAnchorElem.setAttribute("href", dataStr);
-    dlAnchorElem.setAttribute(
-      "download",
-      `Resultate_${title}_${Date.now()}.json`
-    );
-    dlAnchorElem.click();
-  }
-
-  function exportAsCsv(title: string, results: Result[]) {
-    const dataStr = `data:text/csv;charset=utf-8,${toCsv(results)}`;
-    encodeURIComponent(JSON.stringify(results));
-    const dlAnchorElem = document.getElementById("downloadAnchorElem");
-    if (!dlAnchorElem) throw Error("Download element not found");
-    dlAnchorElem.setAttribute("href", dataStr);
-    dlAnchorElem.setAttribute(
-      "download",
-      `Resultate_${title}_${Date.now()}.csv`
-    );
-    dlAnchorElem.click();
-  }
-
-  function toCsv(data: any): string {
-    const csvRows = [];
-
-    const headers = Object.keys(data[0]);
-    csvRows.push(headers.join(","));
-
-    for (const row of data) {
-      const values = headers.map((header) => row[header]);
-      csvRows.push(values.join(","));
-    }
-    return csvRows.join("\n");
+    let fileName = `Resultate_${title}_${Date.now()}`;
+    exportAsJson(results, fileName + ".json");
+    exportAsCsv(results, fileName + ".csv");
   }
 
   function fillTable(title: string, results: Result[], container: HTMLElement) {

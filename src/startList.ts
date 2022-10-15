@@ -1,6 +1,7 @@
 import { Participant } from "./participant";
 import { showSnackbar } from "./helpers/snackbar";
 import "./styles/styles.css";
+import { exportAsJson } from "./helpers/fileDownloader";
 
 let _participants: Participant[] = [];
 const _categories: any = {
@@ -208,14 +209,7 @@ function validate(participants: Participant[]) {
 }
 
 function exportParticipants() {
-  const dataStr = `data:text/json;charset=utf-8,${encodeURIComponent(
-    JSON.stringify(getWithSpare(_participants))
-  )}`;
-  const dlAnchorElem = document.getElementById("downloadAnchorElem");
-  if (!dlAnchorElem) throw Error("Download element not found");
-  dlAnchorElem.setAttribute("href", dataStr);
-  dlAnchorElem.setAttribute("download", `startListe_${Date.now()}.json`);
-  dlAnchorElem.click();
+  exportAsJson(getWithSpare(_participants), `startListe_${Date.now()}.json`);
 }
 
 function getWithSpare(participants: Participant[]) {

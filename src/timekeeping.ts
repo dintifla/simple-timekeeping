@@ -1,6 +1,7 @@
 import { Participant } from "./participant";
 import { showSnackbar } from "./helpers/snackbar";
 import "./styles/styles.css";
+import { exportAsJson } from "./helpers/fileDownloader";
 
 let _entries: Participant[] = [];
 let _measurementLocation: string;
@@ -201,17 +202,7 @@ function reset() {
   (<HTMLInputElement>document.getElementById("load-file")).value = "";
 }
 function exportMeasurements() {
-  const dataStr = `data:text/json;charset=utf-8,${encodeURIComponent(
-    JSON.stringify(_entries)
-  )}`;
-  const dlAnchorElem = document.getElementById("downloadAnchorElem");
-  if (!dlAnchorElem) throw Error("Download element not found");
-  dlAnchorElem.setAttribute("href", dataStr);
-  dlAnchorElem.setAttribute(
-    "download",
-    `${_measurementLocation}_${Date.now()}.json`
-  );
-  dlAnchorElem.click();
+  exportAsJson(_entries, `${_measurementLocation}_${Date.now()}.json`);
 }
 
 function formatDateToTimeString(date: number | Date): string {
