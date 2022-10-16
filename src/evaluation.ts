@@ -109,10 +109,7 @@ function calculate(): void {
     finishTimeStamps: Participant[]
   ): Result[] {
     return mapStartToFinish(startTimeStamps, finishTimeStamps).map((entry) => {
-      if (
-        entry.startTime !== "DNS" &&
-        entry.finishTime !== "DNF"
-      ) {
+      if (entry.startTime !== "DNS" && entry.finishTime !== "DNF") {
         entry.result =
           Date.parse(entry.finishTime) - Date.parse(entry.startTime);
       }
@@ -130,9 +127,10 @@ function calculate(): void {
         numberPlate: s.numberPlate,
         category: s.category,
         name: s.name,
-        startTime: s.time as string || "DNS",
+        startTime: (s.time as string) || "DNS",
         finishTime:
-          finishes.find((f) => f.numberPlate == s.numberPlate)?.time as string || "DNF",
+          (finishes.find((f) => f.numberPlate == s.numberPlate)
+            ?.time as string) || "DNF",
         result: "---",
         delay: "---",
       };

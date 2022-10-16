@@ -81,7 +81,11 @@ function createCategorySelector(
   return categorySelector;
 }
 
-function onCategoryChanged(elementId: string, category: string, input: HTMLInputElement) {
+function onCategoryChanged(
+  elementId: string,
+  category: string,
+  input: HTMLInputElement
+) {
   const matches = elementId.match(/\d+/g);
   if (!matches || matches.length <= 0)
     throw Error(`Couldn't resolve row number for ${elementId}`);

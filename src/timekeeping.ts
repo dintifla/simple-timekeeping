@@ -85,7 +85,7 @@ function addTimestamp(rowNumber: number) {
   _entries[rowNumber].time = timestamp;
   display.value = formatDateToTimeString(timestamp);
   saveEntries();
-  }
+}
 
 function saveEntries(): void {
   localStorage.setItem(

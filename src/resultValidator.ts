@@ -1,10 +1,7 @@
 import { showSnackbar } from "./helpers/snackbar";
 import { Participant } from "./participant";
 
-export function validate(
-  starts: Participant[],
-  finishes: Participant[]
-) {
+export function validate(starts: Participant[], finishes: Participant[]) {
   if (!(starts instanceof Array)) {
     showSnackbar("Start datei ist kein array!");
     return false;
