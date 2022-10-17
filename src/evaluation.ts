@@ -23,19 +23,22 @@ function calculate(): void {
 
       const container = getEmptyContainer();
 
-      const tempResults = mapStartToFinish(starts, finishes);
-      const allResults: { [category: string]: Timing[] } = {
-        male: tempResults.filter((r) => r.category === "M"),
-        female: tempResults.filter((r) => r.category === "F"),
-      };
-      for (let category in allResults) {
-        const results = calculateRankAndSort(allResults[category]);
-        const title = category === "male" ? "Male" : "Female";
-        fillTable(title, results, container);
-        exportResults(title, results);
+      const timings = mapStartToFinish(starts, finishes);
+      for (let category of getUniqueCategories(timings)) {
+        const results = calculateRankAndSort(
+          timings.filter((t) => t.category === category)
+        );
+        fillTable(category, results, container);
+        exportResults(category, results);
       }
     }
   );
+
+  function getUniqueCategories(timings: Timing[]): string[] {
+    return timings
+      .map((t) => t.category)
+      .filter((category, i, categories) => categories.indexOf(category) == i);
+  }
 
   function getStartAndFinishFile(): [FileList, FileList] {
     const startFile = (<HTMLInputElement>document.getElementById("start-file"))
