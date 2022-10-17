@@ -15,7 +15,7 @@ function calculate(): void {
       const starts = JSON.parse(fileContents[0]);
       const finishes = JSON.parse(fileContents[1]);
       if (starts.length != finishes.length) {
-        showSnackbar("Start und Ziel Datei sind nicht gleich lang");
+        showSnackbar("Start und finish have have not the same length");
         return;
       }
 
@@ -30,7 +30,7 @@ function calculate(): void {
       };
       for (let category in allResults) {
         const results = calculateRankAndSort(allResults[category]);
-        const title = category === "male" ? "Männer" : "Frauen";
+        const title = category === "male" ? "Male" : "Female";
         fillTable(title, results, container);
         exportResults(title, results);
       }
@@ -57,18 +57,18 @@ function calculate(): void {
 
   function validateFiles() {
     if (!(<HTMLInputElement>document.getElementById("start-file"))?.value) {
-      showSnackbar("Startfile fehlt!");
+      showSnackbar("Start file missing!");
       return false;
     }
     if (!(<HTMLInputElement>document.getElementById("finish-file"))?.value) {
-      showSnackbar("Zielfile fehlt!");
+      showSnackbar("Finish file missing!");
       return false;
     }
     return true;
   }
 
   function exportResults(title: string, results: Result[]) {
-    let fileName = `Resultate_${title}_${Date.now()}`;
+    let fileName = `Results_${title}_${Date.now()}`;
     exportAsJson(results, fileName + ".json");
     exportAsCsv(results, fileName + ".csv");
   }
@@ -76,13 +76,13 @@ function calculate(): void {
   function fillTable(title: string, results: Result[], container: HTMLElement) {
     const headers = [
       "Rang",
-      "Startnummer",
-      "Kategorie",
+      "Start number",
+      "Category",
       "Name",
-      "Startzeit",
-      "Zielzeit",
-      "Rennzeit",
-      "Rückstand",
+      "Start time",
+      "Finish time",
+      "Race time",
+      "Delay",
     ];
 
     const titleContainer = document.createElement("h1");

@@ -1,6 +1,6 @@
 import { Participant } from "../participant";
 import { calculateRankAndSort, mapStartToFinish } from "../resultCalculator";
-import { TimingBuilder } from "../test-helpers/TimingBuilder";
+import { TimingBuilder } from "../test-helpers/timingBuilder";
 
 describe("Result calculator", () => {
   describe("Maps start and finish", () => {
