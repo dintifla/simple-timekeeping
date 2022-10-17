@@ -1,9 +1,20 @@
 import { msToTime } from "./helpers/time";
 import { Participant } from "./participant";
 import { Result } from "./result";
+import { Timing } from "./timinig";
 
-export function calculateRankAndSort(results: Result[]): Result[] {
-  results.forEach((result) => (result.result = calculateDifference(result)));
+export function calculateRankAndSort(timings: Timing[]): Result[] {
+  const results = timings.map((t: Timing) => {
+    return {
+      rank: 1,
+      numberPlate: t.numberPlate,
+      name: t.name,
+      startTime: t.startTime,
+      finishTime: t.finishTime,
+      result: calculateDifference(t),
+      delay: "---",
+    };
+  });
   sortByTime(results);
   let rank: number | undefined = 1;
   for (let i = 0; i < results.length; ++i) {
@@ -32,10 +43,10 @@ export function calculateRankAndSort(results: Result[]): Result[] {
   return results;
 }
 
-function calculateDifference(result: Result): string | number {
-  if (result.startTime === "---") return "DNS";
-  if (result.finishTime === "---") return "DNF";
-  return Date.parse(result.finishTime) - Date.parse(result.startTime);
+function calculateDifference(timing: Timing): string | number {
+  if (timing.startTime === "---") return "DNS";
+  if (timing.finishTime === "---") return "DNF";
+  return Date.parse(timing.finishTime) - Date.parse(timing.startTime);
 }
 
 function formatTimestampValue(value: Date | string): string {
@@ -46,10 +57,9 @@ function formatTimestampValue(value: Date | string): string {
 export function mapStartToFinish(
   starts: Participant[],
   finishes: Participant[]
-): Result[] {
+): Timing[] {
   return starts.map((s) => {
-    const res: Result = {
-      rank: 1,
+    const res: Timing = {
       numberPlate: s.numberPlate,
       category: s.category,
       name: s.name,
@@ -57,8 +67,6 @@ export function mapStartToFinish(
       finishTime:
         (finishes.find((f) => f.numberPlate == s.numberPlate)
           ?.time as string) || "---",
-      result: "---",
-      delay: "---",
     };
     return res;
   });

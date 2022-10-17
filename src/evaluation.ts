@@ -4,16 +4,12 @@ import "./styles/styles.css";
 import { exportAsCsv, exportAsJson } from "./helpers/fileDownloader";
 import { validate } from "./resultValidator";
 import { calculateRankAndSort, mapStartToFinish } from "./resultCalculator";
+import { Timing } from "./timinig";
 
 function calculate(): void {
   if (!validateFiles()) return;
 
-  const startFile = (<HTMLInputElement>document.getElementById("start-file"))
-    ?.files;
-  const finishFile = (<HTMLInputElement>document.getElementById("finish-file"))
-    ?.files;
-  if (!startFile) throw Error("Start file not found");
-  if (!finishFile) throw Error("Finish file not found");
+  const [startFile, finishFile] = getStartAndFinishFile();
   Promise.all(new Array(startFile[0].text(), finishFile[0].text())).then(
     (fileContents: any[]) => {
       const starts = JSON.parse(fileContents[0]);
@@ -28,18 +24,29 @@ function calculate(): void {
       const container = getEmptyContainer();
 
       const tempResults = mapStartToFinish(starts, finishes);
-      const allResults: any = {
+      const allResults: { [category: string]: Timing[] } = {
         male: tempResults.filter((r) => r.category === "M"),
         female: tempResults.filter((r) => r.category === "F"),
       };
-      for (let key in allResults) {
-        const results = calculateRankAndSort(allResults[key]);
-        const title = key === "male" ? "Männer" : "Frauen";
+      for (let category in allResults) {
+        const results = calculateRankAndSort(allResults[category]);
+        const title = category === "male" ? "Männer" : "Frauen";
         fillTable(title, results, container);
         exportResults(title, results);
       }
     }
   );
+
+  function getStartAndFinishFile(): [FileList, FileList] {
+    const startFile = (<HTMLInputElement>document.getElementById("start-file"))
+      ?.files;
+    const finishFile = (<HTMLInputElement>(
+      document.getElementById("finish-file")
+    ))?.files;
+    if (!startFile) throw Error("Start file not found");
+    if (!finishFile) throw Error("Finish file not found");
+    return [startFile, finishFile];
+  }
 
   function getEmptyContainer(): HTMLElement {
     const container = document.getElementById("container");
