@@ -8,7 +8,8 @@
     "build": "webpack --config webpack.config.js --mode development",
     "lint": "eslint --ext .js --ext .ts src/",
     "prettier": "prettier --write \"**/*.+(js|ts|json)\"",
-    "test": "jest"
+    "test": "jest",
+    "test:watch": "jest --watch"
   },
   "repository": {
     "type": "git",

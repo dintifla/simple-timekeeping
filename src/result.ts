@@ -1,5 +1,5 @@
 export interface Result {
-  rank: number;
+  rank: number | "-";
   numberPlate: number;
   name: string;
   startTime: string;

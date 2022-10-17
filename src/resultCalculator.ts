@@ -4,7 +4,7 @@ import { Result } from "./result";
 import { Timing } from "./timinig";
 
 export function calculateRankAndSort(timings: Timing[]): Result[] {
-  const results = timings.map((t: Timing) => {
+  const results: Result[] = timings.map((t: Timing) => {
     return {
       rank: 1,
       numberPlate: t.numberPlate,
@@ -16,7 +16,7 @@ export function calculateRankAndSort(timings: Timing[]): Result[] {
     };
   });
   sortByTime(results);
-  let rank: number | undefined = 1;
+  let rank: number | "-" = 1;
   for (let i = 0; i < results.length; ++i) {
     rank = i + 1;
     if (i !== 0) {
@@ -28,8 +28,18 @@ export function calculateRankAndSort(timings: Timing[]): Result[] {
 
       const hasSameTime: boolean =
         (results[i].result as number) - (results[i - 1].result as number) < 100;
-      if (hasSameTime) rank = results[i - 1].rank;
-      results[i].rank = rank;
+      if (hasSameTime) {
+        rank = results[i - 1].rank;
+        results[i].delay = results[i - 1].delay;
+      }
+      switch (results[i].result) {
+        case "DNS":
+        case "DNF":
+          results[i].rank = "-";
+          break;
+        default:
+          results[i].rank = rank;
+      }
     }
   }
   results.forEach((x: Result) => {
