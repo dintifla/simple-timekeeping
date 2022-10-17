@@ -12,17 +12,17 @@ export class TimingBuilder {
   }
 
   public addMaleParticipant(name: string): TimingBuilder {
-    this.addParticipant(name, "M");
+    this.addParticipant(name, "Male");
     return this;
   }
 
   public addFemaleParticipant(name: string): TimingBuilder {
-    this.addParticipant(name, "F");
+    this.addParticipant(name, "Female");
     return this;
   }
 
   public addSpareParticipant(): TimingBuilder {
-    this.addParticipant("", "F");
+    this.addParticipant("", "Female");
     return this;
   }
 
@@ -44,7 +44,7 @@ export class TimingBuilder {
 
   public addUnusedSpareParticipant(): TimingBuilder {
     this._startList.push({
-      category: "M",
+      category: "Male",
       name: "",
       numberPlate: this._startList.length + 1,
       time: "",

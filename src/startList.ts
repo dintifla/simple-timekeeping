@@ -4,14 +4,16 @@ import "./styles/styles.css";
 import { exportAsJson } from "./helpers/fileDownloader";
 
 let _participants: Participant[] = [];
-const _categories: any = {
-  M: true,
-  F: false,
-};
+const _categories: string[] = ["Male", "Female"];
 
 function newParticipantList(): void {
   if (_participants.length > 0) exportParticipants();
   clearParticipants();
+
+  if (_categories.length <= 0) {
+    showSnackbar("Configure at least one category");
+    throw Error("no categories configured");
+  }
   const container = document.getElementById("container");
   if (!container) throw new Error("Container not found");
   container.innerHTML = "";
@@ -44,7 +46,7 @@ function createParticipantField(): void {
 
   _participants.push({
     numberPlate: parseInt(numberPlate.innerText),
-    category: "M",
+    category: _categories[0],
     name: "",
   });
   saveParticipants();
@@ -57,7 +59,7 @@ function createCategorySelector(
 ): HTMLDivElement {
   const categorySelector = document.createElement("div");
   categorySelector.className = "category-selection";
-  for (const category in _categories) {
+  for (const category of _categories) {
     const label = document.createElement("label");
     label.innerText = category;
     const input = document.createElement("input");
@@ -67,7 +69,7 @@ function createCategorySelector(
     if (categoryValue != undefined) {
       input.checked = category === categoryValue;
     } else {
-      input.checked = _categories[category];
+      input.checked = category === _categories[0];
     }
     input.onchange = function (e: Event) {
       const elementId = (e.target as HTMLElement).id;
@@ -90,10 +92,8 @@ function onCategoryChanged(
   if (!matches || matches.length <= 0)
     throw Error(`Couldn't resolve row number for ${elementId}`);
   const rowNumber = parseInt(matches[0]);
-  if (category === "M") {
-    _participants[rowNumber].category = input.checked ? "M" : "F";
-  } else if (category === "F") {
-    _participants[rowNumber].category = input.checked ? "F" : "M";
+  if (input.checked) {
+    _participants[rowNumber].category = category;
   }
   saveParticipants();
 }
@@ -226,7 +226,7 @@ function getWithSpare(participants: Participant[]) {
   for (let i = 0; i < SPARE_COUNT; ++i) {
     withSpares.push({
       numberPlate: getNextNumberPlateNumber(withSpares),
-      category: "M",
+      category: _categories[0],
       name: "",
       isSpare: true,
     });
