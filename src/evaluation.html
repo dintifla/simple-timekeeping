@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="de-CH">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Auswertung Zeitmessung</title>
+  </head>
+  <body>
+
+    <label for="start-file">Startzeiten:</label>
+    <input type="file" id="start-file" accept=".json" />
+    <br />
+    <label for="finish-file">Zielzeiten:</label>
+    <input type="file" id="finish-file" accept=".json" />
+    <br />
+    <button
+      type="button"
+      id="evaluate"
+      class="big-button"
+      onclick="calculate()"
+    >
+      Auswerten
+    </button>
+
+    <div id="container"></div>
+    <a id="downloadAnchorElem" style="display: none"></a>
+
+    <div id="snackbar">Some text some message..</div>
+  </body>
+</html>

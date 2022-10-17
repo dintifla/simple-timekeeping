@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="de-CH">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Startliste</title>
+  </head>
+  <body>
+
+    <button
+      type="button"
+      id="new-participantList"
+      class="big-button"
+      onclick="newParticipantList()"
+    >
+      Neu
+    </button>
+
+    <button
+      type="button"
+      id="load-participants"
+      class="big-button"
+      onclick="loadFromStorage()"
+    >
+      Load
+    </button>
+    <a id="downloadAnchorElem" style="display: none"></a>
+
+    <button
+      type="button"
+      id="export-participants"
+      class="big-button"
+      onclick="exportParticipants()"
+    >
+      Export
+    </button>
+    <br />
+    <label for="load-file">Lade Startliste:</label>
+    <input
+      type="file"
+      id="load-file"
+      accept=".json"
+      onchange="loadFromFile()"
+    />
+    <br />
+    <button
+      type="button"
+      id="new-participant"
+      class="big-button"
+      onclick="createParticipantField()"
+    >
+      + Teilnehmer
+    </button>
+    <div id="container"></div>
+
+    <div id="snackbar">Some text some message..</div>
+  </body>
+</html>
