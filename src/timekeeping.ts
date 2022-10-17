@@ -128,7 +128,6 @@ function loadFromFile(): void {
 function load(entries: Participant[]) {
   if (!validate(entries)) return;
 
-  entries.forEach((e) => delete e.isSpare);
   _entries = entries;
   if (!_entries) return;
 

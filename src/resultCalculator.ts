@@ -58,18 +58,23 @@ export function mapStartToFinish(
   starts: Participant[],
   finishes: Participant[]
 ): Timing[] {
-  return starts.map((s) => {
-    const res: Timing = {
-      numberPlate: s.numberPlate,
-      category: s.category,
-      name: s.name,
-      startTime: (s.time as string) || "---",
-      finishTime:
-        (finishes.find((f) => f.numberPlate == s.numberPlate)
-          ?.time as string) || "---",
-    };
-    return res;
-  });
+  return starts
+    .filter((s) => {
+      const isUnusedSpare = s.isSpare === true && s.name === "" && !s.time;
+      return !isUnusedSpare;
+    })
+    .map((s) => {
+      const res: Timing = {
+        numberPlate: s.numberPlate,
+        category: s.category,
+        name: s.name,
+        startTime: (s.time as string) || "---",
+        finishTime:
+          (finishes.find((f) => f.numberPlate == s.numberPlate)
+            ?.time as string) || "---",
+      };
+      return res;
+    });
 }
 
 function getDelayToPreviousAndFirst(
