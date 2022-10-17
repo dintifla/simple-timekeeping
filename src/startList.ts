@@ -23,10 +23,10 @@ function appendHeader(container: HTMLElement): void {
   row.className = "container-row";
   container.appendChild(row);
   const numberPlateHeader = document.createElement("div");
-  numberPlateHeader.innerText = "Startnummer";
+  numberPlateHeader.innerText = "Start number";
   row.appendChild(numberPlateHeader);
   const categoryHeader = document.createElement("div");
-  categoryHeader.innerText = "Kategorie";
+  categoryHeader.innerText = "Category";
   row.appendChild(categoryHeader);
   const nameHeader = document.createElement("div");
   nameHeader.innerText = "Name";
@@ -210,14 +210,14 @@ function validate(participants: Participant[]) {
     return false;
   }
   if (!participants.every((p) => "numberPlate" in p && "name" in p)) {
-    showSnackbar("Falsches Datenformat");
+    showSnackbar("Wrong data format");
     return false;
   }
   return true;
 }
 
 function exportParticipants() {
-  exportAsJson(getWithSpare(_participants), `startListe_${Date.now()}.json`);
+  exportAsJson(getWithSpare(_participants), `startList_${Date.now()}.json`);
 }
 
 function getWithSpare(participants: Participant[]) {

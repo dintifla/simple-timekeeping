@@ -3,21 +3,21 @@ import { Participant } from "./participant";
 
 export function validate(starts: Participant[], finishes: Participant[]) {
   if (!(starts instanceof Array)) {
-    showSnackbar("Start datei ist kein array!");
+    showSnackbar("Start file is not an array!");
     return false;
   }
 
   if (!(finishes instanceof Array)) {
-    showSnackbar("Ziel datei ist kein array!");
+    showSnackbar("Finish file is not an array!");
     return false;
   }
   if (!starts.every((p) => "numberPlate" in p && "name" in p)) {
-    showSnackbar("Startdatei hat falsches format!");
+    showSnackbar("Start file has wrong format!");
     return false;
   }
 
   if (!finishes.every((p) => "numberPlate" in p && "name" in p)) {
-    showSnackbar("Zieldatei hat falsches format!");
+    showSnackbar("Finish file has wrong format!");
     return false;
   }
 
@@ -35,7 +35,7 @@ export function validate(starts: Participant[], finishes: Participant[]) {
         .map((x) => Date.parse(x))
     )
   ) {
-    showSnackbar("Start und Ziel Datei sind vertauscht!");
+    showSnackbar("Start und Finish file are reversed!");
     return false;
   }
   return true;

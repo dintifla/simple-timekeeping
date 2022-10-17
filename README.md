@@ -7,9 +7,22 @@ Simple time keeping to be used on two computers
 This application is used to measure times of a race, where start and finish is not at the same location.
 Best is if the race has interval starts. E.g. a cycling hill climb.
 
+## Build
+
+1. run `npm i` to install dependencies
+2. run `npm run build` to build and bundle the scripts
+3. find the bundles in `./dist`
+
+## Test
+
+Use `npm run test` or `npm run test:watch` to run the tests.
+Code coverage reports are directed to `./coverage`.
+
 ## How to use
 
 ### Register participants
+
+The resulting scripts are located in `./dist`-directory.
 
 1. Start `startList.html` to register participants by name
 2. Click "New" to start a new list. Any previous list will be exported as backup
@@ -23,7 +36,7 @@ At the end of an export, there are 20 spare places to be used for late registrat
 
 1. Start `timekeeping.html` (can be on different computers, due to start and finish not at the same location)
    1. once for the starting times: select "Start" in the dropdown
-   2. once for the finishing times: select "Ziel" in the dropdown
+   2. once for the finishing times: select "Finish" in the dropdown
 2. Select the participant list which was exported in the previous section
 3. Click to capture start/finish time for the given number plate. If there is a mistake, times can be edited manually
 4. Click export to safe the results to a `.json`-file once done, or to make a backup
@@ -38,7 +51,7 @@ Once all participants are registered at the start and finished and both files ar
 1. Correct the category in the "Start" file if some of the spares were female (set `category: "F"`)
 2. Start `evaluation.html`
 3. Import start- and finishing time files (the ones generated above)
-4. Click "Evaluate" ("Auswerten")
+4. Click "Evaluate" ("Evaluate")
 5. See the result table as well the exported results as `.json` and `.csv`
 
 ## Possible improvements
