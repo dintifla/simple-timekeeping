@@ -2,9 +2,13 @@ import { Participant } from "./participant";
 import { showSnackbar } from "./helpers/snackbar";
 import "./styles/styles.css";
 import { exportAsJson } from "./helpers/fileDownloader";
+import { Configuration } from "./configuration";
 
 let _participants: Participant[] = [];
-const _categories: string[] = ["Male", "Female"];
+const _config: Configuration = {
+  categories: ["Male", "Female"],
+};
+const _categories: string[] = _config.categories;
 
 function newParticipantList(): void {
   if (_participants.length > 0) exportParticipants();
