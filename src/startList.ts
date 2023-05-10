@@ -1,5 +1,5 @@
 import { Participant } from "./participant";
-import { showSnackbar } from "./helpers/snackbar";
+import { showSnackbar } from "./components/snackbar";
 import "./styles/styles.css";
 import { exportAsJson } from "./helpers/fileDownloader";
 import { Configuration } from "./configuration";
@@ -7,6 +7,7 @@ import { Configuration } from "./configuration";
 let _participants: Participant[] = [];
 const _config: Configuration = {
   categories: ["Male", "Female"],
+  startIntervalSeconds: 30
 };
 const _categories: string[] = _config.categories;
 

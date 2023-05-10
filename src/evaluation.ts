@@ -1,5 +1,5 @@
 import { Result } from "./result";
-import { showSnackbar } from "./helpers/snackbar";
+import { showSnackbar } from "./components/snackbar";
 import "./styles/styles.css";
 import { exportAsCsv, exportAsJson } from "./helpers/fileDownloader";
 import { validate } from "./resultValidator";
