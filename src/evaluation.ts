@@ -4,7 +4,7 @@ import "./styles/styles.css";
 import { exportAsCsv, exportAsJson } from "./helpers/fileDownloader";
 import { validate } from "./resultValidator";
 import { calculateRankAndSort, mapStartToFinish } from "./resultCalculator";
-import { Timing } from "./timinig";
+import { Timing } from "./timing";
 
 function calculate(): void {
   if (!validateFiles()) return;
