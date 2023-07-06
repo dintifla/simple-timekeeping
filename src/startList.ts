@@ -30,10 +30,10 @@ function appendHeader(container: HTMLElement): void {
   row.className = "container-row";
   container.appendChild(row);
   const numberPlateHeader = document.createElement("div");
-  numberPlateHeader.innerText = "Start number";
+  numberPlateHeader.innerText = "Startnummer";
   row.appendChild(numberPlateHeader);
   const categoryHeader = document.createElement("div");
-  categoryHeader.innerText = "Category";
+  categoryHeader.innerText = "Kategorie";
   row.appendChild(categoryHeader);
   const nameHeader = document.createElement("div");
   nameHeader.innerText = "Name";
@@ -222,7 +222,7 @@ function validate(participants: Participant[]) {
 }
 
 function exportParticipants() {
-  exportAsJson(getWithSpare(_participants), `startList_${Date.now()}.json`);
+  exportAsJson(getWithSpare(_participants), `Startliste_${Date.now()}.json`);
 }
 
 function getWithSpare(participants: Participant[]) {

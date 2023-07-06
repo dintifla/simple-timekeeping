@@ -2,22 +2,21 @@
 <html lang="de-CH">
   <head>
     <meta charset="UTF-8" />
-    <title>Timekeeping</title>
+    <title>Zeitmessung</title>
   </head>
   <body>
-
-    <label for="select-measurement-location">Location:</label>
+    <label for="select-measurement-location">Ort:</label>
     <select
       id="select-measurement-location"
       class="big-select"
       onchange="reset()"
     >
       <option>Start</option>
-      <option>Finish</option>
+      <option>Ziel</option>
     </select>
 
     <br />
-    <label for="load-file">Load start list:</label>
+    <label for="load-file">Startliste laden:</label>
     <input
       type="file"
       id="load-file"
@@ -31,7 +30,7 @@
       class="big-button"
       onclick="loadFromStorage()"
     >
-      Load
+      Laden
     </button>
     <a id="downloadAnchorElem" style="display: none"></a>
 
@@ -41,7 +40,7 @@
       class="big-button"
       onclick="exportMeasurements()"
     >
-      Export
+      Exportieren
     </button>
     <div id="container"></div>
     <div id="snackbar">Some text some message..</div>

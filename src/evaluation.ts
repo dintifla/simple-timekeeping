@@ -71,7 +71,7 @@ function calculate(): void {
   }
 
   function exportResults(title: string, results: Result[]) {
-    let fileName = `Results_${title}_${Date.now()}`;
+    let fileName = `Resultate_${title}_${Date.now()}`;
     exportAsJson(results, fileName + ".json");
     exportAsCsv(results, fileName + ".csv");
   }
@@ -79,12 +79,12 @@ function calculate(): void {
   function fillTable(title: string, results: Result[], container: HTMLElement) {
     const headers = [
       "Rang",
-      "Start number",
+      "Startnummer",
       "Name",
-      "Start time",
-      "Finish time",
-      "Race time",
-      "Delay",
+      "Startzeit",
+      "Ankunftszeit",
+      "Laufzeit",
+      "Rückstand",
     ];
 
     const titleContainer = document.createElement("h1");
