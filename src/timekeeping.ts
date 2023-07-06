@@ -39,6 +39,7 @@ function createButton(
   if (!button) {
     button = document.createElement("button");
     button.id = `button-${rowNumber}`;
+    button.className = "small-button";
     button.onclick = function (e: Event) {
       const elementId = (e.target as HTMLElement).id;
       const matches = elementId.match(/\d+/g);
