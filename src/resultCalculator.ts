@@ -1,7 +1,7 @@
 import { msToTime } from "./helpers/time";
 import { Participant } from "./participant";
 import { Result } from "./result";
-import { Timing } from "./timinig";
+import { Timing } from "./timing";
 
 export function calculateRankAndSort(timings: Timing[]): Result[] {
   const results: Result[] = timings.map((t: Timing) => {

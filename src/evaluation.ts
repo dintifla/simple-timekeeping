@@ -80,7 +80,6 @@ function calculate(): void {
     const headers = [
       "Rang",
       "Start number",
-      "Category",
       "Name",
       "Start time",
       "Finish time",

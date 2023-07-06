@@ -11,7 +11,7 @@ let _measurementLocation: string;
 let _countdown: Countdown | undefined = new Countdown();
 const _config: Configuration = {
   categories: ["Male", "Female"],
-  startIntervalSeconds: 30
+  startIntervalSeconds: 30,
 };
 
 function createTableRow(
@@ -178,11 +178,14 @@ function load(entries: Participant[]) {
 }
 
 function addHeader(table: HTMLTableElement) {
-  const headerRow = table.createTHead().insertRow();
-  for (let header of ["Nr.", "Name", "", "Zeit"]) {
-    const cell = headerRow.insertCell();
-    cell.innerText = header;
-  }
+  const headerRow = document.createElement("tr");
+  ["Nr.", "Name", "", "Zeit"].forEach((headerText) => {
+    const header = document.createElement("th");
+    const textNode = document.createTextNode(headerText);
+    header.appendChild(textNode);
+    headerRow.appendChild(header);
+  });
+  table.appendChild(headerRow);
 }
 
 function validate(entries: Participant[]) {
