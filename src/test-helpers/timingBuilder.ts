@@ -1,6 +1,4 @@
 import { Participant } from "../participant";
-import { mapStartToFinish } from "../resultCalculator";
-import { Timing } from "../timinig";
 
 export class TimingBuilder {
   private readonly _startIntervalSeconds: number = 30;

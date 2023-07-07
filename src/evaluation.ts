@@ -1,10 +1,10 @@
 import { Result } from "./result";
-import { showSnackbar } from "./helpers/snackbar";
+import { showSnackbar } from "./components/snackbar";
 import "./styles/styles.css";
 import { exportAsCsv, exportAsJson } from "./helpers/fileDownloader";
 import { validate } from "./resultValidator";
 import { calculateRankAndSort, mapStartToFinish } from "./resultCalculator";
-import { Timing } from "./timinig";
+import { Timing } from "./timing";
 
 function calculate(): void {
   if (!validateFiles()) return;
@@ -71,7 +71,7 @@ function calculate(): void {
   }
 
   function exportResults(title: string, results: Result[]) {
-    let fileName = `Results_${title}_${Date.now()}`;
+    let fileName = `Resultate_${title}_${Date.now()}`;
     exportAsJson(results, fileName + ".json");
     exportAsCsv(results, fileName + ".csv");
   }
@@ -79,13 +79,12 @@ function calculate(): void {
   function fillTable(title: string, results: Result[], container: HTMLElement) {
     const headers = [
       "Rang",
-      "Start number",
-      "Category",
+      "Startnummer",
       "Name",
-      "Start time",
-      "Finish time",
-      "Race time",
-      "Delay",
+      "Startzeit",
+      "Ankunftszeit",
+      "Laufzeit",
+      "Rückstand",
     ];
 
     const titleContainer = document.createElement("h1");

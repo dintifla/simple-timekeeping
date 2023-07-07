@@ -14,7 +14,7 @@ const htmlGenerators = listOfComponents.reduce((entries, componentName) => {
     new HtmlWebpackPlugin({
       template: `src/${componentName}.html`,
       chunks: [componentName],
-      inject: true,
+      inject: "body",
       filename: `${componentName}.html`,
     })
   );

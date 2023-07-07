@@ -1,4 +1,4 @@
-import { showSnackbar } from "./helpers/snackbar";
+import { showSnackbar } from "./components/snackbar";
 import { Participant } from "./participant";
 
 export function validate(starts: Participant[], finishes: Participant[]) {

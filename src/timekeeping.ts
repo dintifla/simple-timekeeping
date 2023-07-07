@@ -1,11 +1,18 @@
 import { Participant } from "./participant";
-import { showSnackbar } from "./helpers/snackbar";
+import { showSnackbar } from "./components/snackbar";
 import "./styles/styles.css";
 import { exportAsJson } from "./helpers/fileDownloader";
 import { parseTime, roundTo100Ms } from "./helpers/time";
+import { Countdown } from "./components/countdown";
+import { Configuration } from "./configuration";
 
 let _entries: Participant[] = [];
 let _measurementLocation: string;
+let _countdown: Countdown | undefined = new Countdown();
+const _config: Configuration = {
+  categories: ["Male", "Female"],
+  startIntervalSeconds: 30,
+};
 
 function createTableRow(
   table: HTMLTableSectionElement,
@@ -32,6 +39,7 @@ function createButton(
   if (!button) {
     button = document.createElement("button");
     button.id = `button-${rowNumber}`;
+    button.className = "small-button";
     button.onclick = function (e: Event) {
       const elementId = (e.target as HTMLElement).id;
       const matches = elementId.match(/\d+/g);
@@ -39,6 +47,7 @@ function createButton(
         throw Error(`Couldn't resolve row number for ${elementId}`);
       const rowNumber = parseInt(matches[0]);
       addTimestamp(rowNumber);
+      _countdown?.start(_config.startIntervalSeconds);
     };
     button.innerText = `${label} ${rowNumber + 1}`;
     const tableData = tableRow.insertCell();
@@ -106,6 +115,7 @@ function loadFromStorage(): void {
   const measurements = localStorage.getItem(
     `measurement-${_measurementLocation}`
   );
+  setCountdown();
   if (measurements) load(JSON.parse(measurements));
 }
 
@@ -114,6 +124,7 @@ function loadFromFile(): void {
     document.getElementById("select-measurement-location")
   )).value;
   clearEntries();
+  setCountdown();
   const fileInput = <HTMLInputElement>document.getElementById("load-file");
   if (fileInput && fileInput.files && fileInput.files.length > 0) {
     const file = fileInput.files.item(0);
@@ -122,6 +133,19 @@ function loadFromFile(): void {
         load(JSON.parse(text));
         saveEntries();
       });
+  }
+}
+
+function setCountdown(): void {
+  if (
+    _measurementLocation.localeCompare("start", undefined, {
+      sensitivity: "accent",
+    }) === 0
+  ) {
+    _countdown = new Countdown();
+  } else {
+    _countdown?.reset();
+    _countdown = undefined;
   }
 }
 
@@ -155,11 +179,14 @@ function load(entries: Participant[]) {
 }
 
 function addHeader(table: HTMLTableElement) {
-  const headerRow = table.createTHead().insertRow();
-  for (let header of ["Nr.", "Name", "", "Zeit"]) {
-    const cell = headerRow.insertCell();
-    cell.innerText = header;
-  }
+  const headerRow = document.createElement("tr");
+  ["Nr.", "Name", "", "Zeit"].forEach((headerText) => {
+    const header = document.createElement("th");
+    const textNode = document.createTextNode(headerText);
+    header.appendChild(textNode);
+    headerRow.appendChild(header);
+  });
+  table.appendChild(headerRow);
 }
 
 function validate(entries: Participant[]) {
@@ -181,6 +208,7 @@ function reset() {
   container.innerHTML = "";
   (<HTMLInputElement>document.getElementById("load-file")).value = "";
 }
+
 function exportMeasurements() {
   exportAsJson(_entries, `${_measurementLocation}_${Date.now()}.json`);
 }
