@@ -22,29 +22,29 @@ function newParticipantList(): void {
   const container = document.getElementById("container");
   if (!container) throw new Error("Container not found");
   container.innerHTML = "";
-  appendHeader(container);
+  const table = document.createElement("table");
+  addHeader(table);
+  const tableBody = table.createTBody();
+  tableBody.id = "participant-table-body";
+  container.appendChild(table);
 }
 
-function appendHeader(container: HTMLElement): void {
-  const row = document.createElement("div");
-  row.className = "container-row";
-  container.appendChild(row);
-  const numberPlateHeader = document.createElement("div");
-  numberPlateHeader.innerText = "Startnummer";
-  row.appendChild(numberPlateHeader);
-  const categoryHeader = document.createElement("div");
-  categoryHeader.innerText = "Kategorie";
-  row.appendChild(categoryHeader);
-  const nameHeader = document.createElement("div");
-  nameHeader.innerText = "Name";
-  row.appendChild(nameHeader);
+function addHeader(table: HTMLTableElement): void {
+  const headerRow = document.createElement("tr");
+  ["Nr.", "Kategorie", "Name"].forEach((headerText) => {
+    const header = document.createElement("th");
+    const textNode = document.createTextNode(headerText);
+    header.appendChild(textNode);
+    headerRow.appendChild(header);
+  });
+  table.appendChild(headerRow);
 }
 
 function createParticipantField(): void {
-  const container = document.getElementById("container");
-  if (!container) throw Error("container not found");
+  const table = <HTMLTableSectionElement>document.getElementById("participant-table-body");
+  if (!table) throw Error("table not found");
   const rowNumber = _participants.length;
-  const row = createContainerRow(rowNumber, container);
+  const row = createTableRow(rowNumber, table);
   const numberPlate = createNumberPlateField(rowNumber, row);
   createCategorySelector(rowNumber, row);
   createNameField(rowNumber, row);
@@ -59,9 +59,10 @@ function createParticipantField(): void {
 
 function createCategorySelector(
   rowNumber: number,
-  row: HTMLElement,
+  row: HTMLTableRowElement,
   categoryValue?: string
 ): HTMLDivElement {
+  const cell = row.insertCell();
   const categorySelector = document.createElement("div");
   categorySelector.className = "category-selection";
   for (const category of _categories) {
@@ -84,7 +85,7 @@ function createCategorySelector(
     categorySelector.appendChild(label);
     categorySelector.appendChild(input);
   }
-  row.appendChild(categorySelector);
+  cell.appendChild(categorySelector);
   return categorySelector;
 }
 
@@ -105,15 +106,16 @@ function onCategoryChanged(
 
 function createNumberPlateField(
   rowNumber: number,
-  row: HTMLElement,
+  row: HTMLTableRowElement,
   plateValue?: number
 ): HTMLDivElement {
+  const cell = row.insertCell();
   const numberPlate = document.createElement("div");
   numberPlate.id = `numberplate-${rowNumber}`;
   numberPlate.innerText = (
     plateValue || getNextNumberPlateNumber(_participants)
   ).toString();
-  row.appendChild(numberPlate);
+  cell.appendChild(numberPlate);
   return numberPlate;
 }
 
@@ -126,9 +128,10 @@ function getNextNumberPlateNumber(participants: Participant[]): number {
 
 function createNameField(
   rowNumber: number,
-  row: HTMLElement,
+  row: HTMLTableRowElement,
   nameValue?: string
 ): HTMLInputElement {
+  const cell = row.insertCell();
   const name = document.createElement("input");
   name.setAttribute("type", "text");
   name.id = `participant-name-${rowNumber}`;
@@ -146,20 +149,20 @@ function createNameField(
     }
   };
   if (nameValue) name.value = nameValue;
-  row.appendChild(name);
+  cell.appendChild(name);
   return name;
 }
 
-function createContainerRow(rowNumber: number, container: HTMLElement) {
-  let containerRow = document.getElementById(`container-row-${rowNumber}`);
-
-  if (!containerRow) {
-    containerRow = document.createElement("div");
-    containerRow.id = `container-row-${rowNumber}`;
-    containerRow.classList.add("container-row");
-    container.appendChild(containerRow);
+function createTableRow(
+  rowNumber: number,
+  table: HTMLTableSectionElement,
+): HTMLTableRowElement {
+  let tableRow = <HTMLTableRowElement>document.getElementById(`container-row-${rowNumber}`);
+  if (!tableRow) {
+    tableRow = table.insertRow();
+    tableRow.id = `container-row-${rowNumber}`;
   }
-  return containerRow;
+  return tableRow;
 }
 
 function saveParticipants(): void {
@@ -200,9 +203,13 @@ function load(participants: Participant[]) {
   const container = document.getElementById("container");
   if (!container) throw Error("Container not found");
   container.innerHTML = "";
-  appendHeader(container);
+  const table = document.createElement("table");
+  addHeader(table);
+  const tableBody = table.createTBody();
+  tableBody.id = "participant-table-body"
+  container.appendChild(table)
   for (let i = 0; i < _participants.length; i++) {
-    const row = createContainerRow(i, container);
+    const row = createTableRow(i, tableBody);
     createNumberPlateField(i, row, _participants[i].numberPlate);
     createCategorySelector(i, row, _participants[i].category);
     createNameField(i, row, _participants[i].name);
