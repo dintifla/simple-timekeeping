@@ -1,13 +1,10 @@
 import { Participant } from "./participant";
 import { showSnackbar } from "./components/snackbar";
 import { exportAsJson } from "./helpers/fileDownloader";
-import { Configuration } from "./configuration";
+import { Configuration, getConfig } from "./configuration";
 
 let _participants: Participant[] = [];
-const _config: Configuration = {
-  categories: ["Male", "Female"],
-  startIntervalSeconds: 30,
-};
+const _config: Configuration =  getConfig();
 const _categories: string[] = _config.categories;
 
 function render(): HTMLElement {

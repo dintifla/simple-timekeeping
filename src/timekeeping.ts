@@ -3,15 +3,12 @@ import { showSnackbar } from "./components/snackbar";
 import { exportAsJson } from "./helpers/fileDownloader";
 import { parseTime, roundTo100Ms } from "./helpers/time";
 import { Countdown } from "./components/countdown";
-import { Configuration } from "./configuration";
+import { Configuration, getConfig } from "./configuration";
 
 let _entries: Participant[] = [];
 let _measurementLocation: string;
 let _countdown: Countdown | undefined = new Countdown();
-const _config: Configuration = {
-  categories: ["Male", "Female"],
-  startIntervalSeconds: 30,
-};
+const _config: Configuration =  getConfig();
 
 function render(): HTMLElement {
   const header = document.createElement("h1");
