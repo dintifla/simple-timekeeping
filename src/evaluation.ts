@@ -113,6 +113,4 @@ function calculate(): void {
   }
 }
 
-(window as any).calculate = calculate;
-
 export { calculate };

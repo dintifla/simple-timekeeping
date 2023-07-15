@@ -249,12 +249,6 @@ function getWithSpare(participants: Participant[]) {
   return withSpares;
 }
 
-(window as any).newParticipantList = newParticipantList;
-(window as any).createParticipantField = createParticipantField;
-(window as any).exportParticipants = exportParticipants;
-(window as any).loadFromStorage = loadFromStorage;
-(window as any).loadFromFile = loadFromFile;
-
 export {
   newParticipantList,
   createParticipantField,

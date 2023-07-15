@@ -229,11 +229,6 @@ function formatDateToTimeString(date: number | Date): string {
   return dateFormatter.format(date);
 }
 
-(window as any).loadFromStorage = loadFromStorage;
-(window as any).loadFromFile = loadFromFile;
-(window as any).reset = reset;
-(window as any).exportMeasurements = exportMeasurements;
-
 export {
   loadFromStorage,
   loadFromFile,
