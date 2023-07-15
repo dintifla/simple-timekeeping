@@ -1,57 +1,42 @@
-<!DOCTYPE html>
-<html lang="de-CH">
-  <head>
-    <meta charset="UTF-8" />
-    <title>Startliste</title>
-  </head>
-  <body>
+<h1>Startliste</h1>
 
-    <button
-      type="button"
-      id="new-participantList"
-      class="big-button"
-      onclick="newParticipantList()"
-    >
-      Neu
-    </button>
+<button
+  type="button"
+  id="new-participantList"
+  class="big-button"
+  onclick="newParticipantList()"
+>
+  Neu
+</button>
 
-    <button
-      type="button"
-      id="load-participants"
-      class="big-button"
-      onclick="loadFromStorage()"
-    >
-      Laden
-    </button>
-    <a id="downloadAnchorElem" style="display: none"></a>
+<button
+  type="button"
+  id="load-participants"
+  class="big-button"
+  onclick="loadFromStorage()"
+>
+  Laden
+</button>
+<a id="downloadAnchorElem" style="display: none"></a>
 
-    <button
-      type="button"
-      id="export-participants"
-      class="big-button"
-      onclick="exportParticipants()"
-    >
-      Exportieren
-    </button>
-    <br />
-    <label for="load-file">Load start list:</label>
-    <input
-      type="file"
-      id="load-file"
-      accept=".json"
-      onchange="loadFromFile()"
-    />
-    <br />
-    <button
-      type="button"
-      id="new-participant"
-      class="big-button"
-      onclick="createParticipantField()"
-    >
-      + Teilnehmer
-    </button>
-    <div id="container"></div>
-
-    <div id="snackbar">Some text some message..</div>
-  </body>
-</html>
+<button
+  type="button"
+  id="export-participants"
+  class="big-button"
+  onclick="exportParticipants()"
+>
+  Exportieren
+</button>
+<br />
+<label for="load-file">Load start list:</label>
+<input type="file" id="load-file" accept=".json" onchange="loadFromFile()" />
+<br />
+<button
+  type="button"
+  id="new-participant"
+  class="big-button"
+  onclick="createParticipantField()"
+>
+  + Teilnehmer
+</button>
+<div id="container"></div>

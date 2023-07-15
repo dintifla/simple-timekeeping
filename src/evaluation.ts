@@ -1,6 +1,5 @@
 import { Result } from "./result";
 import { showSnackbar } from "./components/snackbar";
-import "./styles/styles.css";
 import { exportAsCsv, exportAsJson } from "./helpers/fileDownloader";
 import { validate } from "./resultValidator";
 import { calculateRankAndSort, mapStartToFinish } from "./resultCalculator";
@@ -115,3 +114,5 @@ function calculate(): void {
 }
 
 (window as any).calculate = calculate;
+
+export { calculate };

@@ -1,13 +1,12 @@
 import { Participant } from "./participant";
 import { showSnackbar } from "./components/snackbar";
-import "./styles/styles.css";
 import { exportAsJson } from "./helpers/fileDownloader";
 import { Configuration } from "./configuration";
 
 let _participants: Participant[] = [];
 const _config: Configuration = {
   categories: ["Male", "Female"],
-  startIntervalSeconds: 30
+  startIntervalSeconds: 30,
 };
 const _categories: string[] = _config.categories;
 
@@ -41,7 +40,9 @@ function addHeader(table: HTMLTableElement): void {
 }
 
 function createParticipantField(): void {
-  const table = <HTMLTableSectionElement>document.getElementById("participant-table-body");
+  const table = <HTMLTableSectionElement>(
+    document.getElementById("participant-table-body")
+  );
   if (!table) throw Error("table not found");
   const rowNumber = _participants.length;
   const row = createTableRow(rowNumber, table);
@@ -155,9 +156,11 @@ function createNameField(
 
 function createTableRow(
   rowNumber: number,
-  table: HTMLTableSectionElement,
+  table: HTMLTableSectionElement
 ): HTMLTableRowElement {
-  let tableRow = <HTMLTableRowElement>document.getElementById(`container-row-${rowNumber}`);
+  let tableRow = <HTMLTableRowElement>(
+    document.getElementById(`container-row-${rowNumber}`)
+  );
   if (!tableRow) {
     tableRow = table.insertRow();
     tableRow.id = `container-row-${rowNumber}`;
@@ -206,8 +209,8 @@ function load(participants: Participant[]) {
   const table = document.createElement("table");
   addHeader(table);
   const tableBody = table.createTBody();
-  tableBody.id = "participant-table-body"
-  container.appendChild(table)
+  tableBody.id = "participant-table-body";
+  container.appendChild(table);
   for (let i = 0; i < _participants.length; i++) {
     const row = createTableRow(i, tableBody);
     createNumberPlateField(i, row, _participants[i].numberPlate);
@@ -251,3 +254,11 @@ function getWithSpare(participants: Participant[]) {
 (window as any).exportParticipants = exportParticipants;
 (window as any).loadFromStorage = loadFromStorage;
 (window as any).loadFromFile = loadFromFile;
+
+export {
+  newParticipantList,
+  createParticipantField,
+  exportParticipants,
+  loadFromStorage,
+  loadFromFile,
+};

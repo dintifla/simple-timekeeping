@@ -1,6 +1,5 @@
 import { Participant } from "./participant";
 import { showSnackbar } from "./components/snackbar";
-import "./styles/styles.css";
 import { exportAsJson } from "./helpers/fileDownloader";
 import { parseTime, roundTo100Ms } from "./helpers/time";
 import { Countdown } from "./components/countdown";
@@ -126,7 +125,7 @@ function loadFromFile(): void {
   clearEntries();
   setCountdown();
   const fileInput = <HTMLInputElement>document.getElementById("load-file");
-  if (fileInput && fileInput.files && fileInput.files.length > 0) {
+  if (fileInput?.files && fileInput.files.length > 0) {
     const file = fileInput.files.item(0);
     if (file)
       file.text().then((text) => {
@@ -144,9 +143,13 @@ function setCountdown(): void {
   ) {
     _countdown = new Countdown();
   } else {
-    _countdown?.reset();
-    _countdown = undefined;
+    resetCountdown();
   }
+}
+
+function resetCountdown(): void {
+  _countdown?.reset();
+  _countdown = undefined;
 }
 
 function load(entries: Participant[]) {
@@ -204,9 +207,10 @@ function validate(entries: Participant[]) {
 function reset() {
   _entries = [];
   const container = document.getElementById("container");
-  if (!container) throw Error("Container not found");
-  container.innerHTML = "";
-  (<HTMLInputElement>document.getElementById("load-file")).value = "";
+  if (container) {
+    container.innerHTML = "";
+    (<HTMLInputElement>document.getElementById("load-file")).value = "";
+  }
 }
 
 function exportMeasurements() {
@@ -229,3 +233,5 @@ function formatDateToTimeString(date: number | Date): string {
 (window as any).loadFromFile = loadFromFile;
 (window as any).reset = reset;
 (window as any).exportMeasurements = exportMeasurements;
+
+export { loadFromStorage, loadFromFile, reset, resetCountdown, exportMeasurements };

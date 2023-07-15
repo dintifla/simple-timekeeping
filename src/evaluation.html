@@ -1,29 +1,14 @@
-<!DOCTYPE html>
-<html lang="de-CH">
-  <head>
-    <meta charset="UTF-8" />
-    <title>Auswertung</title>
-  </head>
-  <body>
+<h1>Auswertung</h1>
 
-    <label for="start-file">Startzeiten:</label>
-    <input type="file" id="start-file" accept=".json" />
-    <br />
-    <label for="finish-file">Ankunftszeiten:</label>
-    <input type="file" id="finish-file" accept=".json" />
-    <br />
-    <button
-      type="button"
-      id="evaluate"
-      class="big-button"
-      onclick="calculate()"
-    >
-      Evaluieren
-    </button>
+<label for="start-file">Startzeiten:</label>
+<input type="file" id="start-file" accept=".json" />
+<br />
+<label for="finish-file">Ankunftszeiten:</label>
+<input type="file" id="finish-file" accept=".json" />
+<br />
+<button type="button" id="evaluate" class="big-button" onclick="calculate()">
+  Evaluieren
+</button>
 
-    <div id="container"></div>
-    <a id="downloadAnchorElem" style="display: none"></a>
-
-    <div id="snackbar">Some text some message..</div>
-  </body>
-</html>
+<div id="container"></div>
+<a id="downloadAnchorElem" style="display: none"></a>

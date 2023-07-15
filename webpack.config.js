@@ -2,24 +2,14 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 const InlineChunkHtmlPlugin = require("./webpack-plugins/inlineChunkHtmlPlugin.js");
 const path = require("path");
 
-const listOfComponents = ["startList", "timekeeping", "evaluation"];
+const entry =  path.join(__dirname, `src/index.ts`);
 
-const entry = listOfComponents.reduce((entries, componentName) => {
-  entries[componentName] = path.join(__dirname, `src/${componentName}.ts`);
-  return entries;
-}, {});
-
-const htmlGenerators = listOfComponents.reduce((entries, componentName) => {
-  entries.push(
-    new HtmlWebpackPlugin({
-      template: `src/${componentName}.html`,
-      chunks: [componentName],
+const htmlGenerator =  new HtmlWebpackPlugin({
+      template: `src/index.html`,
+      // chunks: [componentName],
       inject: "body",
-      filename: `${componentName}.html`,
-    })
-  );
-  return entries;
-}, []);
+      filename: "Zeitmessung.html",
+    });
 
 module.exports = {
   entry,
@@ -35,6 +25,10 @@ module.exports = {
         test: /\.css$/i,
         use: ["style-loader", "css-loader"],
       },
+      {
+        test: /\.html$/i,
+        use: "html-loader",
+      },
     ],
   },
   resolve: {
@@ -45,5 +39,5 @@ module.exports = {
     path: path.resolve(__dirname, "dist"),
     clean: true,
   },
-  plugins: [...htmlGenerators, new InlineChunkHtmlPlugin([/.js$/])],
+  plugins: [htmlGenerator, new InlineChunkHtmlPlugin([/.js$/])],
 };
