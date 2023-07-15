@@ -13,6 +13,65 @@ const _config: Configuration = {
   startIntervalSeconds: 30,
 };
 
+function render(): HTMLElement {
+  const header = document.createElement("h1");
+  header.innerText = "Zeitmessung";
+
+  const locationSelect = document.createElement("select");
+  locationSelect.id = "select-measurement-location";
+  locationSelect.className = "big-select";
+  ["Start", "Ziel"].forEach((opt) => {
+    const option = document.createElement("option");
+    option.value = opt;
+    option.innerText = opt;
+    locationSelect.appendChild(option);
+  });
+  locationSelect.onchange = () => reset();
+  const locationLabel = document.createElement("label");
+  locationLabel.innerText = "Ort:";
+  locationLabel.htmlFor = locationSelect.id;
+
+  const startListInput = document.createElement("input");
+  startListInput.type = "file";
+  startListInput.id = "load-file";
+  startListInput.accept = ".json";
+  startListInput.onchange = () => loadFromFile();
+  const startListLabel = document.createElement("label");
+  startListLabel.innerText = "Startliste laden:";
+  startListLabel.htmlFor = startListInput.id;
+
+  const loadButton = document.createElement("button");
+  loadButton.className = "big-button";
+  loadButton.innerText = "Laden";
+  loadButton.onclick = () => loadFromStorage();
+
+  const downloadElement = document.createElement("a");
+  downloadElement.id = "downloadAnchorElem";
+  downloadElement.style.display = "none";
+
+  const exportButton = document.createElement("button");
+  exportButton.className = "big-button";
+  exportButton.innerText = "Exportieren";
+  exportButton.onclick = () => exportMeasurements();
+
+  const container = document.createElement("div");
+  container.id = "container";
+
+  const parent = document.createElement("div");
+  parent.appendChild(header);
+  parent.appendChild(locationLabel);
+  parent.appendChild(locationSelect);
+  parent.appendChild(document.createElement("br"));
+  parent.appendChild(startListLabel);
+  parent.appendChild(startListInput);
+  parent.appendChild(loadButton);
+  parent.appendChild(downloadElement);
+  parent.appendChild(exportButton);
+  parent.appendChild(container);
+
+  return parent;
+}
+
 function createTableRow(
   table: HTMLTableSectionElement,
   numberPlateValue: number,
@@ -229,10 +288,4 @@ function formatDateToTimeString(date: number | Date): string {
   return dateFormatter.format(date);
 }
 
-export {
-  loadFromStorage,
-  loadFromFile,
-  reset,
-  resetCountdown,
-  exportMeasurements,
-};
+export { render, resetCountdown };

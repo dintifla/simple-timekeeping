@@ -5,6 +5,53 @@ import { validate } from "./resultValidator";
 import { calculateRankAndSort, mapStartToFinish } from "./resultCalculator";
 import { Timing } from "./timing";
 
+function render(): HTMLElement {
+  const header = document.createElement("h1");
+  header.innerText = "Auswertung";
+
+  const startFileInput = document.createElement("input");
+  startFileInput.type = "file";
+  startFileInput.id = "start-file";
+  startFileInput.accept = ".json";
+  const startLabel = document.createElement("label");
+  startLabel.innerText = "Startzeiten:";
+  startLabel.htmlFor = startFileInput.id;
+
+  const finishInputFile = document.createElement("input");
+  finishInputFile.type = "file";
+  finishInputFile.id = "finish-file";
+  finishInputFile.accept = ".json";
+  const finishLabel = document.createElement("label");
+  finishLabel.innerText = "Ankunftszeiten:";
+  finishLabel.htmlFor = finishInputFile.id;
+
+  const button = document.createElement("button");
+  button.className = "big-button";
+  button.innerText = "Evaluieren";
+  button.onclick = () => calculate();
+
+  const container = document.createElement("div");
+  container.id = "container";
+
+  const downloadElement = document.createElement("a");
+  downloadElement.id = "downloadAnchorElem";
+  downloadElement.style.display = "none";
+
+  const parent = document.createElement("div");
+  parent.appendChild(header);
+  parent.appendChild(startLabel);
+  parent.appendChild(startFileInput);
+  parent.appendChild(document.createElement("br"));
+  parent.appendChild(finishLabel);
+  parent.appendChild(finishInputFile);
+  parent.appendChild(document.createElement("br"));
+  parent.appendChild(button);
+  parent.appendChild(container);
+  parent.appendChild(downloadElement);
+
+  return parent;
+}
+
 function calculate(): void {
   if (!validateFiles()) return;
 
@@ -113,4 +160,4 @@ function calculate(): void {
   }
 }
 
-export { calculate };
+export { render };

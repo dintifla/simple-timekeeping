@@ -10,6 +10,61 @@ const _config: Configuration = {
 };
 const _categories: string[] = _config.categories;
 
+function render(): HTMLElement {
+  const header = document.createElement("h1");
+  header.innerText = "Startliste";
+
+  const newListButton = document.createElement("button");
+  newListButton.className = "big-button";
+  newListButton.innerText = "Neu";
+  newListButton.onclick = () => newParticipantList();
+
+  const loadButton = document.createElement("button");
+  loadButton.className = "big-button";
+  loadButton.innerText = "Laden";
+  loadButton.onclick = () => loadFromStorage();
+
+  const downloadElement = document.createElement("a");
+  downloadElement.id = "downloadAnchorElem";
+  downloadElement.style.display = "none";
+
+  const exportButton = document.createElement("button");
+  exportButton.className = "big-button";
+  exportButton.innerText = "Exportieren";
+  exportButton.onclick = () => exportParticipants();
+
+  const startListInput = document.createElement("input");
+  startListInput.type = "file";
+  startListInput.id = "load-file";
+  startListInput.accept = ".json";
+  startListInput.onchange = () => loadFromFile();
+  const startListLabel = document.createElement("label");
+  startListLabel.innerText = "Startliste laden:";
+  startListLabel.htmlFor = startListInput.id;
+
+  const newParticipantButton = document.createElement("button");
+  newParticipantButton.className = "big-button";
+  newParticipantButton.innerText = "+ Teilnehmer";
+  newParticipantButton.onclick = () => createParticipantField();
+
+  const container = document.createElement("div");
+  container.id = "container";
+
+  const parent = document.createElement("div");
+  parent.appendChild(header);
+  parent.appendChild(newListButton);
+  parent.appendChild(loadButton);
+  parent.appendChild(downloadElement);
+  parent.appendChild(exportButton);
+  parent.appendChild(document.createElement("br"));
+  parent.appendChild(startListLabel);
+  parent.appendChild(startListInput);
+  parent.appendChild(document.createElement("br"));
+  parent.appendChild(newParticipantButton);
+  parent.appendChild(container);
+  return parent;
+}
+
 function newParticipantList(): void {
   if (_participants.length > 0) exportParticipants();
   clearParticipants();
@@ -249,10 +304,4 @@ function getWithSpare(participants: Participant[]) {
   return withSpares;
 }
 
-export {
-  newParticipantList,
-  createParticipantField,
-  exportParticipants,
-  loadFromStorage,
-  loadFromFile,
-};
+export { render };

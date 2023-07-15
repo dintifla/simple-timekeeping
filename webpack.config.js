@@ -5,8 +5,6 @@ const path = require("path");
 const entry = path.join(__dirname, `src/index.ts`);
 
 const htmlGenerator = new HtmlWebpackPlugin({
-  template: `src/index.html`,
-  // chunks: [componentName],
   inject: "body",
   filename: "Zeitmessung.html",
 });
