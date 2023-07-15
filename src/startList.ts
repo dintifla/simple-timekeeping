@@ -15,7 +15,7 @@ function newParticipantList(): void {
   clearParticipants();
 
   if (_categories.length <= 0) {
-    showSnackbar("Configure at least one category");
+    showSnackbar("Configuriere mindestens eine Kategorie");
     throw Error("no categories configured");
   }
   const container = document.getElementById("container");
@@ -225,7 +225,7 @@ function validate(participants: Participant[]) {
     return false;
   }
   if (!participants.every((p) => "numberPlate" in p && "name" in p)) {
-    showSnackbar("Wrong data format");
+    showSnackbar("Falsches Datenformat");
     return false;
   }
   return true;

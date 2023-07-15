@@ -14,7 +14,7 @@ function calculate(): void {
       const starts = JSON.parse(fileContents[0]);
       const finishes = JSON.parse(fileContents[1]);
       if (starts.length != finishes.length) {
-        showSnackbar("Start und finish have have not the same length");
+        showSnackbar("Start und Ziel file sind nicht gleich lang");
         return;
       }
 
@@ -59,11 +59,11 @@ function calculate(): void {
 
   function validateFiles() {
     if (!(<HTMLInputElement>document.getElementById("start-file"))?.value) {
-      showSnackbar("Start file missing!");
+      showSnackbar("Start file fehlt!");
       return false;
     }
     if (!(<HTMLInputElement>document.getElementById("finish-file"))?.value) {
-      showSnackbar("Finish file missing!");
+      showSnackbar("Ziel file fehlt!");
       return false;
     }
     return true;

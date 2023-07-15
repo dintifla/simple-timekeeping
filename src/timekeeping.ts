@@ -198,7 +198,7 @@ function validate(entries: Participant[]) {
     return false;
   }
   if (!entries.every((p) => "numberPlate" in p && "name" in p)) {
-    showSnackbar("Wrong data format");
+    showSnackbar("Falsches Datenformat");
     return false;
   }
   return true;
