@@ -234,4 +234,10 @@ function formatDateToTimeString(date: number | Date): string {
 (window as any).reset = reset;
 (window as any).exportMeasurements = exportMeasurements;
 
-export { loadFromStorage, loadFromFile, reset, resetCountdown, exportMeasurements };
+export {
+  loadFromStorage,
+  loadFromFile,
+  reset,
+  resetCountdown,
+  exportMeasurements,
+};

@@ -2,14 +2,14 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 const InlineChunkHtmlPlugin = require("./webpack-plugins/inlineChunkHtmlPlugin.js");
 const path = require("path");
 
-const entry =  path.join(__dirname, `src/index.ts`);
+const entry = path.join(__dirname, `src/index.ts`);
 
-const htmlGenerator =  new HtmlWebpackPlugin({
-      template: `src/index.html`,
-      // chunks: [componentName],
-      inject: "body",
-      filename: "Zeitmessung.html",
-    });
+const htmlGenerator = new HtmlWebpackPlugin({
+  template: `src/index.html`,
+  // chunks: [componentName],
+  inject: "body",
+  filename: "Zeitmessung.html",
+});
 
 module.exports = {
   entry,
