@@ -2,6 +2,7 @@ import * as startList from "./startList";
 import * as timeKeeping from "./timekeeping";
 import * as evaluation from "./evaluation";
 import "./styles/styles.css";
+import { HTMLFactory } from "./htmlFactory";
 
 render();
 const contentContainer = document.getElementById("content-container");
@@ -35,10 +36,7 @@ function renderMenu(): HTMLElement {
   ];
   menuItems.forEach((x: [string, () => void]) => {
     const li = document.createElement("li");
-    const button = document.createElement("button");
-    button.innerText = x[0];
-    button.className = "big-button";
-    button.onclick = x[1];
+    const button = HTMLFactory.makeButton(x[0], "big-button", x[1]);
     li.appendChild(button);
     menu.appendChild(li);
   });

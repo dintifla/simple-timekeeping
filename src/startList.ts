@@ -2,47 +2,37 @@ import { Participant } from "./participant";
 import { showSnackbar } from "./components/snackbar";
 import { exportAsJson } from "./helpers/fileDownloader";
 import { Configuration, getConfig } from "./configuration";
+import { HTMLFactory } from "./htmlFactory";
 
 let _participants: Participant[] = [];
-const _config: Configuration =  getConfig();
+const _config: Configuration = getConfig();
 const _categories: string[] = _config.categories;
 
 function render(): HTMLElement {
   const header = document.createElement("h1");
   header.innerText = "Startliste";
 
-  const newListButton = document.createElement("button");
-  newListButton.className = "big-button";
-  newListButton.innerText = "Neu";
-  newListButton.onclick = () => newParticipantList();
-
-  const loadButton = document.createElement("button");
-  loadButton.className = "big-button";
-  loadButton.innerText = "Laden";
-  loadButton.onclick = () => loadFromStorage();
-
-  const downloadElement = document.createElement("a");
-  downloadElement.id = "downloadAnchorElem";
-  downloadElement.style.display = "none";
-
-  const exportButton = document.createElement("button");
-  exportButton.className = "big-button";
-  exportButton.innerText = "Exportieren";
-  exportButton.onclick = () => exportParticipants();
-
-  const startListInput = document.createElement("input");
-  startListInput.type = "file";
-  startListInput.id = "load-file";
-  startListInput.accept = ".json";
-  startListInput.onchange = () => loadFromFile();
-  const startListLabel = document.createElement("label");
-  startListLabel.innerText = "Startliste laden:";
-  startListLabel.htmlFor = startListInput.id;
-
-  const newParticipantButton = document.createElement("button");
-  newParticipantButton.className = "big-button";
-  newParticipantButton.innerText = "+ Teilnehmer";
-  newParticipantButton.onclick = () => createParticipantField();
+  const newListButton = HTMLFactory.makeButton("Neu", "big-button", () =>
+    newParticipantList()
+  );
+  const loadButton = HTMLFactory.makeButton("Laden", "big-button", () =>
+    loadFromStorage()
+  );
+  const downloadElement =
+    HTMLFactory.makeInvisibleDownloadElement("downloadAnchorElem");
+  const exportButton = HTMLFactory.makeButton("Exportieren", "big-button", () =>
+    exportParticipants()
+  );
+  const startListInput = HTMLFactory.makeJsonFileInput(
+    "Startliste laden:",
+    "load-file",
+    () => loadFromFile()
+  );
+  const newParticipantButton = HTMLFactory.makeButton(
+    "+ Teilnehmer",
+    "big-button",
+    () => createParticipantField()
+  );
 
   const container = document.createElement("div");
   container.id = "container";
@@ -54,7 +44,6 @@ function render(): HTMLElement {
   parent.appendChild(downloadElement);
   parent.appendChild(exportButton);
   parent.appendChild(document.createElement("br"));
-  parent.appendChild(startListLabel);
   parent.appendChild(startListInput);
   parent.appendChild(document.createElement("br"));
   parent.appendChild(newParticipantButton);
@@ -185,22 +174,22 @@ function createNameField(
   nameValue?: string
 ): HTMLInputElement {
   const cell = row.insertCell();
-  const name = document.createElement("input");
-  name.setAttribute("type", "text");
-  name.id = `participant-name-${rowNumber}`;
-  name.onchange = function (e: Event) {
-    try {
-      const elementId = (e.target as HTMLElement).id;
-      const matches = elementId.match(/\d+/g);
-      if (!matches || matches.length <= 0)
-        throw Error(`Couldn't resolve row number for ${elementId}`);
-      const rowNumber = parseInt(matches[0]);
-      _participants[rowNumber].name = name.value;
-      saveParticipants();
-    } catch (error) {
-      // ignore
+  const name = HTMLFactory.makeTextInput(
+    `participant-name-${rowNumber}`,
+    function (e: Event) {
+      try {
+        const elementId = (e.target as HTMLElement).id;
+        const matches = elementId.match(/\d+/g);
+        if (!matches || matches.length <= 0)
+          throw Error(`Couldn't resolve row number for ${elementId}`);
+        const rowNumber = parseInt(matches[0]);
+        _participants[rowNumber].name = name.value;
+        saveParticipants();
+      } catch (error) {
+        // ignore
+      }
     }
-  };
+  );
   if (nameValue) name.value = nameValue;
   cell.appendChild(name);
   return name;

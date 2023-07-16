@@ -4,45 +4,35 @@ import { exportAsCsv, exportAsJson } from "./helpers/fileDownloader";
 import { validate } from "./resultValidator";
 import { calculateRankAndSort, mapStartToFinish } from "./resultCalculator";
 import { Timing } from "./timing";
+import { HTMLFactory } from "./htmlFactory";
 
 function render(): HTMLElement {
   const header = document.createElement("h1");
   header.innerText = "Auswertung";
 
-  const startFileInput = document.createElement("input");
-  startFileInput.type = "file";
-  startFileInput.id = "start-file";
-  startFileInput.accept = ".json";
-  const startLabel = document.createElement("label");
-  startLabel.innerText = "Startzeiten:";
-  startLabel.htmlFor = startFileInput.id;
+  const startFileInput = HTMLFactory.makeJsonFileInput(
+    "Startzeiten:",
+    "start-file"
+  );
+  const finishInputFile = HTMLFactory.makeJsonFileInput(
+    "Ankunfszeiten:",
+    "finish-file"
+  );
 
-  const finishInputFile = document.createElement("input");
-  finishInputFile.type = "file";
-  finishInputFile.id = "finish-file";
-  finishInputFile.accept = ".json";
-  const finishLabel = document.createElement("label");
-  finishLabel.innerText = "Ankunftszeiten:";
-  finishLabel.htmlFor = finishInputFile.id;
-
-  const button = document.createElement("button");
-  button.className = "big-button";
-  button.innerText = "Evaluieren";
-  button.onclick = () => calculate();
+  const button = HTMLFactory.makeButton("Evaluieren", "big-button", () =>
+    calculate()
+  );
 
   const container = document.createElement("div");
   container.id = "container";
 
-  const downloadElement = document.createElement("a");
-  downloadElement.id = "downloadAnchorElem";
-  downloadElement.style.display = "none";
+  const downloadElement =
+    HTMLFactory.makeInvisibleDownloadElement("downloadAnchorElem");
 
   const parent = document.createElement("div");
   parent.appendChild(header);
-  parent.appendChild(startLabel);
   parent.appendChild(startFileInput);
   parent.appendChild(document.createElement("br"));
-  parent.appendChild(finishLabel);
   parent.appendChild(finishInputFile);
   parent.appendChild(document.createElement("br"));
   parent.appendChild(button);
