@@ -1,10 +1,46 @@
 import { Result } from "./result";
 import { showSnackbar } from "./components/snackbar";
-import "./styles/styles.css";
 import { exportAsCsv, exportAsJson } from "./helpers/fileDownloader";
 import { validate } from "./resultValidator";
 import { calculateRankAndSort, mapStartToFinish } from "./resultCalculator";
 import { Timing } from "./timing";
+import { HTMLFactory } from "./htmlFactory";
+
+function render(): HTMLElement {
+  const header = document.createElement("h1");
+  header.innerText = "Auswertung";
+
+  const startFileInput = HTMLFactory.makeJsonFileInput(
+    "Startzeiten:",
+    "start-file"
+  );
+  const finishInputFile = HTMLFactory.makeJsonFileInput(
+    "Ankunfszeiten:",
+    "finish-file"
+  );
+
+  const button = HTMLFactory.makeButton("Evaluieren", "big-button", () =>
+    calculate()
+  );
+
+  const container = document.createElement("div");
+  container.id = "container";
+
+  const downloadElement =
+    HTMLFactory.makeInvisibleDownloadElement("downloadAnchorElem");
+
+  const parent = document.createElement("div");
+  parent.appendChild(header);
+  parent.appendChild(startFileInput);
+  parent.appendChild(document.createElement("br"));
+  parent.appendChild(finishInputFile);
+  parent.appendChild(document.createElement("br"));
+  parent.appendChild(button);
+  parent.appendChild(container);
+  parent.appendChild(downloadElement);
+
+  return parent;
+}
 
 function calculate(): void {
   if (!validateFiles()) return;
@@ -15,7 +51,7 @@ function calculate(): void {
       const starts = JSON.parse(fileContents[0]);
       const finishes = JSON.parse(fileContents[1]);
       if (starts.length != finishes.length) {
-        showSnackbar("Start und finish have have not the same length");
+        showSnackbar("Start und Ziel file sind nicht gleich lang");
         return;
       }
 
@@ -60,11 +96,11 @@ function calculate(): void {
 
   function validateFiles() {
     if (!(<HTMLInputElement>document.getElementById("start-file"))?.value) {
-      showSnackbar("Start file missing!");
+      showSnackbar("Start file fehlt!");
       return false;
     }
     if (!(<HTMLInputElement>document.getElementById("finish-file"))?.value) {
-      showSnackbar("Finish file missing!");
+      showSnackbar("Ziel file fehlt!");
       return false;
     }
     return true;
@@ -114,4 +150,4 @@ function calculate(): void {
   }
 }
 
-(window as any).calculate = calculate;
+export { render };

@@ -1,18 +1,60 @@
 import { Participant } from "./participant";
 import { showSnackbar } from "./components/snackbar";
-import "./styles/styles.css";
 import { exportAsJson } from "./helpers/fileDownloader";
 import { parseTime, roundTo100Ms } from "./helpers/time";
 import { Countdown } from "./components/countdown";
-import { Configuration } from "./configuration";
+import { Configuration, getConfig } from "./configuration";
+import { HTMLFactory } from "./htmlFactory";
 
 let _entries: Participant[] = [];
 let _measurementLocation: string;
 let _countdown: Countdown | undefined = new Countdown();
-const _config: Configuration = {
-  categories: ["Male", "Female"],
-  startIntervalSeconds: 30,
-};
+const _config: Configuration = getConfig();
+
+function render(): HTMLElement {
+  const header = document.createElement("h1");
+  header.innerText = "Zeitmessung";
+
+  const locationSelect = HTMLFactory.makeSelect(
+    "Ort:",
+    "select-measurement-location",
+    "big-select",
+    ["Start", "Ziel"],
+    () => reset()
+  );
+
+  const startListInput = HTMLFactory.makeJsonFileInput(
+    "Startliste laden:",
+    "load-file",
+    () => loadFromFile()
+  );
+
+  const loadButton = HTMLFactory.makeButton("Laden", "big-button", () =>
+    loadFromStorage()
+  );
+
+  const downloadElement =
+    HTMLFactory.makeInvisibleDownloadElement("downloadAnchorElem");
+
+  const exportButton = HTMLFactory.makeButton("Exportieren", "big-button", () =>
+    exportMeasurements()
+  );
+
+  const container = document.createElement("div");
+  container.id = "container";
+
+  const parent = document.createElement("div");
+  parent.appendChild(header);
+  parent.appendChild(locationSelect);
+  parent.appendChild(document.createElement("br"));
+  parent.appendChild(startListInput);
+  parent.appendChild(loadButton);
+  parent.appendChild(downloadElement);
+  parent.appendChild(exportButton);
+  parent.appendChild(container);
+
+  return parent;
+}
 
 function createTableRow(
   table: HTMLTableSectionElement,
@@ -37,19 +79,20 @@ function createButton(
 ) {
   let button = document.getElementById(`button-${rowNumber}`);
   if (!button) {
-    button = document.createElement("button");
-    button.id = `button-${rowNumber}`;
-    button.className = "small-button";
-    button.onclick = function (e: Event) {
-      const elementId = (e.target as HTMLElement).id;
-      const matches = elementId.match(/\d+/g);
-      if (!matches || matches.length <= 0)
-        throw Error(`Couldn't resolve row number for ${elementId}`);
-      const rowNumber = parseInt(matches[0]);
-      addTimestamp(rowNumber);
-      _countdown?.start(_config.startIntervalSeconds);
-    };
-    button.innerText = `${label} ${rowNumber + 1}`;
+    button = HTMLFactory.makeButton(
+      `${label} ${rowNumber + 1}`,
+      "small-button",
+      function (e: Event) {
+        const elementId = (e.target as HTMLElement).id;
+        const matches = elementId.match(/\d+/g);
+        if (!matches || matches.length <= 0)
+          throw Error(`Couldn't resolve row number for ${elementId}`);
+        const rowNumber = parseInt(matches[0]);
+        addTimestamp(rowNumber);
+        _countdown?.start(_config.startIntervalSeconds);
+      },
+      `button-${rowNumber}`
+    );
     const tableData = tableRow.insertCell();
     tableData.appendChild(button);
     return button;
@@ -62,24 +105,25 @@ function createDisplay(rowNumber: number, tableRow: HTMLTableRowElement) {
   );
 
   if (!display) {
-    display = document.createElement("input");
-    display.setAttribute("type", "text");
-    display.id = `timestamp-${rowNumber}`;
-    display.onchange = function (e: Event) {
-      try {
-        const elementId = (e.target as HTMLElement).id;
-        const matches = elementId.match(/\d+/g);
-        if (!matches || matches.length <= 0)
-          throw Error(`Couldn't resolve row number for ${elementId}`);
-        const rowNumber = parseInt(matches[0]);
-        if (display.value) _entries[rowNumber].time = parseTime(display.value);
-        else delete _entries[rowNumber].time;
-        saveEntries();
-      } catch (error) {
-        delete _entries[rowNumber].time;
-        display.value = "";
+    display = HTMLFactory.makeTextInput(
+      `timestamp-${rowNumber}`,
+      function (e: Event) {
+        try {
+          const elementId = (e.target as HTMLElement).id;
+          const matches = elementId.match(/\d+/g);
+          if (!matches || matches.length <= 0)
+            throw Error(`Couldn't resolve row number for ${elementId}`);
+          const rowNumber = parseInt(matches[0]);
+          if (display.value)
+            _entries[rowNumber].time = parseTime(display.value);
+          else delete _entries[rowNumber].time;
+          saveEntries();
+        } catch (error) {
+          delete _entries[rowNumber].time;
+          display.value = "";
+        }
       }
-    };
+    );
   }
   const tableData = tableRow.insertCell();
   tableData.appendChild(display);
@@ -126,7 +170,7 @@ function loadFromFile(): void {
   clearEntries();
   setCountdown();
   const fileInput = <HTMLInputElement>document.getElementById("load-file");
-  if (fileInput && fileInput.files && fileInput.files.length > 0) {
+  if (fileInput?.files && fileInput.files.length > 0) {
     const file = fileInput.files.item(0);
     if (file)
       file.text().then((text) => {
@@ -144,9 +188,13 @@ function setCountdown(): void {
   ) {
     _countdown = new Countdown();
   } else {
-    _countdown?.reset();
-    _countdown = undefined;
+    resetCountdown();
   }
+}
+
+function resetCountdown(): void {
+  _countdown?.reset();
+  _countdown = undefined;
 }
 
 function load(entries: Participant[]) {
@@ -195,7 +243,7 @@ function validate(entries: Participant[]) {
     return false;
   }
   if (!entries.every((p) => "numberPlate" in p && "name" in p)) {
-    showSnackbar("Wrong data format");
+    showSnackbar("Falsches Datenformat");
     return false;
   }
   return true;
@@ -204,9 +252,10 @@ function validate(entries: Participant[]) {
 function reset() {
   _entries = [];
   const container = document.getElementById("container");
-  if (!container) throw Error("Container not found");
-  container.innerHTML = "";
-  (<HTMLInputElement>document.getElementById("load-file")).value = "";
+  if (container) {
+    container.innerHTML = "";
+    (<HTMLInputElement>document.getElementById("load-file")).value = "";
+  }
 }
 
 function exportMeasurements() {
@@ -225,7 +274,4 @@ function formatDateToTimeString(date: number | Date): string {
   return dateFormatter.format(date);
 }
 
-(window as any).loadFromStorage = loadFromStorage;
-(window as any).loadFromFile = loadFromFile;
-(window as any).reset = reset;
-(window as any).exportMeasurements = exportMeasurements;
+export { render, resetCountdown };

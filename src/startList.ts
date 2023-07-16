@@ -1,22 +1,62 @@
 import { Participant } from "./participant";
 import { showSnackbar } from "./components/snackbar";
-import "./styles/styles.css";
 import { exportAsJson } from "./helpers/fileDownloader";
-import { Configuration } from "./configuration";
+import { Configuration, getConfig } from "./configuration";
+import { HTMLFactory } from "./htmlFactory";
 
 let _participants: Participant[] = [];
-const _config: Configuration = {
-  categories: ["Male", "Female"],
-  startIntervalSeconds: 30
-};
+const _config: Configuration = getConfig();
 const _categories: string[] = _config.categories;
+
+function render(): HTMLElement {
+  const header = document.createElement("h1");
+  header.innerText = "Startliste";
+
+  const newListButton = HTMLFactory.makeButton("Neu", "big-button", () =>
+    newParticipantList()
+  );
+  const loadButton = HTMLFactory.makeButton("Laden", "big-button", () =>
+    loadFromStorage()
+  );
+  const downloadElement =
+    HTMLFactory.makeInvisibleDownloadElement("downloadAnchorElem");
+  const exportButton = HTMLFactory.makeButton("Exportieren", "big-button", () =>
+    exportParticipants()
+  );
+  const startListInput = HTMLFactory.makeJsonFileInput(
+    "Startliste laden:",
+    "load-file",
+    () => loadFromFile()
+  );
+  const newParticipantButton = HTMLFactory.makeButton(
+    "+ Teilnehmer",
+    "big-button",
+    () => createParticipantField()
+  );
+
+  const container = document.createElement("div");
+  container.id = "container";
+
+  const parent = document.createElement("div");
+  parent.appendChild(header);
+  parent.appendChild(newListButton);
+  parent.appendChild(loadButton);
+  parent.appendChild(downloadElement);
+  parent.appendChild(exportButton);
+  parent.appendChild(document.createElement("br"));
+  parent.appendChild(startListInput);
+  parent.appendChild(document.createElement("br"));
+  parent.appendChild(newParticipantButton);
+  parent.appendChild(container);
+  return parent;
+}
 
 function newParticipantList(): void {
   if (_participants.length > 0) exportParticipants();
   clearParticipants();
 
   if (_categories.length <= 0) {
-    showSnackbar("Configure at least one category");
+    showSnackbar("Configuriere mindestens eine Kategorie");
     throw Error("no categories configured");
   }
   const container = document.getElementById("container");
@@ -41,7 +81,9 @@ function addHeader(table: HTMLTableElement): void {
 }
 
 function createParticipantField(): void {
-  const table = <HTMLTableSectionElement>document.getElementById("participant-table-body");
+  const table = <HTMLTableSectionElement>(
+    document.getElementById("participant-table-body")
+  );
   if (!table) throw Error("table not found");
   const rowNumber = _participants.length;
   const row = createTableRow(rowNumber, table);
@@ -132,22 +174,22 @@ function createNameField(
   nameValue?: string
 ): HTMLInputElement {
   const cell = row.insertCell();
-  const name = document.createElement("input");
-  name.setAttribute("type", "text");
-  name.id = `participant-name-${rowNumber}`;
-  name.onchange = function (e: Event) {
-    try {
-      const elementId = (e.target as HTMLElement).id;
-      const matches = elementId.match(/\d+/g);
-      if (!matches || matches.length <= 0)
-        throw Error(`Couldn't resolve row number for ${elementId}`);
-      const rowNumber = parseInt(matches[0]);
-      _participants[rowNumber].name = name.value;
-      saveParticipants();
-    } catch (error) {
-      // ignore
+  const name = HTMLFactory.makeTextInput(
+    `participant-name-${rowNumber}`,
+    function (e: Event) {
+      try {
+        const elementId = (e.target as HTMLElement).id;
+        const matches = elementId.match(/\d+/g);
+        if (!matches || matches.length <= 0)
+          throw Error(`Couldn't resolve row number for ${elementId}`);
+        const rowNumber = parseInt(matches[0]);
+        _participants[rowNumber].name = name.value;
+        saveParticipants();
+      } catch (error) {
+        // ignore
+      }
     }
-  };
+  );
   if (nameValue) name.value = nameValue;
   cell.appendChild(name);
   return name;
@@ -155,9 +197,11 @@ function createNameField(
 
 function createTableRow(
   rowNumber: number,
-  table: HTMLTableSectionElement,
+  table: HTMLTableSectionElement
 ): HTMLTableRowElement {
-  let tableRow = <HTMLTableRowElement>document.getElementById(`container-row-${rowNumber}`);
+  let tableRow = <HTMLTableRowElement>(
+    document.getElementById(`container-row-${rowNumber}`)
+  );
   if (!tableRow) {
     tableRow = table.insertRow();
     tableRow.id = `container-row-${rowNumber}`;
@@ -206,8 +250,8 @@ function load(participants: Participant[]) {
   const table = document.createElement("table");
   addHeader(table);
   const tableBody = table.createTBody();
-  tableBody.id = "participant-table-body"
-  container.appendChild(table)
+  tableBody.id = "participant-table-body";
+  container.appendChild(table);
   for (let i = 0; i < _participants.length; i++) {
     const row = createTableRow(i, tableBody);
     createNumberPlateField(i, row, _participants[i].numberPlate);
@@ -222,7 +266,7 @@ function validate(participants: Participant[]) {
     return false;
   }
   if (!participants.every((p) => "numberPlate" in p && "name" in p)) {
-    showSnackbar("Wrong data format");
+    showSnackbar("Falsches Datenformat");
     return false;
   }
   return true;
@@ -246,8 +290,4 @@ function getWithSpare(participants: Participant[]) {
   return withSpares;
 }
 
-(window as any).newParticipantList = newParticipantList;
-(window as any).createParticipantField = createParticipantField;
-(window as any).exportParticipants = exportParticipants;
-(window as any).loadFromStorage = loadFromStorage;
-(window as any).loadFromFile = loadFromFile;
+export { render };
