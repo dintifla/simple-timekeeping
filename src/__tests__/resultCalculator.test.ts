@@ -16,17 +16,17 @@ describe("Result calculator", () => {
       const mapped = mapStartToFinish(starts, finishes);
 
       expect(mapped).toHaveLength(3);
-      expect(mapped[0].category).toBe("M");
+      expect(mapped[0].category).toBe("Male");
       expect(mapped[0].name).toBe("Paul");
       expect(mapped[0].numberPlate).toBe(1);
       expect(mapped[0].startTime).toBe(starts[0].time);
       expect(mapped[0].finishTime).toBe(finishes[0].time);
-      expect(mapped[1].category).toBe("F");
+      expect(mapped[1].category).toBe("Female");
       expect(mapped[1].name).toBe("Clara");
       expect(mapped[1].numberPlate).toBe(2);
       expect(mapped[1].startTime).toBe(starts[1].time);
       expect(mapped[1].finishTime).toBe(finishes[1].time);
-      expect(mapped[2].category).toBe("M");
+      expect(mapped[2].category).toBe("Male");
       expect(mapped[2].name).toBe("Mike");
       expect(mapped[2].numberPlate).toBe(3);
       expect(mapped[2].startTime).toBe(starts[2].time);
