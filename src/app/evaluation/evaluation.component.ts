@@ -3,7 +3,7 @@ import { ResultValidationService } from '../result-validation.service';
 import { MessageService } from '../message.service';
 import { Timing } from '../timing';
 import { Result } from '../result';
-import { calculateRankAndSort, mapStartToFinish } from '../result-calculator';
+import { ResultCalculator } from '../result-calculator';
 import { exportAsCsv, exportAsJson } from '../fileDownloader';
 
 @Component({
@@ -20,6 +20,8 @@ export class EvaluationComponent {
   categories: string[] = [];
   results: { [category: string]: Result[] } = {};
 
+  private calculator: ResultCalculator = new ResultCalculator();
+
   calculate(): void {
     if (!this.validateFiles()) return;
 
@@ -35,10 +37,10 @@ export class EvaluationComponent {
 
         if (!this.validator.validate(starts, finishes)) return;
 
-        const timings = mapStartToFinish(starts, finishes);
+        const timings = this.calculator.mapStartToFinish(starts, finishes);
         this.categories = this.getUniqueCategories(timings);
         for (let category of this.categories) {
-          this.results[category] = calculateRankAndSort(
+          this.results[category] = this.calculator.calculateRankAndSort(
             timings.filter((t) => t.category === category)
           );
           this.exportResults(category, this.results[category]);

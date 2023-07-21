@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Participant } from '../participant';
-import { Configuration, ConfigurationService } from '../configurationService';
+import { Configuration, ConfigurationService } from '../configuration-service';
 import { exportAsJson } from '../fileDownloader';
 import { ParticipantService } from '../participant.service';
 import { MessageService } from '../message.service';

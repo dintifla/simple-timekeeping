@@ -3,7 +3,9 @@ import { Participant } from './participant';
 import { Result } from './result';
 import { Timing } from './timing';
 
-export function calculateRankAndSort(timings: Timing[]): Result[] {
+export class ResultCalculator{
+
+calculateRankAndSort(timings: Timing[]): Result[] {
   const results: Result[] = timings.map((t: Timing) => {
     return {
       rank: 1,
@@ -11,16 +13,16 @@ export function calculateRankAndSort(timings: Timing[]): Result[] {
       name: t.name,
       startTime: t.startTime,
       finishTime: t.finishTime,
-      result: calculateDifference(t),
+      result: this.calculateDifference(t),
       delay: '---',
     };
   });
-  sortByTime(results);
+  this.sortByTime(results);
   let rank: number | '-' = 1;
   for (let i = 0; i < results.length; ++i) {
     rank = i + 1;
     if (i !== 0) {
-      results[i].delay = getDelayToPreviousAndFirst(
+      results[i].delay = this.getDelayToPreviousAndFirst(
         results[0].result,
         results[i].result,
         results[i - 1].result
@@ -43,8 +45,8 @@ export function calculateRankAndSort(timings: Timing[]): Result[] {
     }
   }
   results.forEach((x: Result) => {
-    x.startTime = formatTimestampValue(x.startTime);
-    x.finishTime = formatTimestampValue(x.finishTime);
+    x.startTime = this.formatTimestampValue(x.startTime);
+    x.finishTime = this.formatTimestampValue(x.finishTime);
     x.result =
       typeof x.result !== 'number' || isNaN(x.result)
         ? x.result
@@ -53,18 +55,18 @@ export function calculateRankAndSort(timings: Timing[]): Result[] {
   return results;
 }
 
-function calculateDifference(timing: Timing): string | number {
+private calculateDifference(timing: Timing): string | number {
   if (timing.startTime === '---') return 'DNS';
   if (timing.finishTime === '---') return 'DNF';
   return Date.parse(timing.finishTime) - Date.parse(timing.startTime);
 }
 
-function formatTimestampValue(value: Date | string): string {
+private formatTimestampValue(value: Date | string): string {
   if (!value) return '---';
   return typeof value === 'string' ? value : value.toString();
 }
 
-export function mapStartToFinish(
+ mapStartToFinish(
   starts: Participant[],
   finishes: Participant[]
 ): Timing[] {
@@ -87,7 +89,7 @@ export function mapStartToFinish(
     });
 }
 
-function getDelayToPreviousAndFirst(
+private getDelayToPreviousAndFirst(
   firstTime: number | string,
   currentTime: number | string,
   previousTime: number | string
@@ -115,7 +117,7 @@ function getDelayToPreviousAndFirst(
  * 2. DNF
  * 3. DNS
  */
-function sortByTime(results: Result[]) {
+private sortByTime(results: Result[]) {
   results.sort((a, b) => {
     if (a.result == 'DNS' && b.result == 'DNF') return 1;
     if (a.result == 'DNF' && b.result == 'DNS') return -1;
@@ -124,4 +126,6 @@ function sortByTime(results: Result[]) {
     if (a.result === b.result) return 0;
     return (a.result as number) < (b.result as number) ? -1 : 1;
   });
+}
+
 }

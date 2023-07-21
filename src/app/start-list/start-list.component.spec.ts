@@ -1,27 +1,20 @@
-import { TestBed } from '@angular/core/testing';
-import { AppComponent } from './start-list.component';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { StartListComponent } from './start-list.component';
 
-describe('AppComponent', () => {
-  beforeEach(() => TestBed.configureTestingModule({
-    declarations: [AppComponent]
-  }));
+describe('StartListComponent', () => {
+  let component: StartListComponent;
+  let fixture: ComponentFixture<StartListComponent>;
 
-  it('should create the app', () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.componentInstance;
-    expect(app).toBeTruthy();
-  });
-
-  it(`should have as title 'timekeeping'`, () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.componentInstance;
-    expect(app.title).toEqual('timekeeping');
-  });
-
-  it('should render title', () => {
-    const fixture = TestBed.createComponent(AppComponent);
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      declarations: [StartListComponent],
+    });
+    fixture = TestBed.createComponent(StartListComponent);
+    component = fixture.componentInstance;
     fixture.detectChanges();
-    const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('.content span')?.textContent).toContain('timekeeping app is running!');
+  });
+
+  it('should create', () => {
+    expect(component).toBeTruthy();
   });
 });

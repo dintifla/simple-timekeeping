@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { Participant } from '../participant';
 import { ParticipantService } from '../participant.service';
-import { ConfigurationService } from '../configurationService';
+import { ConfigurationService } from '../configuration-service';
 
 @Component({
   selector: 'app-participant-input',
