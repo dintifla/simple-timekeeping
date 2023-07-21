@@ -1,0 +1,11 @@
+<div *ngIf="entry">
+  <div class="table-body-cell">{{ entry.numberPlate }}</div>
+  <div class="table-body-cell">{{entry.name}}</div>
+  <div class="table-body-cell">
+    <button class="small-button" (click)="takeTime()">{{location}} {{entry.numberPlate}}</button>
+  </div>
+  <div class="table-body-cell">
+    <input type="text" [ngModel]="entry.time | dateToTimeString" (change)="setManualTime($event)" />
+  </div>
+</div>
+

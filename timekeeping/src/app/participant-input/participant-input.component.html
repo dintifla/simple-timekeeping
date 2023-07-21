@@ -1,0 +1,18 @@
+<div *ngIf="participant">
+  <div class="table-body-cell">{{ participant.numberPlate }}</div>
+  <div class="table-body-cell category-selection">
+    <label *ngFor="let category of categories">
+      <input
+        type="radio"
+        name="category-{{ participant.numberPlate }}"
+        [(ngModel)]="participant.category"
+        [value]="category"
+        (change)="save()"
+      />
+      <b>{{ category }}</b>
+    </label>
+  </div>
+  <div class="table-body-cell">
+    <input type="text" [(ngModel)]="participant.name" (focusout)="save()" />
+  </div>
+</div>

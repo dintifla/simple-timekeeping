@@ -1,0 +1,49 @@
+<h2>Zeitmessung</h2>
+
+<label for="select-measurement-location">Ort:</label>
+<select
+  id="select-measurement-location"
+  class="big-select"
+  (change)="reset()"
+  [(ngModel)]="location"
+>
+  <option>Start</option>
+  <option>Ziel</option>
+</select>
+
+<br />
+<label for="load-file">Startliste laden:</label>
+<input type="file" id="load-file" accept=".json" (change)="loadFromFile()" />
+
+<button
+  type="button"
+  id="load-measurements"
+  class="big-button"
+  (click)="getEntries()"
+>
+  Laden
+</button>
+<a id="downloadAnchorElem" style="display: none"></a>
+
+<button
+  type="button"
+  id="export-measurements"
+  class="big-button"
+  (click)="exportMeasurements()"
+>
+  Exportieren
+</button>
+
+<div class="table">
+  <div class="table-header">
+    <div class="table-header-cell">Nr.</div>
+    <div class="table-header-cell">Name</div>
+    <div class="table-header-cell"></div>
+    <div class="table-header-cell">Zeit</div>
+  </div>
+  <div class="table-body">
+    <app-entry class="table-row" *ngFor="let entry of entries" [entry]="entry" [location]="location">
+    </app-entry>
+  </div>
+</div>
+<app-start-countdown *ngIf="location==='Start'"></app-start-countdown>
