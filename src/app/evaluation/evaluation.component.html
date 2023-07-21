@@ -15,27 +15,24 @@
 <div *ngFor="let category of categories">
   <h3>{{ category }}</h3>
 
-  <div class="table">
-    <div class="table-header">
-      <div class="table-header-cell">Rang</div>
-      <div class="table-header-cell">Startnummer</div>
-      <div class="table-header-cell">Name</div>
-      <div class="table-header-cell">Startzeit</div>
-      <div class="table-header-cell">Ankunftszeit</div>
-      <div class="table-header-cell">Laufzeit</div>
-      <div class="table-header-cell">Rückstand</div>
-    </div>
-    <div class="table-body">
-      <div class="table-row" *ngFor="let result of results[category]">
-        <div class="table-body-cell">{{ result.rank }}</div>
-        <div class="table-body-cell">{{ result.numberPlate }}</div>
-        <div class="table-body-cell">{{ result.name }}</div>
-        <div class="table-body-cell">{{ result.startTime }}</div>
-        <div class="table-body-cell">{{ result.finishTime }}</div>
-        <div class="table-body-cell">{{ result.result }}</div>
-        <div class="table-body-cell">{{ result.delay }}</div>
-      </div>
-    </div>
-  </div>
+  <table>
+    <tr>
+      <th>Rang</th>
+      <th>Startnummer</th>
+      <th>Name</th>
+      <th>Startzeit</th>
+      <th>Ankunftszeit</th>
+      <th>Laufzeit</th>
+      <th>Rückstand</th>
+    </tr>
+    <tr *ngFor="let result of results[category]">
+      <td>{{ result.rank }}</td>
+      <td>{{ result.numberPlate }}</td>
+      <td>{{ result.name }}</td>
+      <td>{{ result.startTime }}</td>
+      <td>{{ result.finishTime }}</td>
+      <td>{{ result.result }}</td>
+      <td>{{ result.delay }}</td>
+    </tr>
+  </table>
 </div>
-
