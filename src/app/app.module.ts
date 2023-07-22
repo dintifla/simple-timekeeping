@@ -6,7 +6,6 @@ import { StartListComponent } from './start-list/start-list.component';
 import { ParticipantInputComponent } from './participant-input/participant-input.component';
 import { AppComponent } from './app.component';
 import { SnackbarComponent } from './snackbar/snackbar.component';
-import { AppRoutingModule } from './app-routing.module';
 import { TimekeepingComponent } from './timekeeping/timekeeping.component';
 import { EntryComponent } from './entry/entry.component';
 import { FormatDateToTimeStringPipe } from './pipes/date-to-timestring.pipe';
@@ -25,7 +24,7 @@ import { EvaluationComponent } from './evaluation/evaluation.component';
     StartCountdownComponent,
     EvaluationComponent,
   ],
-  imports: [BrowserModule, FormsModule, AppRoutingModule],
+  imports: [BrowserModule, FormsModule],
   providers: [],
   bootstrap: [AppComponent],
 })

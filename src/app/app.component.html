@@ -1,7 +1,9 @@
 <h1>Zeitmessung</h1>
 <nav>
-  <a routerLink="/startlist">Startliste</a>
-  <a routerLink="/timekeeping">Zeitmessung</a>
-  <a routerLink="/evaluation">Auswertung</a>
+  <button (click)="showStartList()">Startliste</button>
+  <button (click)="showTimekeeping()">Zeitmessung</button>
+  <button (click)="showEvaluation()">Auswertung</button>
 </nav>
-<router-outlet></router-outlet>
+<app-start-list *ngIf="displayTarget === 'startlist'"></app-start-list>
+<app-timekeeping *ngIf="displayTarget === 'timekeeping'"></app-timekeeping>
+<app-evaluation *ngIf="displayTarget === 'evaluation'"></app-evaluation>
