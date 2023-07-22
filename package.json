@@ -6,7 +6,9 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build",
+    "build": "ng build --output-hashing=none",
+    "package": "cd dist/timekeeping && type main.js polyfills.js runtime.js > bundle.js",
+    "bundle": "npm run build && npm run package && node deploy.js",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "lint": "eslint --ext .js --ext .ts src/",
