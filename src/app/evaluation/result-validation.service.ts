@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { MessageService } from './message.service';
-import { Participant } from './participant';
+import { MessageService } from './../message.service';
+import { Participant } from './../participant';
 
 @Injectable({
   providedIn: 'root',

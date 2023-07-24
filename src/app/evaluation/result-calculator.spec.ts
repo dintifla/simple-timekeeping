@@ -1,4 +1,4 @@
-import { Participant } from './participant';
+import { Participant } from './../participant';
 import { ResultCalculator } from './result-calculator';
 import { TimingBuilder } from './test-helpers/timing-builder';
 

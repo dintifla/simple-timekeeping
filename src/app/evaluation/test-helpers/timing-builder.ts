@@ -1,4 +1,4 @@
-import { Participant } from "../participant";
+import { Participant } from "../../participant";
 
 export class TimingBuilder {
   private readonly _startIntervalSeconds: number = 30;

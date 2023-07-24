@@ -1,5 +1,5 @@
-import { msToTime } from './time';
-import { Participant } from './participant';
+import { msToTime } from './../time';
+import { Participant } from './../participant';
 import { Result } from './result';
 import { Timing } from './timing';
 

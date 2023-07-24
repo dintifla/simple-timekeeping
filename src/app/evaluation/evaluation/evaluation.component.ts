@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
 import { ResultValidationService } from '../result-validation.service';
-import { MessageService } from '../message.service';
+import { MessageService } from '../../message.service';
 import { Timing } from '../timing';
 import { Result } from '../result';
 import { ResultCalculator } from '../result-calculator';
-import { exportAsCsv, exportAsJson } from '../fileDownloader';
+import { exportAsCsv, exportAsJson } from '../../fileDownloader';
 
 @Component({
   selector: 'app-evaluation',
