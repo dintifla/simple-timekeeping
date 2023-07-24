@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { Participant } from '../../participant';
 import { ParticipantService } from '../participant.service';
-import { exportAsJson } from '../../fileDownloader';
+import { FileDownloader } from '../../file-downloader';
 import { parseTime, roundTo100Ms } from '../../time';
 import { CountdownService } from '../countdown.service';
 
@@ -48,7 +48,7 @@ export class TimekeepingComponent {
   }
 
   exportMeasurements(): void {
-    exportAsJson(this.participants, `${this.location}_${Date.now()}.json`);
+    FileDownloader.exportAsJson(this.participants, `${this.location}_${Date.now()}.json`);
   }
 
   takeTime(participant: Participant): void {

@@ -4,7 +4,7 @@ import { MessageService } from '../../message.service';
 import { Timing } from '../timing';
 import { Result } from '../result';
 import { ResultCalculator } from '../result-calculator';
-import { exportAsCsv, exportAsJson } from '../../fileDownloader';
+import { FileDownloader } from '../../file-downloader';
 
 @Component({
   selector: 'app-evaluation',
@@ -51,8 +51,8 @@ export class EvaluationComponent {
 
   private exportResults(title: string, results: Result[]): void {
     let fileName = `Resultate_${title}_${Date.now()}`;
-    exportAsJson(results, fileName + '.json');
-    exportAsCsv(results, fileName + '.csv');
+    FileDownloader.exportAsJson(results, fileName + '.json');
+    FileDownloader.exportAsCsv(results, fileName + '.csv');
   }
 
   private validateFiles(): boolean {

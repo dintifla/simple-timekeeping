@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { Participant } from '../../participant';
 import { ConfigurationService } from '../../configuration-service';
-import { exportAsJson } from '../../fileDownloader';
+import { FileDownloader } from '../../file-downloader';
 import { ParticipantService } from '../participant.service';
 import { MessageService } from '../../message.service';
 
@@ -74,7 +74,7 @@ export class StartListComponent {
   exportParticipants(): void {
     this.participantService
       .getWithSpare(this.categories[0])
-      .subscribe((p) => exportAsJson(p, `Startliste_${Date.now()}.json`));
+      .subscribe((p) => FileDownloader.exportAsJson(p, `Startliste_${Date.now()}.json`));
   }
 
   save(participant: Participant): void {
