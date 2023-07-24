@@ -28,7 +28,6 @@ export class TimekeepingComponent {
 
   loadFromFile(): void {
     this.clearEntries();
-    this.setCountdown();
     const fileInput = <HTMLInputElement>document.getElementById('load-file');
     if (fileInput?.files && fileInput.files.length > 0) {
       const file = fileInput.files.item(0);
@@ -39,11 +38,8 @@ export class TimekeepingComponent {
     }
   }
 
-  private setCountdown(): void {}
-
   private clearEntries(): void {
     this.entries = [];
-    this.entryService.clear(this.location).subscribe();
   }
 
   exportMeasurements(): void {

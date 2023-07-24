@@ -71,6 +71,7 @@ export class EntryService {
       entryToUpdate.category = entry.category;
       entryToUpdate.isSpare = entry.isSpare;
       entryToUpdate.name = entry.name;
+      entryToUpdate.time = entry.time;
     }
     this.save(location);
     return of(undefined);
