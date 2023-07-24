@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
-import { Participant } from '../participant';
-import { EntryService } from '../entry.service';
-import { exportAsJson } from '../fileDownloader';
-import { parseTime, roundTo100Ms } from '../time';
+import { Participant } from '../../participant';
+import { ParticipantService } from '../participant.service';
+import { exportAsJson } from '../../fileDownloader';
+import { parseTime, roundTo100Ms } from '../../time';
 import { CountdownService } from '../countdown.service';
 
 @Component({
@@ -12,11 +12,11 @@ import { CountdownService } from '../countdown.service';
 })
 export class TimekeepingComponent {
   constructor(
-    private entryService: EntryService,
+    private participantService: ParticipantService,
     private countdownService: CountdownService
   ) {}
 
-  entries: Participant[] = [];
+  participants: Participant[] = [];
 
   location: string = 'Start';
 
@@ -26,9 +26,9 @@ export class TimekeepingComponent {
   }
 
   getEntries(): void {
-    this.entryService
+    this.participantService
       .getEntries(this.location)
-      .subscribe((entries) => (this.entries = entries));
+      .subscribe((entries) => (this.participants = entries));
   }
 
   loadFromFile(): void {
@@ -37,35 +37,35 @@ export class TimekeepingComponent {
     if (fileInput?.files && fileInput.files.length > 0) {
       const file = fileInput.files.item(0);
       if (file)
-        this.entryService
+        this.participantService
           .getEntriesFromFile(file, this.location)
-          .subscribe((e) => (this.entries = e));
+          .subscribe((e) => (this.participants = e));
     }
   }
 
   private clearEntries(): void {
-    this.entries = [];
+    this.participants = [];
   }
 
   exportMeasurements(): void {
-    exportAsJson(this.entries, `${this.location}_${Date.now()}.json`);
+    exportAsJson(this.participants, `${this.location}_${Date.now()}.json`);
   }
 
-  takeTime(entry: Participant): void {
+  takeTime(participant: Participant): void {
     const timestamp = roundTo100Ms(new Date());
-    entry!.time = timestamp;
-    this.save(entry);
+    participant.time = timestamp;
+    this.save(participant);
     this.countdownService.start();
   }
 
-  setManualTime(event: Event, entry: Participant): void {
+  setManualTime(event: Event, participant: Participant): void {
     const value = (<HTMLInputElement>event.target).value;
-    if (value) entry!.time = parseTime(value);
-    else entry!.time = '';
-    this.save(entry);
+    if (value) participant.time = parseTime(value);
+    else participant.time = '';
+    this.save(participant);
   }
 
-  private save(entry: Participant): void {
-    this.entryService.update(entry!, this.location!).subscribe();
+  private save(participant: Participant): void {
+    this.participantService.update(participant, this.location).subscribe();
   }
 }

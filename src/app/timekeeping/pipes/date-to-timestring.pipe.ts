@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { parseTime } from '../time';
+import { parseTime } from '../../time';
 /*
  * Formats to time of a date
  * Usage:

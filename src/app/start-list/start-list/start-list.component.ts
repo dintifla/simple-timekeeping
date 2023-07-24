@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Participant } from '../participant';
+import { Participant } from '../../participant';
 import { ConfigurationService } from '../../configuration-service';
 import { exportAsJson } from '../../fileDownloader';
 import { ParticipantService } from '../participant.service';

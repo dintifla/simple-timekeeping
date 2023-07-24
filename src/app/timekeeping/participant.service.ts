@@ -1,15 +1,15 @@
 import { Injectable } from '@angular/core';
 import { Observable, from, of } from 'rxjs';
-import { Participant } from './participant';
-import { MessageService } from './message.service';
+import { Participant } from '../participant';
+import { MessageService } from '../message.service';
 
 @Injectable({
   providedIn: 'root',
 })
-export class EntryService {
+export class ParticipantService {
   constructor(private messageService: MessageService) {}
 
-  entries: Participant[] = [];
+  participants: Participant[] = [];
 
   private localStorageKeyPrefix = 'measurement';
 
@@ -21,13 +21,13 @@ export class EntryService {
       console.error('Could not load participants from storage');
       return of([]);
     }
-    const entries: Participant[] = JSON.parse(value);
-    if (!this.validate(entries)) {
+    const participants: Participant[] = JSON.parse(value);
+    if (!this.validate(participants)) {
       console.error('Could not parse participants');
       return of([]);
     }
-    this.entries = entries;
-    return of(this.entries);
+    this.participants = participants;
+    return of(this.participants);
   }
 
   getEntriesFromFile(file: File, location: string): Observable<Participant[]> {
@@ -39,8 +39,8 @@ export class EntryService {
           return [];
         }
         this.save(location);
-        this.entries = entries;
-        return this.entries;
+        this.participants = entries;
+        return this.participants;
       })
     );
   }
@@ -57,28 +57,28 @@ export class EntryService {
     return true;
   }
 
-  add(entry: Participant, location: string): Observable<Participant> {
-    this.entries.push(entry);
+  add(participant: Participant, location: string): Observable<Participant> {
+    this.participants.push(participant);
     this.save(location);
-    return of(entry);
+    return of(participant);
   }
 
-  update(entry: Participant, location: string): Observable<any> {
-    let entryToUpdate = this.entries.find(
-      (p) => p.numberPlate === entry.numberPlate
+  update(participant: Participant, location: string): Observable<any> {
+    let participantToUpdate = this.participants.find(
+      (p) => p.numberPlate === participant.numberPlate
     );
-    if (entryToUpdate) {
-      entryToUpdate.category = entry.category;
-      entryToUpdate.isSpare = entry.isSpare;
-      entryToUpdate.name = entry.name;
-      entryToUpdate.time = entry.time;
+    if (participantToUpdate) {
+      participantToUpdate.category = participant.category;
+      participantToUpdate.isSpare = participant.isSpare;
+      participantToUpdate.name = participant.name;
+      participantToUpdate.time = participant.time;
     }
     this.save(location);
     return of(undefined);
   }
 
   clear(location: string): Observable<any> {
-    this.entries = [];
+    this.participants = [];
     localStorage.removeItem(`${this.localStorageKeyPrefix}-${location}`);
     return of(undefined);
   }
@@ -86,12 +86,12 @@ export class EntryService {
   private save(location: string): void {
     localStorage.setItem(
       `${this.localStorageKeyPrefix}-${location}`,
-      JSON.stringify(this.entries)
+      JSON.stringify(this.participants)
     );
   }
 
   private log(message: string): void {
-    this.messageService.add(`EntryService: ${message}`);
+    this.messageService.add(`ParticipantService: ${message}`);
   }
 }
 

@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Subscription, map, takeWhile, timer } from 'rxjs';
-import { ConfigurationService } from '../configuration-service';
+import { ConfigurationService } from '../../configuration-service';
 import { CountdownService } from '../countdown.service';
 
 @Component({
@@ -51,4 +51,3 @@ export class StartCountdownComponent {
     this.remainingTimeSeconds = 0;
   }
 }
-

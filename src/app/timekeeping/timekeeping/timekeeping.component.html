@@ -41,19 +41,19 @@
     <th></th>
     <th>Zeit</th>
   </tr>
-  <tr *ngFor="let entry of entries">
-    <td>{{ entry.numberPlate }}</td>
-    <td>{{ entry.name }}</td>
+  <tr *ngFor="let participant of participants">
+    <td>{{ participant.numberPlate }}</td>
+    <td>{{ participant.name }}</td>
     <td>
-      <button class="small-button" (click)="takeTime(entry)">
-        {{ location }} {{ entry.numberPlate }}
+      <button class="small-button" (click)="takeTime(participant)">
+        {{ location }} {{ participant.numberPlate }}
       </button>
     </td>
     <td>
       <input
         type="text"
-        [ngModel]="entry.time | dateToTimeString"
-        (change)="setManualTime($event, entry)"
+        [ngModel]="participant.time | dateToTimeString"
+        (change)="setManualTime($event, participant)"
       />
     </td>
   </tr>
