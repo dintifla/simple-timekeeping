@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Participant } from '../participant';
-import { Configuration, ConfigurationService } from '../configuration-service';
+import { ConfigurationService } from '../configuration-service';
 import { exportAsJson } from '../fileDownloader';
 import { ParticipantService } from '../participant.service';
 import { MessageService } from '../message.service';
@@ -19,14 +19,11 @@ export class StartListComponent {
 
   title = 'timekeeping';
 
-  private _config?: Configuration;
-  private _categories?: string[];
-
   participants: Participant[] = [];
+  categories: string[] = [];
 
   ngOnInit(): void {
-    this.getConfig();
-    this._categories = this._config?.categories;
+    this.getCategories();
   }
 
   getParticipants(): void {
@@ -47,17 +44,17 @@ export class StartListComponent {
     }
   }
 
-  private getConfig(): void {
+  private getCategories(): void {
     this.configService
       .getConfig()
-      .subscribe((config) => (this._config = config));
+      .subscribe((c) => (this.categories = c.categories));
   }
 
   newParticipantList(): void {
     if (this.participants.length > 0) this.exportParticipants();
     this.clearParticipants();
 
-    if (this._categories && this._categories.length <= 0) {
+    if (this.categories && this.categories.length <= 0) {
       this.log('Configuriere mindestens eine Kategorie');
       throw Error('no categories configured');
     }
@@ -70,7 +67,7 @@ export class StartListComponent {
 
   addParticipant(): void {
     this.participantService
-      .add({ name: '', category: this._categories![0] } as Participant)
+      .add({ name: '', category: this.categories[0] } as Participant)
       .subscribe((participant) => {
         this.participants.push(participant);
       });
@@ -78,12 +75,15 @@ export class StartListComponent {
 
   exportParticipants(): void {
     this.participantService
-      .getWithSpare(this._categories![0])
+      .getWithSpare(this.categories[0])
       .subscribe((p) => exportAsJson(p, `Startliste_${Date.now()}.json`));
+  }
+
+  save(participant: Participant): void {
+    this.participantService.update(participant!).subscribe();
   }
 
   private log(message: string): void {
     this.messageService.add(`StartList: ${message}`);
   }
 }
-

@@ -1,28 +1,3 @@
-.table {
-  width: 100%;
-  display: table;
-}
-
-.table-header {
-  display: table-header-group;
-  font-weight: bold;
-}
-
-.table-header-cell {
-  display: table-cell;
-  padding: 10px;
-  text-align: justify;
-  border-bottom: 1px solid black;
-}
-
-.table-body {
-  display: table-row-group;
-}
-
-.table-row {
-  display: table-row;
-}
-
 .category-selection {
   display: flex;
 }

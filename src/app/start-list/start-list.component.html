@@ -40,18 +40,33 @@
   + Teilnehmer
 </button>
 
-<div class="table">
-  <div class="table-header">
-    <div class="table-header-cell">Nr.</div>
-    <div class="table-header-cell">Kategorie</div>
-    <div class="table-header-cell">Name</div>
-  </div>
-  <div class="table-body">
-    <app-participant-input
-      class="table-row"
-      *ngFor="let participant of participants"
-      [participant]="participant"
-    >
-    </app-participant-input>
-  </div>
-</div>
+<table>
+  <tr>
+    <th>Nr.</th>
+    <th>Kategorie</th>
+    <th>Name</th>
+  </tr>
+
+  <tr *ngFor="let participant of participants">
+    <td>{{ participant.numberPlate }}</td>
+    <td class="category-selection">
+      <label *ngFor="let category of categories">
+        <input
+          type="radio"
+          name="category-{{ participant.numberPlate }}"
+          [(ngModel)]="participant.category"
+          [value]="category"
+          (change)="save(participant)"
+        />
+        <b>{{ category }}</b>
+      </label>
+    </td>
+    <td>
+      <input
+        type="text"
+        [(ngModel)]="participant.name"
+        (focusout)="save(participant)"
+      />
+    </td>
+  </tr>
+</table>
