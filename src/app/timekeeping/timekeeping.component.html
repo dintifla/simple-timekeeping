@@ -34,16 +34,28 @@
   Exportieren
 </button>
 
-<div class="table">
-  <div class="table-header">
-    <div class="table-header-cell">Nr.</div>
-    <div class="table-header-cell">Name</div>
-    <div class="table-header-cell"></div>
-    <div class="table-header-cell">Zeit</div>
-  </div>
-  <div class="table-body">
-    <app-entry class="table-row" *ngFor="let entry of entries" [entry]="entry" [location]="location">
-    </app-entry>
-  </div>
-</div>
-<app-start-countdown *ngIf="location==='Start'"></app-start-countdown>
+<table>
+  <tr>
+    <th>Nr.</th>
+    <th>Name</th>
+    <th></th>
+    <th>Zeit</th>
+  </tr>
+  <tr *ngFor="let entry of entries">
+    <td>{{ entry.numberPlate }}</td>
+    <td>{{ entry.name }}</td>
+    <td>
+      <button class="small-button" (click)="takeTime(entry)">
+        {{ location }} {{ entry.numberPlate }}
+      </button>
+    </td>
+    <td>
+      <input
+        type="text"
+        [ngModel]="entry.time | dateToTimeString"
+        (change)="setManualTime($event, entry)"
+      />
+    </td>
+  </tr>
+</table>
+<app-start-countdown *ngIf="location === 'Start'"></app-start-countdown>

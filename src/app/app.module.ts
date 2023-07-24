@@ -7,7 +7,6 @@ import { ParticipantInputComponent } from './participant-input/participant-input
 import { AppComponent } from './app.component';
 import { SnackbarComponent } from './snackbar/snackbar.component';
 import { TimekeepingComponent } from './timekeeping/timekeeping.component';
-import { EntryComponent } from './entry/entry.component';
 import { FormatDateToTimeStringPipe } from './pipes/date-to-timestring.pipe';
 import { StartCountdownComponent } from './start-countdown/start-countdown.component';
 import { EvaluationComponent } from './evaluation/evaluation.component';
@@ -19,7 +18,6 @@ import { EvaluationComponent } from './evaluation/evaluation.component';
     ParticipantInputComponent,
     SnackbarComponent,
     TimekeepingComponent,
-    EntryComponent,
     FormatDateToTimeStringPipe,
     StartCountdownComponent,
     EvaluationComponent,

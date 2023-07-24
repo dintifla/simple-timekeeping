@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import { Participant } from '../participant';
 import { EntryService } from '../entry.service';
 import { exportAsJson } from '../fileDownloader';
+import { parseTime, roundTo100Ms } from '../time';
+import { CountdownService } from '../countdown.service';
 
 @Component({
   selector: 'app-timekeeping',
@@ -9,7 +11,10 @@ import { exportAsJson } from '../fileDownloader';
   styleUrls: ['./timekeeping.component.css'],
 })
 export class TimekeepingComponent {
-  constructor(private entryService: EntryService) {}
+  constructor(
+    private entryService: EntryService,
+    private countdownService: CountdownService
+  ) {}
 
   entries: Participant[] = [];
 
@@ -45,5 +50,22 @@ export class TimekeepingComponent {
   exportMeasurements(): void {
     exportAsJson(this.entries, `${this.location}_${Date.now()}.json`);
   }
-}
 
+  takeTime(entry: Participant): void {
+    const timestamp = roundTo100Ms(new Date());
+    entry!.time = timestamp;
+    this.save(entry);
+    this.countdownService.start();
+  }
+
+  setManualTime(event: Event, entry: Participant): void {
+    const value = (<HTMLInputElement>event.target).value;
+    if (value) entry!.time = parseTime(value);
+    else entry!.time = '';
+    this.save(entry);
+  }
+
+  private save(entry: Participant): void {
+    this.entryService.update(entry!, this.location!).subscribe();
+  }
+}
