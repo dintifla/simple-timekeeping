@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
 import { Participant } from '../participant';
-import { ConfigurationService } from '../configuration-service';
-import { exportAsJson } from '../fileDownloader';
+import { ConfigurationService } from '../../configuration-service';
+import { exportAsJson } from '../../fileDownloader';
 import { ParticipantService } from '../participant.service';
-import { MessageService } from '../message.service';
+import { MessageService } from '../../message.service';
 
 @Component({
   selector: 'app-start-list',
@@ -68,9 +68,7 @@ export class StartListComponent {
   addParticipant(): void {
     this.participantService
       .add({ name: '', category: this.categories[0] } as Participant)
-      .subscribe((participant) => {
-        this.participants.push(participant);
-      });
+      .subscribe();
   }
 
   exportParticipants(): void {

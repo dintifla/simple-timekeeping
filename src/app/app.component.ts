@@ -7,16 +7,4 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   displayTarget: string = 'startlist';
-
-  showStartList(): void {
-    this.displayTarget = 'startlist';
-  }
-
-  showTimekeeping(): void {
-    this.displayTarget = 'timekeeping';
-  }
-
-  showEvaluation(): void {
-    this.displayTarget = 'evaluation';
-  }
 }

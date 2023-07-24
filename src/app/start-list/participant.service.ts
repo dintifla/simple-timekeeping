@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Participant } from './participant';
 import { Observable, from, of } from 'rxjs';
-import { MessageService } from './message.service';
+import { MessageService } from './../message.service';
 
 @Injectable({
   providedIn: 'root',
