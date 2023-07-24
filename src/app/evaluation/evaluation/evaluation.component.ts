@@ -56,6 +56,14 @@ export class EvaluationComponent {
   }
 
   private validateFiles(): boolean {
+    if (!(<HTMLInputElement>document.getElementById("start-file"))?.value) {
+      this.messageService.add("Start file fehlt!");
+      return false;
+    }
+    if (!(<HTMLInputElement>document.getElementById("finish-file"))?.value) {
+      this.messageService.add("Ziel file fehlt!");
+      return false;
+    }
     return true;
   }
 

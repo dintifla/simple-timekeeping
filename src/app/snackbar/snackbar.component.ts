@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { MessageService } from '../message.service';
 
 @Component({
   selector: 'app-snackbar',
@@ -6,8 +7,14 @@ import { Component } from '@angular/core';
   styleUrls: ['./snackbar.component.css'],
 })
 export class SnackbarComponent {
+  constructor(private messageService: MessageService) {}
+
   message?: string;
   visible: boolean = false;
+
+  ngOnInit(): void {
+    this.messageService.newLog.subscribe((m) => this.show(m));
+  }
 
   show(message: string) {
     this.message = message;
@@ -15,7 +22,7 @@ export class SnackbarComponent {
     this.visible = true;
     setTimeout(() => {
       this.visible = false;
+      this.message = undefined;
     }, 3000);
   }
 }
-
