@@ -2,7 +2,7 @@ const fs = require("fs");
 
 try {
   const outFile = "./dist/Zeitmessung.html";
-  fs.unlinkSync(outFile)
+  if (fs.existsSync(outFile)) fs.unlinkSync(outFile);
   let html = fs.readFileSync("./dist/timekeeping/index.html", "utf8");
   html = replaceWithInternalStyles(html);
   html = replaceWithInternalScript(html);
@@ -21,7 +21,7 @@ function replaceWithInternalStyles(html) {
 }
 
 function replaceWithInternalScript(html) {
-  html = html.replaceAll(/<script.*<\/script>/ig, "");
+  html = html.replaceAll(/<script.*<\/script>/gi, "");
   let script = fs.readFileSync("./dist/timekeeping/bundle.js", "utf8");
   script = `<script>${script}</script>`;
   const indexOfHtmlEndTag = html.indexOf("</html>");
