@@ -14,10 +14,11 @@ export class ParticipantService {
   private localStorageKey = 'participants';
 
   getParticipants(): Observable<Participant[]> {
+    this.participants = [];
     const value = localStorage.getItem(this.localStorageKey);
     if (!value) {
       console.error('Could not load participants from storage');
-      return of([]);
+      return of(this.participants);
     }
     const participants: Participant[] = JSON.parse(value);
     if (!this.validate(participants)) {
@@ -127,4 +128,3 @@ export class ParticipantService {
     this.messageService.add(`ParticipantService: ${message}`);
   }
 }
-

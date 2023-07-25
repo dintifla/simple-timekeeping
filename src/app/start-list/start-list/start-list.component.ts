@@ -58,6 +58,9 @@ export class StartListComponent {
       this.log('Configuriere mindestens eine Kategorie');
       throw Error('no categories configured');
     }
+    this.participantService
+      .getParticipants()
+      .subscribe((p) => (this.participants = p));
   }
 
   private clearParticipants(): void {
@@ -74,7 +77,9 @@ export class StartListComponent {
   exportParticipants(): void {
     this.participantService
       .getWithSpare(this.categories[0])
-      .subscribe((p) => FileDownloader.exportAsJson(p, `Startliste_${Date.now()}.json`));
+      .subscribe((p) =>
+        FileDownloader.exportAsJson(p, `Startliste_${Date.now()}.json`)
+      );
   }
 
   save(participant: Participant): void {
