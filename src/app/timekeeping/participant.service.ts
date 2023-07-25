@@ -11,11 +11,11 @@ export class ParticipantService {
 
   participants: Participant[] = [];
 
-  private localStorageKeyPrefix = 'measurement';
+  private localStorageKey = (location: string) =>  `measurement-${location}`;
 
   getEntries(location: string): Observable<Participant[]> {
     const value = localStorage.getItem(
-      `${this.localStorageKeyPrefix}-${location}`
+      this.localStorageKey(location)
     );
     if (!value) {
       console.error('Could not load participants from storage');
@@ -79,13 +79,13 @@ export class ParticipantService {
 
   clear(location: string): Observable<any> {
     this.participants = [];
-    localStorage.removeItem(`${this.localStorageKeyPrefix}-${location}`);
+    localStorage.removeItem(this.localStorageKey(location));
     return of(undefined);
   }
 
   private save(location: string): void {
     localStorage.setItem(
-      `${this.localStorageKeyPrefix}-${location}`,
+      this.localStorageKey(location),
       JSON.stringify(this.participants)
     );
   }
