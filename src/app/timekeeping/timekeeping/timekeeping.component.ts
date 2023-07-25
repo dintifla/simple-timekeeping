@@ -4,6 +4,7 @@ import { ParticipantService } from '../participant.service';
 import { FileDownloader } from '../../file-downloader';
 import { parseTime, roundTo100Ms } from '../../time';
 import { CountdownService } from '../countdown.service';
+import { ConfigurationService } from 'src/app/configuration-service';
 
 @Component({
   selector: 'app-timekeeping',
@@ -13,12 +14,23 @@ import { CountdownService } from '../countdown.service';
 export class TimekeepingComponent {
   constructor(
     private participantService: ParticipantService,
-    private countdownService: CountdownService
+    private countdownService: CountdownService,
+    private configService: ConfigurationService
   ) {}
 
   participants: Participant[] = [];
+  categories: string[] = [];
+  location = 'Start';
 
-  location: string = 'Start';
+  ngOnInit(): void {
+    this.getCategories();
+  }
+
+  private getCategories(): void {
+    this.configService
+      .getConfig()
+      .subscribe((c) => (this.categories = c.categories));
+  }
 
   reset() {
     this.clearEntries();
@@ -48,7 +60,10 @@ export class TimekeepingComponent {
   }
 
   exportMeasurements(): void {
-    FileDownloader.exportAsJson(this.participants, `${this.location}_${Date.now()}.json`);
+    FileDownloader.exportAsJson(
+      this.participants,
+      `${this.location}_${Date.now()}.json`
+    );
   }
 
   takeTime(participant: Participant): void {
@@ -65,7 +80,12 @@ export class TimekeepingComponent {
     this.save(participant);
   }
 
-  private save(participant: Participant): void {
+  save(participant: Participant): void {
     this.participantService.update(participant, this.location).subscribe();
+  }
+
+  nameEditIsEnabled(participant: Participant) {
+    if (this.location !== 'Start') return false;
+    return participant.isSpare != undefined && participant.isSpare === true;
   }
 }

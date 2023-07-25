@@ -37,13 +37,41 @@
 <table>
   <tr>
     <th>Nr.</th>
+    <th></th>
     <th>Name</th>
     <th></th>
     <th>Zeit</th>
   </tr>
   <tr *ngFor="let participant of participants">
     <td>{{ participant.numberPlate }}</td>
-    <td class="name-column">{{ participant.name }}</td>
+    <td>
+      <div
+        *ngIf="nameEditIsEnabled(participant) === true"
+        class="category-selection"
+      >
+        <label *ngFor="let category of categories">
+          <input
+            type="radio"
+            name="category-{{ participant.numberPlate }}"
+            [(ngModel)]="participant.category"
+            [value]="category"
+            (change)="save(participant)"
+          />
+          <b>{{ category }}</b>
+        </label>
+      </div>
+    </td>
+    <td>
+      <div *ngIf="nameEditIsEnabled(participant) === false" class="name-column">
+        {{ participant.name }}
+      </div>
+      <input
+        *ngIf="nameEditIsEnabled(participant) === true"
+        type="text"
+        [(ngModel)]="participant.name"
+        (focusout)="save(participant)"
+      />
+    </td>
     <td>
       <button class="small-button" (click)="takeTime(participant)">
         {{ location }} {{ participant.numberPlate }}
