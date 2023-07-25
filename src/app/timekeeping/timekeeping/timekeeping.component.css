@@ -1,1 +1,13 @@
 
+.name-column {
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.big-select {
+  font-size: 16px;
+  font-weight: 600;
+  margin: 5px;
+  min-height: 30px;
+  padding: 5px;
+}

@@ -6,8 +6,13 @@
   class="big-button"
   (click)="newParticipantList()"
 >
-  Neu
+  Neue Liste
 </button>
+
+<br />
+<label for="load-file">Startliste laden:</label>
+<input type="file" id="load-file" accept=".json" (change)="loadFromFile()" />
+
 
 <button
   type="button"
@@ -27,9 +32,6 @@
 >
   Exportieren
 </button>
-<br />
-<label for="load-file">Startliste laden:</label>
-<input type="file" id="load-file" accept=".json" (change)="loadFromFile()" />
 <br />
 <button
   type="button"

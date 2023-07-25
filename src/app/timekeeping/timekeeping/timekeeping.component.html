@@ -1,6 +1,6 @@
 <h2>Zeitmessung</h2>
 
-<label for="select-measurement-location">Ort:</label>
+<label for="select-measurement-location">Mess-Ort:</label>
 <select
   id="select-measurement-location"
   class="big-select"
@@ -43,7 +43,7 @@
   </tr>
   <tr *ngFor="let participant of participants">
     <td>{{ participant.numberPlate }}</td>
-    <td>{{ participant.name }}</td>
+    <td class="name-column">{{ participant.name }}</td>
     <td>
       <button class="small-button" (click)="takeTime(participant)">
         {{ location }} {{ participant.numberPlate }}
