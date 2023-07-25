@@ -1,11 +1,13 @@
 const fs = require("fs");
 
 try {
+  const outFile = "./dist/Zeitmessung.html";
+  fs.unlinkSync(outFile)
   let html = fs.readFileSync("./dist/timekeeping/index.html", "utf8");
   html = replaceWithInternalStyles(html);
   html = replaceWithInternalScript(html);
 
-  fs.writeFileSync("./dist/Zeitmessung.html", html);
+  fs.writeFileSync(outFile, html);
 } catch (err) {
   console.error(err);
 }
