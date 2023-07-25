@@ -1,0 +1,74 @@
+<h2>Startliste</h2>
+
+<button
+  type="button"
+  id="new-participantList"
+  class="big-button"
+  (click)="newParticipantList()"
+>
+  Neue Liste
+</button>
+
+<br />
+<label for="load-file">Startliste laden:</label>
+<input type="file" id="load-file" accept=".json" (change)="loadFromFile()" />
+
+
+<button
+  type="button"
+  id="load-participants"
+  class="big-button"
+  (click)="getParticipants()"
+>
+  Laden
+</button>
+<a id="downloadAnchorElem" style="display: none"></a>
+
+<button
+  type="button"
+  id="export-participants"
+  class="big-button"
+  (click)="exportParticipants()"
+>
+  Exportieren
+</button>
+<br />
+<button
+  type="button"
+  id="new-participant"
+  class="big-button"
+  (click)="addParticipant()"
+>
+  + Teilnehmer
+</button>
+
+<table>
+  <tr>
+    <th>Nr.</th>
+    <th>Kategorie</th>
+    <th>Name</th>
+  </tr>
+
+  <tr *ngFor="let participant of participants">
+    <td>{{ participant.numberPlate }}</td>
+    <td class="category-selection">
+      <label *ngFor="let category of categories">
+        <input
+          type="radio"
+          name="category-{{ participant.numberPlate }}"
+          [(ngModel)]="participant.category"
+          [value]="category"
+          (change)="save(participant)"
+        />
+        <b>{{ category }}</b>
+      </label>
+    </td>
+    <td>
+      <input
+        type="text"
+        [(ngModel)]="participant.name"
+        (focusout)="save(participant)"
+      />
+    </td>
+  </tr>
+</table>

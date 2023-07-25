@@ -11,12 +11,12 @@ Best is if the race has interval starts. E.g. a cycling hill climb. The applicat
 ## Build
 
 1. Run `npm i` to install dependencies
-2. Run `npm run build` to build and bundle the scripts
-3. Find the bundles in `./dist`
+2. Run `npm run bundle` to build and bundle the scripts
+3. Find the bundled script `./dist/Zeitmessung.html`
 
 ## Test
 
-Use `npm run test` or `npm run test:watch` to run the tests.
+Use `npm run test` to run the tests.
 Code coverage reports are directed to `./coverage`.
 
 ## How to use
@@ -27,12 +27,12 @@ Start `Zeitmessung.html` (can be on different computers, due to start and finish
 ### Register participants
 
 1. Select "Startliste" from the top menu
-2. Click "New" to start a new list. Any previous list will be exported as backup
-3. Click "Load" if you need to reload from local storage (e.g. if the browser was closed). The storage is updated after each manipulation
+2. Click "Neue Liste" to start a new list. Any previous list will be exported as backup
+3. Click "Laden" if you need to reload from local storage (e.g. if the browser was closed). The storage is updated after each manipulation
 4. Export once finished, or to make a backup
 5. Select a file to continue on an existing list
 
-At the end of an export, there are 20 spare places to be used for late registrations. The spares are set as "male".
+At the end of an export, there are 20 spare places to be used for late registrations. They can be edited at the start.
 
 ### Measure times
 
@@ -43,8 +43,9 @@ At the end of an export, there are 20 spare places to be used for late registrat
 3. Click to capture start/finish time for the given number plate. If there is a mistake, times can be edited manually
 4. Click export to safe the results to a `.json`-file once done, or to make a backup
 
-- Click "Load" if you need to reload from local storage (e.g. if the browser was closed). The storage is updated after each manipulation
+- Click "Laden" if you need to reload from local storage (e.g. if the browser was closed). The storage is updated after each manipulation
 - With the file selection it is also possible to load a backup of already registered times instead of the participant list
+- Spare participants can be edited at the start (name and category).
 
 ### Evaluate results
 
@@ -53,14 +54,13 @@ Once all participants are registered at the start and finished and both files ar
 1. Correct the category in the "Start" file if some of the spares were female (set `category: "Female"`)
 2. Select "Auswertung" from the top menu
 3. Import start- and finishing time files (the ones generated above)
-4. Click "Evaluate" ("Evaluate")
+4. Click "Auswerten" ("Evaluate")
 5. See the result table as well the exported results as `.json` and `.csv`
 
 ## Possible improvements
 
 - Export results in more file formats
 - Save to (cloud) database instead of files
-- Better, more consistent styling
 - Increase test coverage
-- Better handling of spares per category
-- Get categories from config file
+- Make categories configurable
+- Register more data at the start list (e.g. team name)

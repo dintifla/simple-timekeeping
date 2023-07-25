@@ -1,0 +1,29 @@
+.start-countdown {
+  position: fixed;
+  width: 150px;
+  height: 150px;
+  right: 10px;
+  top:30px;
+  padding: 20px;
+  box-shadow: 0 3px 10px rgb(0 0 0 / 0.2);
+  border-radius: 15px;
+  font-size: 18px;
+}
+
+.start-countdown.blink {
+  animation: blinking 1s infinite;
+}
+
+@keyframes blinking {
+  0% {
+    background-color: #e02e0b;
+  }
+  100% {
+    background-color: #ffffff;
+  }
+}
+
+.start-countdown-time {
+  font-size: 60px;
+  font-weight: 600;
+}

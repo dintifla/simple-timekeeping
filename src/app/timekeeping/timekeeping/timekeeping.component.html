@@ -1,0 +1,89 @@
+<h2>Zeitmessung</h2>
+
+<label for="select-measurement-location">Mess-Ort:</label>
+<select
+  id="select-measurement-location"
+  class="big-select"
+  (change)="reset()"
+  [(ngModel)]="location"
+>
+  <option>Start</option>
+  <option>Ziel</option>
+</select>
+
+<br />
+<label for="load-file">Startliste laden:</label>
+<input type="file" id="load-file" accept=".json" (change)="loadFromFile()" />
+
+<button
+  type="button"
+  id="load-measurements"
+  class="big-button"
+  (click)="getEntries()"
+>
+  Laden
+</button>
+<a id="downloadAnchorElem" style="display: none"></a>
+
+<button
+  type="button"
+  id="export-measurements"
+  class="big-button"
+  (click)="exportMeasurements()"
+>
+  Exportieren
+</button>
+
+<table>
+  <tr>
+    <th>Nr.</th>
+    <th></th>
+    <th>Name</th>
+    <th></th>
+    <th>Zeit</th>
+  </tr>
+  <tr *ngFor="let participant of participants">
+    <td>{{ participant.numberPlate }}</td>
+    <td>
+      <div
+        *ngIf="nameEditIsEnabled(participant) === true"
+        class="category-selection"
+      >
+        <label *ngFor="let category of categories">
+          <input
+            type="radio"
+            name="category-{{ participant.numberPlate }}"
+            [(ngModel)]="participant.category"
+            [value]="category"
+            (change)="save(participant)"
+          />
+          <b>{{ category }}</b>
+        </label>
+      </div>
+    </td>
+    <td>
+      <div *ngIf="nameEditIsEnabled(participant) === false" class="name-column">
+        {{ participant.name }}
+      </div>
+      <input
+        *ngIf="nameEditIsEnabled(participant) === true"
+        type="text"
+        [(ngModel)]="participant.name"
+        (focusout)="save(participant)"
+      />
+    </td>
+    <td>
+      <button class="small-button" (click)="takeTime(participant)">
+        {{ location }} {{ participant.numberPlate }}
+      </button>
+    </td>
+    <td>
+      <input
+        type="text"
+        [ngModel]="participant.time | dateToTimeString"
+        (change)="setManualTime($event, participant)"
+      />
+    </td>
+  </tr>
+</table>
+<app-start-countdown *ngIf="location === 'Start'"></app-start-countdown>

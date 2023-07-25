@@ -1,0 +1,12 @@
+<h1>Zeitmessung</h1>
+<nav>
+  <button (click)="displayTarget = 'startlist'">Startliste</button>
+  <button (click)="displayTarget = 'timekeeping'">Zeitmessung</button>
+  <button (click)="displayTarget = 'evaluation'">Auswertung</button>
+</nav>
+
+<app-start-list *ngIf="displayTarget === 'startlist'"></app-start-list>
+<app-timekeeping *ngIf="displayTarget === 'timekeeping'"></app-timekeeping>
+<app-evaluation *ngIf="displayTarget === 'evaluation'"></app-evaluation>
+
+<app-snackbar></app-snackbar>

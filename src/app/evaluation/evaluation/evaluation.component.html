@@ -1,0 +1,38 @@
+<h2>Auswertung</h2>
+
+<label for="start-file">Startzeiten:</label>
+<input type="file" id="start-file" accept=".json" />
+<br />
+<label for="finish-file">Ankunftszeiten:</label>
+<input type="file" id="finish-file" accept=".json" />
+<br />
+<button type="button" id="evaluate" class="big-button" (click)="calculate()">
+  Auswerten
+</button>
+
+<a id="downloadAnchorElem" style="display: none"></a>
+
+<div *ngFor="let category of categories">
+  <h3>{{ category }}</h3>
+
+  <table>
+    <tr>
+      <th>Rang</th>
+      <th>Startnummer</th>
+      <th>Name</th>
+      <th>Startzeit</th>
+      <th>Ankunftszeit</th>
+      <th>Laufzeit</th>
+      <th>Rückstand</th>
+    </tr>
+    <tr *ngFor="let result of results[category]">
+      <td>{{ result.rank }}</td>
+      <td>{{ result.numberPlate }}</td>
+      <td>{{ result.name }}</td>
+      <td>{{ result.startTime }}</td>
+      <td>{{ result.finishTime }}</td>
+      <td>{{ result.result }}</td>
+      <td>{{ result.delay }}</td>
+    </tr>
+  </table>
+</div>
