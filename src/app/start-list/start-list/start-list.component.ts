@@ -83,7 +83,7 @@ export class StartListComponent {
   }
 
   save(participant: Participant): void {
-    this.participantService.update(participant!).subscribe();
+    this.participantService.update(participant).subscribe();
   }
 
   private log(message: string): void {

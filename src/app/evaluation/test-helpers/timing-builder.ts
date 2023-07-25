@@ -58,7 +58,7 @@ export class TimingBuilder {
   public getFinishListWithRandomTiming(): Participant[] {
     return this._startList.map((t) => {
       if (!t.time) return t;
-      let time = new Date(Date.parse(t.time as string));
+      const time = new Date(Date.parse(t.time as string));
       time.setSeconds(time.getSeconds() + Math.random() * 200);
       t.time = time;
       return t;

@@ -1,4 +1,5 @@
 export class FileDownloader {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   static exportAsJson(data: any, fileName: string): void {
     const dataStr = `data:text/json;charset=utf-8,${encodeURIComponent(
       JSON.stringify(data)
@@ -9,6 +10,7 @@ export class FileDownloader {
     );
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   static exportAsCsv(data: any, fileName: string): void {
     const dataStr = `data:text/csv;charset=utf-8,${this.toCsv(data)}`;
     this.downloadAsFile(
@@ -28,6 +30,7 @@ export class FileDownloader {
     dlAnchorElem.click();
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private static toCsv(data: any): string {
     const csvRows = [];
 

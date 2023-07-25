@@ -26,18 +26,18 @@ export class StartCountdownComponent {
   }
 
   remainingTimeSeconds?: number;
-  blink: boolean = false;
+  blink = false;
 
-  private intervalTimeSeconds?: number;
+  private intervalTimeSeconds = 30;
   private timerSubscription?: Subscription;
 
   public start(): void {
     this.reset();
-    this.remainingTimeSeconds = this.intervalTimeSeconds!;
+    this.remainingTimeSeconds = this.intervalTimeSeconds;
 
     this.timerSubscription = timer(0, 1000)
       .pipe(
-        map((n) => this.intervalTimeSeconds! - n),
+        map((n) => this.intervalTimeSeconds - n),
         takeWhile((n) => n >= 0)
       )
       .subscribe((t) => {

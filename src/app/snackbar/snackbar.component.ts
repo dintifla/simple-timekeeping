@@ -10,7 +10,7 @@ export class SnackbarComponent {
   constructor(private messageService: MessageService) {}
 
   message?: string;
-  visible: boolean = false;
+  visible = false;
 
   ngOnInit(): void {
     this.messageService.newLog.subscribe((m) => this.show(m));

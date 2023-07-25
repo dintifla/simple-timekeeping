@@ -79,8 +79,8 @@ export class ParticipantService {
     return of(participant);
   }
 
-  update(participant: Participant): Observable<any> {
-    let participantToUpdate = this.participants.find(
+  update(participant: Participant): Observable<unknown> {
+    const participantToUpdate = this.participants.find(
       (p) => p.numberPlate === participant.numberPlate
     );
     if (participantToUpdate) {
@@ -103,7 +103,7 @@ export class ParticipantService {
     return of(participant);
   }
 
-  clear(): Observable<any> {
+  clear(): Observable<unknown> {
     this.participants = [];
     localStorage.removeItem(this.localStorageKey);
     return of(undefined);

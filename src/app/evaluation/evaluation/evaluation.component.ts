@@ -26,8 +26,8 @@ export class EvaluationComponent {
     if (!this.validateFiles()) return;
 
     const [startFile, finishFile] = this.getStartAndFinishFile();
-    Promise.all(new Array(startFile[0].text(), finishFile[0].text())).then(
-      (fileContents: any[]) => {
+    Promise.all([startFile[0].text(), finishFile[0].text()]).then(
+      (fileContents: string[]) => {
         const starts = JSON.parse(fileContents[0]);
         const finishes = JSON.parse(fileContents[1]);
         if (starts.length != finishes.length) {
@@ -39,7 +39,7 @@ export class EvaluationComponent {
 
         const timings = this.calculator.mapStartToFinish(starts, finishes);
         this.categories = this.getUniqueCategories(timings);
-        for (let category of this.categories) {
+        for (const category of this.categories) {
           this.results[category] = this.calculator.calculateRankAndSort(
             timings.filter((t) => t.category === category)
           );
@@ -50,7 +50,7 @@ export class EvaluationComponent {
   }
 
   private exportResults(title: string, results: Result[]): void {
-    let fileName = `Resultate_${title}_${Date.now()}`;
+    const fileName = `Resultate_${title}_${Date.now()}`;
     FileDownloader.exportAsJson(results, fileName + '.json');
     FileDownloader.exportAsCsv(results, fileName + '.csv');
   }
