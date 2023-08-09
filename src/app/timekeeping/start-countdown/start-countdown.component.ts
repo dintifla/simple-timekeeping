@@ -27,13 +27,13 @@ export class StartCountdownComponent {
 
   remainingTimeSeconds?: number;
   blink = false;
+  private blinkForLastSeconds = 5;
 
   private intervalTimeSeconds = 30;
   private timerSubscription?: Subscription;
 
   public start(): void {
     this.reset();
-    this.remainingTimeSeconds = this.intervalTimeSeconds;
 
     this.timerSubscription = timer(0, 1000)
       .pipe(
@@ -42,7 +42,7 @@ export class StartCountdownComponent {
       )
       .subscribe((t) => {
         this.remainingTimeSeconds = t;
-        if (this.remainingTimeSeconds <= 4) this.blink = true;
+        if (this.remainingTimeSeconds <= this.blinkForLastSeconds) this.blink = true;
       });
   }
 
