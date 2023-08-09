@@ -49,5 +49,6 @@ export class StartCountdownComponent {
   public reset(): void {
     this.timerSubscription?.unsubscribe();
     this.remainingTimeSeconds = 0;
+    this.blink = false;
   }
 }
