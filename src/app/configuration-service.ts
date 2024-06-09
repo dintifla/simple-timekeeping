@@ -12,7 +12,7 @@ export interface Configuration {
 export class ConfigurationService {
   getConfig(): Observable<Configuration> {
     const config = {
-      categories: ['Male', 'Female'],
+      categories: ['Male', 'Female', 'E-Bike'],
       startIntervalSeconds: 30,
     };
     return of(config);
