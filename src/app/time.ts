@@ -27,5 +27,7 @@ export function roundTo100Ms(timestamp: Date): Date {
  * Format the given milliseconds to HH:mm:ss.s
  */
 export function msToTime(ms: number): string {
-  return roundTo100Ms(new Date(ms)).toISOString().substring(11, 21);
+  return roundTo100Ms(new Date(Math.abs(ms)))
+    .toISOString()
+    .substring(11, 21);
 }

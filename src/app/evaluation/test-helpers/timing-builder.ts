@@ -1,4 +1,4 @@
-import { Participant } from "../../participant";
+import { Participant } from '../../participant';
 
 export class TimingBuilder {
   private readonly _startIntervalSeconds: number = 30;
@@ -10,17 +10,17 @@ export class TimingBuilder {
   }
 
   public addMaleParticipant(name: string): TimingBuilder {
-    this.addParticipant(name, "Male");
+    this.addParticipant(name, 'Male');
     return this;
   }
 
   public addFemaleParticipant(name: string): TimingBuilder {
-    this.addParticipant(name, "Female");
+    this.addParticipant(name, 'Female');
     return this;
   }
 
   public addSpareParticipant(): TimingBuilder {
-    this.addParticipant("", "Female");
+    this.addParticipant('', 'Female');
     return this;
   }
 
@@ -31,7 +31,7 @@ export class TimingBuilder {
       numberPlate: this._startList.length + 1,
       time: this._nextStartTime.toISOString(),
     };
-    if (name === "") {
+    if (name === '') {
       participant.isSpare = true;
     }
     this._startList.push(participant);
@@ -42,10 +42,10 @@ export class TimingBuilder {
 
   public addUnusedSpareParticipant(): TimingBuilder {
     this._startList.push({
-      category: "Male",
-      name: "",
+      category: 'Male',
+      name: '',
       numberPlate: this._startList.length + 1,
-      time: "",
+      time: '',
       isSpare: true,
     });
     return this;

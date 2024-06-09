@@ -49,10 +49,11 @@ export class EvaluationComponent {
         this.categories = this.getUniqueCategories(timings);
         for (const category of this.categories) {
           if (category === 'E-Bike') {
-            this.results[category] = this.eBikeCalculator.calculate(
-              timings.filter((t) => t.category === category),
-              refTimeMs
-            );
+            this.results[category] =
+              this.eBikeCalculator.calculateAndSortToReferenceTime(
+                timings.filter((t) => t.category === category),
+                refTimeMs
+              );
           } else {
             this.results[category] = this.calculator.calculateRankAndSort(
               timings.filter((t) => t.category === category)

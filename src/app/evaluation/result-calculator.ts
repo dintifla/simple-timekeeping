@@ -77,10 +77,11 @@ export class ResultCalculator {
           numberPlate: s.numberPlate,
           category: s.category,
           name: s.name,
-          startTime: (s.time as string) || '---',
+          startTime: s.time?.toString() || '---',
           finishTime:
-            (finishes.find((f) => f.numberPlate == s.numberPlate)
-              ?.time as string) || '---',
+            finishes
+              .find((f) => f.numberPlate == s.numberPlate)
+              ?.time?.toString() || '---',
         };
         return res;
       });

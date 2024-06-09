@@ -8,7 +8,10 @@ export class ReferenceTimeResultCalculator extends ResultCalculator {
     super();
   }
 
-  calculate(timings: Timing[], refTimeMs: number): Result[] {
+  calculateAndSortToReferenceTime(
+    timings: Timing[],
+    refTimeMs: number
+  ): Result[] {
     const results: Result[] = timings.map((t: Timing) => {
       return {
         rank: 1,
@@ -56,7 +59,20 @@ export class ReferenceTimeResultCalculator extends ResultCalculator {
           ? x.result
           : msToTime(x.result);
     });
+    results.unshift(this._getReferenceTimeLine(refTimeMs));
     return results;
+  }
+
+  private _getReferenceTimeLine(referenceTime: number): Result {
+    return {
+      rank: '-',
+      numberPlate: 0,
+      name: 'Referenzzeit',
+      startTime: '',
+      finishTime: '',
+      result: msToTime(referenceTime),
+      delay: '---',
+    };
   }
 
   private sortByTimeToRef(results: Result[], refTimeMs: number) {

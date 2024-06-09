@@ -42,7 +42,8 @@ export class StartCountdownComponent {
       )
       .subscribe((t) => {
         this.remainingTimeSeconds = t;
-        if (this.remainingTimeSeconds <= this.blinkForLastSeconds) this.blink = true;
+        if (this.remainingTimeSeconds <= this.blinkForLastSeconds)
+          this.blink = true;
       });
   }
 
