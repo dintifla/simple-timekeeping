@@ -18,4 +18,3 @@ export class MessageService {
     this.logs = [];
   }
 }
-

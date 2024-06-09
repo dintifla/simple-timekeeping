@@ -11,12 +11,10 @@ export class ParticipantService {
 
   participants: Participant[] = [];
 
-  private localStorageKey = (location: string) =>  `measurement-${location}`;
+  private localStorageKey = (location: string) => `measurement-${location}`;
 
   getEntries(location: string): Observable<Participant[]> {
-    const value = localStorage.getItem(
-      this.localStorageKey(location)
-    );
+    const value = localStorage.getItem(this.localStorageKey(location));
     if (!value) {
       console.error('Could not load participants from storage');
       return of([]);
@@ -94,4 +92,3 @@ export class ParticipantService {
     this.messageService.add(`ParticipantService: ${message}`);
   }
 }
-

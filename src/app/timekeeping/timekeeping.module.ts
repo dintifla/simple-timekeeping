@@ -6,11 +6,12 @@ import { StartCountdownComponent } from './start-countdown/start-countdown.compo
 import { TimekeepingComponent } from './timekeeping/timekeeping.component';
 
 @NgModule({
-  declarations: [TimekeepingComponent, StartCountdownComponent, FormatDateToTimeStringPipe],
-  imports: [
-    FormsModule,
-    CommonModule
+  declarations: [
+    TimekeepingComponent,
+    StartCountdownComponent,
+    FormatDateToTimeStringPipe,
   ],
-  exports: [ TimekeepingComponent]
+  imports: [FormsModule, CommonModule],
+  exports: [TimekeepingComponent],
 })
-export class TimekeepingModule { }
+export class TimekeepingModule {}

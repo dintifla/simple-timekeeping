@@ -48,4 +48,3 @@ export class ResultValidationService {
     return true;
   }
 }
-
