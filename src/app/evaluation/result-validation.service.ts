@@ -33,13 +33,13 @@ export class ResultValidationService {
         ...starts
           .map((x) => x.time)
           .filter((x): x is string => !!x)
-          .map((x) => Date.parse(x))
+          .map((x) => Date.parse(x)),
       ) >
       Math.min(
         ...finishes
           .map((x) => x.time)
           .filter((x): x is string => !!x)
-          .map((x) => Date.parse(x))
+          .map((x) => Date.parse(x)),
       )
     ) {
       this.messageService.add('Start und Finish file are reversed!');

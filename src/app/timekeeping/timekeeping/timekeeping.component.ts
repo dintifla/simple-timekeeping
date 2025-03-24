@@ -5,17 +5,27 @@ import { FileDownloader } from '../../file-downloader';
 import { parseTime, roundTo100Ms } from '../../time';
 import { CountdownService } from '../countdown.service';
 import { ConfigurationService } from 'src/app/configuration-service';
+import { FormsModule } from '@angular/forms';
+import { StartCountdownComponent } from '../start-countdown/start-countdown.component';
+import { FormatDateToTimeStringPipe } from '../pipes/date-to-timestring.pipe';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-timekeeping',
   templateUrl: './timekeeping.component.html',
   styleUrls: ['./timekeeping.component.css'],
+  imports: [
+    FormsModule,
+    StartCountdownComponent,
+    FormatDateToTimeStringPipe,
+    CommonModule,
+  ],
 })
 export class TimekeepingComponent {
   constructor(
     private participantService: ParticipantService,
     private countdownService: CountdownService,
-    private configService: ConfigurationService
+    private configService: ConfigurationService,
   ) {}
 
   participants: Participant[] = [];
@@ -62,7 +72,7 @@ export class TimekeepingComponent {
   exportMeasurements(): void {
     FileDownloader.exportAsJson(
       this.participants,
-      `${this.location}_${Date.now()}.json`
+      `${this.location}_${Date.now()}.json`,
     );
   }
 

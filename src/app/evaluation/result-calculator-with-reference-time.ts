@@ -10,7 +10,7 @@ export class ReferenceTimeResultCalculator extends ResultCalculator {
 
   calculateAndSortToReferenceTime(
     timings: Timing[],
-    refTimeMs: number
+    refTimeMs: number,
   ): Result[] {
     const results: Result[] = timings.map((t: Timing) => {
       return {
@@ -30,12 +30,12 @@ export class ReferenceTimeResultCalculator extends ResultCalculator {
       results[i].delay = this.getDelayToPreviousAndReference(
         refTimeMs,
         results[i].result,
-        i > 0 ? results[i - 1].result : undefined
+        i > 0 ? results[i - 1].result : undefined,
       );
       if (i !== 0) {
         const hasSameTime: boolean =
           Math.abs(
-            (results[i].result as number) - (results[i - 1].result as number)
+            (results[i].result as number) - (results[i - 1].result as number),
           ) < 100;
         if (hasSameTime) {
           rank = results[i - 1].rank;
@@ -92,7 +92,7 @@ export class ReferenceTimeResultCalculator extends ResultCalculator {
   private getDelayToPreviousAndReference(
     referenceTime: number | string,
     currentTime: number | string,
-    previousTime: number | string | undefined
+    previousTime: number | string | undefined,
   ): string {
     if (
       typeof referenceTime !== 'number' ||

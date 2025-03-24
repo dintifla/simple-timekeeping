@@ -11,7 +11,7 @@ Best is if the race has interval starts. E.g. a cycling hill climb. The applicat
 ## Build
 
 1. Run `npm i` to install dependencies
-2. Run `npm run bundle` to build and bundle the scripts
+2. Run `npm run bundle` to build and bundle the scripts (or `npm run bundle:win` on windows)
 3. Find the bundled script `./dist/Zeitmessung.html`
 
 ## Test

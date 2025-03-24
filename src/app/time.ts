@@ -18,7 +18,7 @@ export function parseTime(t: string): Date {
 
 export function roundTo100Ms(timestamp: Date): Date {
   timestamp.setMilliseconds(
-    Math.round(timestamp.getMilliseconds() / 100) * 100
+    Math.round(timestamp.getMilliseconds() / 100) * 100,
   );
   return timestamp;
 }

@@ -2,16 +2,18 @@ import { Component } from '@angular/core';
 import { Subscription, map, takeWhile, timer } from 'rxjs';
 import { ConfigurationService } from '../../configuration-service';
 import { CountdownService } from '../countdown.service';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-start-countdown',
   templateUrl: './start-countdown.component.html',
   styleUrls: ['./start-countdown.component.css'],
+  imports: [CommonModule],
 })
 export class StartCountdownComponent {
   constructor(
     private configService: ConfigurationService,
-    private countdownService: CountdownService
+    private countdownService: CountdownService,
   ) {}
 
   ngOnInit(): void {
@@ -38,7 +40,7 @@ export class StartCountdownComponent {
     this.timerSubscription = timer(0, 1000)
       .pipe(
         map((n) => this.intervalTimeSeconds - n),
-        takeWhile((n) => n >= 0)
+        takeWhile((n) => n >= 0),
       )
       .subscribe((t) => {
         this.remainingTimeSeconds = t;

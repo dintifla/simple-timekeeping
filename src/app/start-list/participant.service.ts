@@ -40,7 +40,7 @@ export class ParticipantService {
         this.participants = participants.filter((p) => !p.isSpare);
         this.save();
         return this.participants;
-      })
+      }),
     );
   }
 
@@ -72,7 +72,7 @@ export class ParticipantService {
 
   add(participant: Participant): Observable<Participant> {
     participant.numberPlate = ParticipantService.generateNumberPlate(
-      this.participants
+      this.participants,
     );
     this.participants.push(participant);
     this.save();
@@ -81,7 +81,7 @@ export class ParticipantService {
 
   update(participant: Participant): Observable<unknown> {
     const participantToUpdate = this.participants.find(
-      (p) => p.numberPlate === participant.numberPlate
+      (p) => p.numberPlate === participant.numberPlate,
     );
     if (participantToUpdate) {
       participantToUpdate.category = participant.category;
@@ -94,7 +94,7 @@ export class ParticipantService {
 
   delete(numberPlate: number): Observable<Participant | undefined> {
     const participant = this.participants.find(
-      (p) => p.numberPlate === numberPlate
+      (p) => p.numberPlate === numberPlate,
     );
     if (!participant) return of(undefined);
 
@@ -120,7 +120,7 @@ export class ParticipantService {
   private save(): void {
     localStorage.setItem(
       this.localStorageKey,
-      JSON.stringify(this.participants)
+      JSON.stringify(this.participants),
     );
   }
 

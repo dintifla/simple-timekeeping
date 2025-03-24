@@ -93,13 +93,13 @@ describe('Result calculator', () => {
 
       expect(results).toHaveSize(3);
       expect(results[0]).toEqual(
-        jasmine.objectContaining({ name: 'Michael', rank: 1 })
+        jasmine.objectContaining({ name: 'Michael', rank: 1 }),
       );
       expect(results[1]).toEqual(
-        jasmine.objectContaining({ name: 'Peter', rank: 2 })
+        jasmine.objectContaining({ name: 'Peter', rank: 2 }),
       );
       expect(results[2]).toEqual(
-        jasmine.objectContaining({ name: 'Paul', rank: 3 })
+        jasmine.objectContaining({ name: 'Paul', rank: 3 }),
       );
     });
 
@@ -130,19 +130,19 @@ describe('Result calculator', () => {
 
       expect(results).toHaveSize(3);
       expect(results[0]).toEqual(
-        jasmine.objectContaining({ name: 'Michael', delay: '---' })
+        jasmine.objectContaining({ name: 'Michael', delay: '---' }),
       );
       expect(results[1]).toEqual(
         jasmine.objectContaining({
           name: 'Peter',
           delay: '+00:25:00.0 (+00:25:00.0)',
-        })
+        }),
       );
       expect(results[2]).toEqual(
         jasmine.objectContaining({
           name: 'Paul',
           delay: '+01:31:18.7 (+01:06:18.7)',
-        })
+        }),
       );
     });
 
@@ -194,38 +194,38 @@ describe('Result calculator', () => {
 
       expect(results).toHaveSize(6);
       expect(results[0]).toEqual(
-        jasmine.objectContaining({ name: 'Paul', rank: 1 })
+        jasmine.objectContaining({ name: 'Paul', rank: 1 }),
       );
       expect(results[1]).toEqual(
-        jasmine.objectContaining({ name: 'Greg', rank: 2 })
+        jasmine.objectContaining({ name: 'Greg', rank: 2 }),
       );
       expect(results[2]).toEqual(
         jasmine.objectContaining({
           name: 'Peter',
           rank: 3,
           delay: '+00:59:59.0 (+00:59:54.0)',
-        })
+        }),
       );
       expect(results[3]).toEqual(
         jasmine.objectContaining({
           name: 'Fred',
           rank: 3,
           delay: '+00:59:59.0 (+00:59:54.0)',
-        })
+        }),
       );
       expect(results[4]).toEqual(
         jasmine.objectContaining({
           name: 'Arthur',
           rank: 3,
           delay: '+00:59:59.0 (+00:59:54.0)',
-        })
+        }),
       );
       expect(results[5]).toEqual(
         jasmine.objectContaining({
           name: 'Michael',
           rank: 6,
           delay: '+12:00:00.0 (+11:00:01.0)',
-        })
+        }),
       );
     });
 
@@ -255,21 +255,21 @@ describe('Result calculator', () => {
       ]);
       expect(results).toHaveSize(3);
       expect(results[0]).toEqual(
-        jasmine.objectContaining({ name: 'Michael', rank: 1 })
+        jasmine.objectContaining({ name: 'Michael', rank: 1 }),
       );
       expect(results[1]).toEqual(
         jasmine.objectContaining({
           name: 'Peter',
           rank: '-',
           result: 'DNF',
-        })
+        }),
       );
       expect(results[2]).toEqual(
         jasmine.objectContaining({
           name: 'Paul',
           rank: '-',
           result: 'DNS',
-        })
+        }),
       );
     });
   });

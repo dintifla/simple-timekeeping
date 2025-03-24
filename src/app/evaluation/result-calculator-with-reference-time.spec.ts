@@ -15,7 +15,7 @@ describe('Result calculator with reference time', () => {
         timingBuilder.getFinishListWithRandomTiming();
       const mapped = new ReferenceTimeResultCalculator().mapStartToFinish(
         starts,
-        finishes
+        finishes,
       );
 
       expect(mapped).toHaveSize(3);
@@ -49,7 +49,7 @@ describe('Result calculator with reference time', () => {
         timingBuilder.getFinishListWithRandomTiming();
       const mapped = new ReferenceTimeResultCalculator().mapStartToFinish(
         starts,
-        finishes
+        finishes,
       );
 
       expect(mapped).toHaveSize(4);
@@ -70,7 +70,7 @@ describe('Result calculator with reference time', () => {
               category: 'M',
             },
           ],
-          refTime
+          refTime,
         );
 
       expect(results).toHaveSize(2);
@@ -104,21 +104,21 @@ describe('Result calculator with reference time', () => {
               category: 'M',
             },
           ],
-          refTime
+          refTime,
         );
 
       expect(results).toHaveSize(4);
       expect(results[0]).toEqual(
-        jasmine.objectContaining({ name: 'Referenzzeit', rank: '-' })
+        jasmine.objectContaining({ name: 'Referenzzeit', rank: '-' }),
       );
       expect(results[1]).toEqual(
-        jasmine.objectContaining({ name: 'Michael', rank: 1 })
+        jasmine.objectContaining({ name: 'Michael', rank: 1 }),
       );
       expect(results[2]).toEqual(
-        jasmine.objectContaining({ name: 'Peter', rank: 2 })
+        jasmine.objectContaining({ name: 'Peter', rank: 2 }),
       );
       expect(results[3]).toEqual(
-        jasmine.objectContaining({ name: 'Paul', rank: 3 })
+        jasmine.objectContaining({ name: 'Paul', rank: 3 }),
       );
     });
 
@@ -149,30 +149,30 @@ describe('Result calculator with reference time', () => {
               category: 'M',
             },
           ],
-          refTime
+          refTime,
         );
 
       expect(results).toHaveSize(4);
       expect(results[0]).toEqual(
-        jasmine.objectContaining({ name: 'Referenzzeit', delay: '---' })
+        jasmine.objectContaining({ name: 'Referenzzeit', delay: '---' }),
       );
       expect(results[1]).toEqual(
         jasmine.objectContaining({
           name: 'Michael',
           delay: '+00:00:38.5 (---)',
-        })
+        }),
       );
       expect(results[2]).toEqual(
         jasmine.objectContaining({
           name: 'Peter',
           delay: '+00:25:38.5 (00:25:00.0)',
-        })
+        }),
       );
       expect(results[3]).toEqual(
         jasmine.objectContaining({
           name: 'Paul',
           delay: '+01:31:57.2 (01:06:18.7)',
-        })
+        }),
       );
     });
 
@@ -224,46 +224,46 @@ describe('Result calculator with reference time', () => {
               category: 'M',
             },
           ],
-          refTime
+          refTime,
         );
 
       expect(results).toHaveSize(7);
       expect(results[0]).toEqual(
-        jasmine.objectContaining({ name: 'Referenzzeit', rank: '-' })
+        jasmine.objectContaining({ name: 'Referenzzeit', rank: '-' }),
       );
       expect(results[1]).toEqual(
-        jasmine.objectContaining({ name: 'Paul', rank: 1 })
+        jasmine.objectContaining({ name: 'Paul', rank: 1 }),
       );
       expect(results[2]).toEqual(
-        jasmine.objectContaining({ name: 'Greg', rank: 2 })
+        jasmine.objectContaining({ name: 'Greg', rank: 2 }),
       );
       expect(results[3]).toEqual(
         jasmine.objectContaining({
           name: 'Peter',
           rank: 3,
           delay: '+01:27:06.2 (00:59:54.0)',
-        })
+        }),
       );
       expect(results[4]).toEqual(
         jasmine.objectContaining({
           name: 'Fred',
           rank: 3,
           delay: '+01:27:06.2 (00:59:54.0)',
-        })
+        }),
       );
       expect(results[5]).toEqual(
         jasmine.objectContaining({
           name: 'Arthur',
           rank: 3,
           delay: '+01:27:06.2 (00:59:54.0)',
-        })
+        }),
       );
       expect(results[6]).toEqual(
         jasmine.objectContaining({
           name: 'Michael',
           rank: 6,
           delay: '+12:27:07.2 (11:00:01.0)',
-        })
+        }),
       );
     });
 
@@ -294,28 +294,28 @@ describe('Result calculator with reference time', () => {
               category: 'M',
             },
           ],
-          refTime
+          refTime,
         );
       expect(results).toHaveSize(4);
       expect(results[0]).toEqual(
-        jasmine.objectContaining({ name: 'Referenzzeit', rank: '-' })
+        jasmine.objectContaining({ name: 'Referenzzeit', rank: '-' }),
       );
       expect(results[1]).toEqual(
-        jasmine.objectContaining({ name: 'Michael', rank: 1 })
+        jasmine.objectContaining({ name: 'Michael', rank: 1 }),
       );
       expect(results[2]).toEqual(
         jasmine.objectContaining({
           name: 'Peter',
           rank: '-',
           result: 'DNF',
-        })
+        }),
       );
       expect(results[3]).toEqual(
         jasmine.objectContaining({
           name: 'Paul',
           rank: '-',
           result: 'DNS',
-        })
+        }),
       );
     });
   });

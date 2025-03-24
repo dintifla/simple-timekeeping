@@ -8,7 +8,9 @@ import { parseTime } from '../../time';
  *   {{ Fri Jul 21 2023 09:25:58 GMT+0200 (Central European Summer Time) | dateToTimeString }}
  *   formats to: 09:25:58
  */
-@Pipe({ name: 'dateToTimeString' })
+@Pipe({
+  name: 'dateToTimeString',
+})
 export class FormatDateToTimeStringPipe implements PipeTransform {
   transform(value: string | Date | undefined): string {
     if (!value) return '';

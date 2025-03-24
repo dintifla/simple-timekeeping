@@ -7,9 +7,7 @@ describe('EvaluationComponent', () => {
   let fixture: ComponentFixture<EvaluationComponent>;
 
   beforeEach(() => {
-    TestBed.configureTestingModule({
-      declarations: [EvaluationComponent],
-    });
+    TestBed.configureTestingModule({});
     fixture = TestBed.createComponent(EvaluationComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

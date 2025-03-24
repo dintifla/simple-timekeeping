@@ -2,11 +2,11 @@ export class FileDownloader {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   static exportAsJson(data: any, fileName: string): void {
     const dataStr = `data:text/json;charset=utf-8,${encodeURIComponent(
-      JSON.stringify(data)
+      JSON.stringify(data),
     )}`;
     this.downloadAsFile(
       dataStr,
-      fileName.endsWith('.json') ? fileName : `${fileName}.json`
+      fileName.endsWith('.json') ? fileName : `${fileName}.json`,
     );
   }
 
@@ -15,13 +15,13 @@ export class FileDownloader {
     const dataStr = `data:text/csv;charset=utf-8,${this.toCsv(data)}`;
     this.downloadAsFile(
       dataStr,
-      fileName.endsWith('.csv') ? fileName : `${fileName}.csv`
+      fileName.endsWith('.csv') ? fileName : `${fileName}.csv`,
     );
   }
 
   private static downloadAsFile(
     data: string,
-    fileNameWithEnding: string
+    fileNameWithEnding: string,
   ): void {
     const dlAnchorElem = document.getElementById('downloadAnchorElem');
     if (!dlAnchorElem) throw Error('Download element not found');

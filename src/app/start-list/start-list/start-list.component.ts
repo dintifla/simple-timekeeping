@@ -4,17 +4,20 @@ import { ConfigurationService } from '../../configuration-service';
 import { FileDownloader } from '../../file-downloader';
 import { ParticipantService } from '../participant.service';
 import { MessageService } from '../../message.service';
+import { FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-start-list',
   templateUrl: './start-list.component.html',
   styleUrls: ['./start-list.component.css'],
+  imports: [FormsModule, CommonModule],
 })
 export class StartListComponent {
   constructor(
     private configService: ConfigurationService,
     private participantService: ParticipantService,
-    private messageService: MessageService
+    private messageService: MessageService,
   ) {}
 
   title = 'timekeeping';
@@ -78,7 +81,7 @@ export class StartListComponent {
     this.participantService
       .getWithSpare(this.categories[0])
       .subscribe((p) =>
-        FileDownloader.exportAsJson(p, `Startliste_${Date.now()}.json`)
+        FileDownloader.exportAsJson(p, `Startliste_${Date.now()}.json`),
       );
   }
 

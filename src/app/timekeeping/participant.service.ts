@@ -39,7 +39,7 @@ export class ParticipantService {
         this.save(location);
         this.participants = entries;
         return this.participants;
-      })
+      }),
     );
   }
 
@@ -63,7 +63,7 @@ export class ParticipantService {
 
   update(participant: Participant, location: string): Observable<unknown> {
     const participantToUpdate = this.participants.find(
-      (p) => p.numberPlate === participant.numberPlate
+      (p) => p.numberPlate === participant.numberPlate,
     );
     if (participantToUpdate) {
       participantToUpdate.category = participant.category;
@@ -84,7 +84,7 @@ export class ParticipantService {
   private save(location: string): void {
     localStorage.setItem(
       this.localStorageKey(location),
-      JSON.stringify(this.participants)
+      JSON.stringify(this.participants),
     );
   }
 

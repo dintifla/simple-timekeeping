@@ -36,7 +36,7 @@ export class TimingBuilder {
     }
     this._startList.push(participant);
     this._nextStartTime.setSeconds(
-      this._nextStartTime.getSeconds() + this._startIntervalSeconds
+      this._nextStartTime.getSeconds() + this._startIntervalSeconds,
     );
   }
 
