@@ -7,9 +7,7 @@ describe('TimekeepingComponent', () => {
   let fixture: ComponentFixture<TimekeepingComponent>;
 
   beforeEach(() => {
-    TestBed.configureTestingModule({
-      declarations: [TimekeepingComponent],
-    });
+    TestBed.configureTestingModule({});
     fixture = TestBed.createComponent(TimekeepingComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

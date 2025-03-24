@@ -7,9 +7,7 @@ describe('StartCountdownComponent', () => {
   let fixture: ComponentFixture<StartCountdownComponent>;
 
   beforeEach(() => {
-    TestBed.configureTestingModule({
-      declarations: [StartCountdownComponent],
-    });
+    TestBed.configureTestingModule({});
     fixture = TestBed.createComponent(StartCountdownComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
