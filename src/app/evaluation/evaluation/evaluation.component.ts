@@ -11,6 +11,7 @@ import { ReferenceTimeResultCalculator } from '../result-calculator-with-referen
   selector: 'app-evaluation',
   templateUrl: './evaluation.component.html',
   styleUrls: ['./evaluation.component.css'],
+  standalone: false,
 })
 export class EvaluationComponent {
   constructor(

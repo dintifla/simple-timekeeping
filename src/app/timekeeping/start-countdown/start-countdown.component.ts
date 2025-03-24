@@ -7,6 +7,7 @@ import { CountdownService } from '../countdown.service';
   selector: 'app-start-countdown',
   templateUrl: './start-countdown.component.html',
   styleUrls: ['./start-countdown.component.css'],
+  standalone: false,
 })
 export class StartCountdownComponent {
   constructor(

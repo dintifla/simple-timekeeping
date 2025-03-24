@@ -10,6 +10,7 @@ import { ConfigurationService } from 'src/app/configuration-service';
   selector: 'app-timekeeping',
   templateUrl: './timekeeping.component.html',
   styleUrls: ['./timekeeping.component.css'],
+  standalone: false,
 })
 export class TimekeepingComponent {
   constructor(

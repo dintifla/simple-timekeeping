@@ -5,6 +5,7 @@ import { MessageService } from '../message.service';
   selector: 'app-snackbar',
   templateUrl: './snackbar.component.html',
   styleUrls: ['./snackbar.component.css'],
+  standalone: false,
 })
 export class SnackbarComponent {
   constructor(private messageService: MessageService) {}

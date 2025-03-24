@@ -7,10 +7,7 @@
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build --output-hashing=none",
-    "package:win": "cd dist/timekeeping && type main.js polyfills.js runtime.js > bundle.js",
-    "package": "cd ./dist/timekeeping && cat main.js polyfills.js runtime.js > bundle.js",
-    "bundle": "npm run build && npm run package && node deploy.js",
-    "bundle_win": "npm run build && npm run package:win && node deploy.js",
+    "bundle": "npm run build && node deploy.js",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "lint": "eslint --ext .js --ext .ts src/",
@@ -27,22 +24,22 @@
   },
   "homepage": "https://github.com/dintifla/simple-timekeeping#readme",
   "dependencies": {
-    "@angular/animations": "^18.0.2",
-    "@angular/common": "^18.0.2",
-    "@angular/compiler": "^18.0.2",
-    "@angular/core": "^18.0.2",
-    "@angular/forms": "^18.0.2",
-    "@angular/platform-browser": "^18.0.2",
-    "@angular/platform-browser-dynamic": "^18.0.2",
-    "@angular/router": "^18.0.2",
+    "@angular/animations": "^19.2.3",
+    "@angular/common": "^19.2.3",
+    "@angular/compiler": "^19.2.3",
+    "@angular/core": "^19.2.3",
+    "@angular/forms": "^19.2.3",
+    "@angular/platform-browser": "^19.2.3",
+    "@angular/platform-browser-dynamic": "^19.2.3",
+    "@angular/router": "^19.2.3",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
-    "zone.js": "~0.14.7"
+    "zone.js": "~0.15.0"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "^18.0.3",
-    "@angular/cli": "~18.0.3",
-    "@angular/compiler-cli": "^18.0.2",
+    "@angular-devkit/build-angular": "^19.2.4",
+    "@angular/cli": "~19.2.4",
+    "@angular/compiler-cli": "^19.2.3",
     "@types/jasmine": "^5.1.4",
     "@typescript-eslint/eslint-plugin": "^5.40.0",
     "@typescript-eslint/parser": "^5.40.0",
@@ -54,6 +51,6 @@
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.1.0",
     "prettier": "^2.7.1",
-    "typescript": "~5.4.5"
+    "typescript": "~5.8.2"
   }
 }

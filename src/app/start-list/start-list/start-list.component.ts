@@ -9,6 +9,7 @@ import { MessageService } from '../../message.service';
   selector: 'app-start-list',
   templateUrl: './start-list.component.html',
   styleUrls: ['./start-list.component.css'],
+  standalone: false,
 })
 export class StartListComponent {
   constructor(
