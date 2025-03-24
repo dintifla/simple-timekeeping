@@ -6,7 +6,7 @@ describe('AppComponent', () => {
   beforeEach(() =>
     TestBed.configureTestingModule({
       declarations: [AppComponent, SnackbarComponent],
-    })
+    }),
   );
 
   it('should create the app', () => {

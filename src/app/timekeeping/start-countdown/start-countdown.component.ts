@@ -13,7 +13,7 @@ import { CommonModule } from '@angular/common';
 export class StartCountdownComponent {
   constructor(
     private configService: ConfigurationService,
-    private countdownService: CountdownService
+    private countdownService: CountdownService,
   ) {}
 
   ngOnInit(): void {
@@ -40,7 +40,7 @@ export class StartCountdownComponent {
     this.timerSubscription = timer(0, 1000)
       .pipe(
         map((n) => this.intervalTimeSeconds - n),
-        takeWhile((n) => n >= 0)
+        takeWhile((n) => n >= 0),
       )
       .subscribe((t) => {
         this.remainingTimeSeconds = t;

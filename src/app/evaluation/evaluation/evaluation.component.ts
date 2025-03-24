@@ -17,7 +17,7 @@ import { CommonModule } from '@angular/common';
 export class EvaluationComponent {
   constructor(
     private validator: ResultValidationService,
-    private messageService: MessageService
+    private messageService: MessageService,
   ) {}
 
   categories: string[] = [];
@@ -54,16 +54,16 @@ export class EvaluationComponent {
             this.results[category] =
               this.eBikeCalculator.calculateAndSortToReferenceTime(
                 timings.filter((t) => t.category === category),
-                refTimeMs
+                refTimeMs,
               );
           } else {
             this.results[category] = this.calculator.calculateRankAndSort(
-              timings.filter((t) => t.category === category)
+              timings.filter((t) => t.category === category),
             );
           }
           this.exportResults(category, this.results[category]);
         }
-      }
+      },
     );
   }
 
@@ -85,7 +85,7 @@ export class EvaluationComponent {
       return true;
     }
     this.messageService.add(
-      'Ungültiges Format für die Referenzzeit. Erwartet wird HH:mm:ss.s'
+      'Ungültiges Format für die Referenzzeit. Erwartet wird HH:mm:ss.s',
     );
     return false;
   }

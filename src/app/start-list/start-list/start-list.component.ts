@@ -17,7 +17,7 @@ export class StartListComponent {
   constructor(
     private configService: ConfigurationService,
     private participantService: ParticipantService,
-    private messageService: MessageService
+    private messageService: MessageService,
   ) {}
 
   title = 'timekeeping';
@@ -81,7 +81,7 @@ export class StartListComponent {
     this.participantService
       .getWithSpare(this.categories[0])
       .subscribe((p) =>
-        FileDownloader.exportAsJson(p, `Startliste_${Date.now()}.json`)
+        FileDownloader.exportAsJson(p, `Startliste_${Date.now()}.json`),
       );
   }
 

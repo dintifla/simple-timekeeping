@@ -12,8 +12,8 @@ describe('time module', () => {
           14,
           36,
           18,
-          0
-        ).toISOString()
+          0,
+        ).toISOString(),
       );
     });
   });
@@ -21,19 +21,19 @@ describe('time module', () => {
   describe('round to 100 ms', () => {
     it('rounds up to 100 ms', () => {
       expect(
-        roundTo100Ms(new Date(2022, 10, 16, 11, 25, 10, 350)).getMilliseconds()
+        roundTo100Ms(new Date(2022, 10, 16, 11, 25, 10, 350)).getMilliseconds(),
       ).toBe(400);
     });
 
     it('rounds down to 100 ms', () => {
       expect(
-        roundTo100Ms(new Date(2022, 10, 16, 11, 25, 10, 349)).getMilliseconds()
+        roundTo100Ms(new Date(2022, 10, 16, 11, 25, 10, 349)).getMilliseconds(),
       ).toBe(300);
     });
 
     it('does nothing if already rounded to 100 ms', () => {
       expect(
-        roundTo100Ms(new Date(2022, 10, 16, 11, 25, 10, 500)).getMilliseconds()
+        roundTo100Ms(new Date(2022, 10, 16, 11, 25, 10, 500)).getMilliseconds(),
       ).toBe(500);
     });
   });

@@ -24,7 +24,7 @@ export class ResultCalculator {
         results[i].delay = this.getDelayToPreviousAndFirst(
           results[0].result,
           results[i].result,
-          results[i - 1].result
+          results[i - 1].result,
         );
 
         const hasSameTime: boolean =
@@ -90,7 +90,7 @@ export class ResultCalculator {
   private getDelayToPreviousAndFirst(
     firstTime: number | string,
     currentTime: number | string,
-    previousTime: number | string
+    previousTime: number | string,
   ): string {
     if (
       typeof firstTime !== 'number' ||

@@ -25,7 +25,7 @@ export class TimekeepingComponent {
   constructor(
     private participantService: ParticipantService,
     private countdownService: CountdownService,
-    private configService: ConfigurationService
+    private configService: ConfigurationService,
   ) {}
 
   participants: Participant[] = [];
@@ -72,7 +72,7 @@ export class TimekeepingComponent {
   exportMeasurements(): void {
     FileDownloader.exportAsJson(
       this.participants,
-      `${this.location}_${Date.now()}.json`
+      `${this.location}_${Date.now()}.json`,
     );
   }
 
