@@ -10,7 +10,6 @@ import { parseTime } from '../../time';
  */
 @Pipe({
   name: 'dateToTimeString',
-  standalone: false,
 })
 export class FormatDateToTimeStringPipe implements PipeTransform {
   transform(value: string | Date | undefined): string {

@@ -2,12 +2,13 @@ import { Component } from '@angular/core';
 import { Subscription, map, takeWhile, timer } from 'rxjs';
 import { ConfigurationService } from '../../configuration-service';
 import { CountdownService } from '../countdown.service';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-start-countdown',
   templateUrl: './start-countdown.component.html',
   styleUrls: ['./start-countdown.component.css'],
-  standalone: false,
+  imports: [CommonModule],
 })
 export class StartCountdownComponent {
   constructor(

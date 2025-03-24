@@ -5,12 +5,21 @@ import { FileDownloader } from '../../file-downloader';
 import { parseTime, roundTo100Ms } from '../../time';
 import { CountdownService } from '../countdown.service';
 import { ConfigurationService } from 'src/app/configuration-service';
+import { FormsModule } from '@angular/forms';
+import { StartCountdownComponent } from '../start-countdown/start-countdown.component';
+import { FormatDateToTimeStringPipe } from '../pipes/date-to-timestring.pipe';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-timekeeping',
   templateUrl: './timekeeping.component.html',
   styleUrls: ['./timekeeping.component.css'],
-  standalone: false,
+  imports: [
+    FormsModule,
+    StartCountdownComponent,
+    FormatDateToTimeStringPipe,
+    CommonModule,
+  ],
 })
 export class TimekeepingComponent {
   constructor(
