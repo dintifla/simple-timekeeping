@@ -4,7 +4,6 @@ import { TimekeepingComponent } from './timekeeping/timekeeping/timekeeping.comp
 import { EvaluationComponent } from './evaluation/evaluation/evaluation.component';
 import { SnackbarComponent } from './snackbar/snackbar.component';
 
-
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -13,8 +12,8 @@ import { SnackbarComponent } from './snackbar/snackbar.component';
     StartListComponent,
     TimekeepingComponent,
     EvaluationComponent,
-    SnackbarComponent
-],
+    SnackbarComponent,
+  ],
 })
 export class AppComponent {
   displayTarget = 'startlist';

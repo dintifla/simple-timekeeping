@@ -7,7 +7,6 @@ import { ResultCalculator } from '../result-calculator';
 import { FileDownloader } from '../../file-downloader';
 import { ReferenceTimeResultCalculator } from '../result-calculator-with-reference-time';
 
-
 @Component({
   selector: 'app-evaluation',
   templateUrl: './evaluation.component.html',

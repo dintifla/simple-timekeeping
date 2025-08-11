@@ -6,7 +6,6 @@ import { ParticipantService } from '../participant.service';
 import { MessageService } from '../../message.service';
 import { FormsModule } from '@angular/forms';
 
-
 @Component({
   selector: 'app-start-list',
   templateUrl: './start-list.component.html',
