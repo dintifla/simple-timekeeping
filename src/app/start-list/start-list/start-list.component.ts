@@ -5,13 +5,12 @@ import { FileDownloader } from '../../file-downloader';
 import { ParticipantService } from '../participant.service';
 import { MessageService } from '../../message.service';
 import { FormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-start-list',
   templateUrl: './start-list.component.html',
   styleUrls: ['./start-list.component.css'],
-  imports: [FormsModule, CommonModule],
+  imports: [FormsModule],
 })
 export class StartListComponent {
   constructor(

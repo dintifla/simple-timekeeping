@@ -3,7 +3,6 @@ import { StartListComponent } from './start-list/start-list/start-list.component
 import { TimekeepingComponent } from './timekeeping/timekeeping/timekeeping.component';
 import { EvaluationComponent } from './evaluation/evaluation/evaluation.component';
 import { SnackbarComponent } from './snackbar/snackbar.component';
-import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-root',
@@ -14,7 +13,6 @@ import { CommonModule } from '@angular/common';
     TimekeepingComponent,
     EvaluationComponent,
     SnackbarComponent,
-    CommonModule,
   ],
 })
 export class AppComponent {

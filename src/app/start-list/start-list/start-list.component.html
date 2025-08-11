@@ -5,7 +5,7 @@
   id="new-participantList"
   class="big-button"
   (click)="newParticipantList()"
->
+  >
   Neue Liste
 </button>
 
@@ -19,7 +19,7 @@
   id="load-participants"
   class="big-button"
   (click)="getParticipants()"
->
+  >
   Laden
 </button>
 <a id="downloadAnchorElem" style="display: none"></a>
@@ -29,7 +29,7 @@
   id="export-participants"
   class="big-button"
   (click)="exportParticipants()"
->
+  >
   Exportieren
 </button>
 <br />
@@ -38,7 +38,7 @@
   id="new-participant"
   class="big-button"
   (click)="addParticipant()"
->
+  >
   + Teilnehmer
 </button>
 
@@ -49,26 +49,30 @@
     <th>Name</th>
   </tr>
 
-  <tr *ngFor="let participant of participants">
-    <td>{{ participant.numberPlate }}</td>
-    <td class="category-selection">
-      <label *ngFor="let category of categories">
+  @for (participant of participants; track participant) {
+    <tr>
+      <td>{{ participant.numberPlate }}</td>
+      <td class="category-selection">
+        @for (category of categories; track category) {
+          <label>
+            <input
+              type="radio"
+              name="category-{{ participant.numberPlate }}"
+              [(ngModel)]="participant.category"
+              [value]="category"
+              (change)="save(participant)"
+              />
+            <b>{{ category }}</b>
+          </label>
+        }
+      </td>
+      <td>
         <input
-          type="radio"
-          name="category-{{ participant.numberPlate }}"
-          [(ngModel)]="participant.category"
-          [value]="category"
-          (change)="save(participant)"
-        />
-        <b>{{ category }}</b>
-      </label>
-    </td>
-    <td>
-      <input
-        type="text"
-        [(ngModel)]="participant.name"
-        (focusout)="save(participant)"
-      />
-    </td>
-  </tr>
+          type="text"
+          [(ngModel)]="participant.name"
+          (focusout)="save(participant)"
+          />
+      </td>
+    </tr>
+  }
 </table>

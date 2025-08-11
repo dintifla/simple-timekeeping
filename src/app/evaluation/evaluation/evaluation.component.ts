@@ -6,13 +6,12 @@ import { Result } from '../result';
 import { ResultCalculator } from '../result-calculator';
 import { FileDownloader } from '../../file-downloader';
 import { ReferenceTimeResultCalculator } from '../result-calculator-with-reference-time';
-import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-evaluation',
   templateUrl: './evaluation.component.html',
   styleUrls: ['./evaluation.component.css'],
-  imports: [CommonModule],
+  imports: [],
 })
 export class EvaluationComponent {
   constructor(

@@ -5,8 +5,14 @@
   <button (click)="displayTarget = 'evaluation'">Auswertung</button>
 </nav>
 
-<app-start-list *ngIf="displayTarget === 'startlist'"></app-start-list>
-<app-timekeeping *ngIf="displayTarget === 'timekeeping'"></app-timekeeping>
-<app-evaluation *ngIf="displayTarget === 'evaluation'"></app-evaluation>
+@if (displayTarget === 'startlist') {
+  <app-start-list></app-start-list>
+}
+@if (displayTarget === 'timekeeping') {
+  <app-timekeeping></app-timekeeping>
+}
+@if (displayTarget === 'evaluation') {
+  <app-evaluation></app-evaluation>
+}
 
 <app-snackbar></app-snackbar>
