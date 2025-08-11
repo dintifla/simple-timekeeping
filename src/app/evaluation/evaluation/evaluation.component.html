@@ -16,27 +16,30 @@
 
 <a id="downloadAnchorElem" style="display: none"></a>
 
-<div *ngFor="let category of categories">
-  <h3>{{ category }}</h3>
-
-  <table>
-    <tr>
-      <th>Rang</th>
-      <th>Startnummer</th>
-      <th>Name</th>
-      <th>Startzeit</th>
-      <th>Ankunftszeit</th>
-      <th>Laufzeit</th>
-      <th>Rückstand</th>
-    </tr>
-    <tr *ngFor="let result of results[category]">
-      <td>{{ result.rank }}</td>
-      <td>{{ result.numberPlate }}</td>
-      <td>{{ result.name }}</td>
-      <td>{{ result.startTime }}</td>
-      <td>{{ result.finishTime }}</td>
-      <td>{{ result.result }}</td>
-      <td>{{ result.delay }}</td>
-    </tr>
-  </table>
-</div>
+@for (category of categories; track category) {
+  <div>
+    <h3>{{ category }}</h3>
+    <table>
+      <tr>
+        <th>Rang</th>
+        <th>Startnummer</th>
+        <th>Name</th>
+        <th>Startzeit</th>
+        <th>Ankunftszeit</th>
+        <th>Laufzeit</th>
+        <th>Rückstand</th>
+      </tr>
+      @for (result of results[category]; track result) {
+        <tr>
+          <td>{{ result.rank }}</td>
+          <td>{{ result.numberPlate }}</td>
+          <td>{{ result.name }}</td>
+          <td>{{ result.startTime }}</td>
+          <td>{{ result.finishTime }}</td>
+          <td>{{ result.result }}</td>
+          <td>{{ result.delay }}</td>
+        </tr>
+      }
+    </table>
+  </div>
+}

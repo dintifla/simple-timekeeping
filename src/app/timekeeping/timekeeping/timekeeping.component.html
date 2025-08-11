@@ -6,7 +6,7 @@
   class="big-select"
   (change)="reset()"
   [(ngModel)]="location"
->
+  >
   <option>Start</option>
   <option>Ziel</option>
 </select>
@@ -20,7 +20,7 @@
   id="load-measurements"
   class="big-button"
   (click)="getEntries()"
->
+  >
   Laden
 </button>
 <a id="downloadAnchorElem" style="display: none"></a>
@@ -30,7 +30,7 @@
   id="export-measurements"
   class="big-button"
   (click)="exportMeasurements()"
->
+  >
   Exportieren
 </button>
 
@@ -42,48 +42,58 @@
     <th></th>
     <th>Zeit</th>
   </tr>
-  <tr *ngFor="let participant of participants">
-    <td>{{ participant.numberPlate }}</td>
-    <td>
-      <div
-        *ngIf="nameEditIsEnabled(participant) === true"
-        class="category-selection"
-      >
-        <label *ngFor="let category of categories">
+  @for (participant of participants; track participant) {
+    <tr>
+      <td>{{ participant.numberPlate }}</td>
+      <td>
+        @if (nameEditIsEnabled(participant) === true) {
+          <div
+            class="category-selection"
+            >
+            @for (category of categories; track category) {
+              <label>
+                <input
+                  type="radio"
+                  name="category-{{ participant.numberPlate }}"
+                  [(ngModel)]="participant.category"
+                  [value]="category"
+                  (change)="save(participant)"
+                  />
+                <b>{{ category }}</b>
+              </label>
+            }
+          </div>
+        }
+      </td>
+      <td>
+        @if (nameEditIsEnabled(participant) === false) {
+          <div class="name-column">
+            {{ participant.name }}
+          </div>
+        }
+        @if (nameEditIsEnabled(participant) === true) {
           <input
-            type="radio"
-            name="category-{{ participant.numberPlate }}"
-            [(ngModel)]="participant.category"
-            [value]="category"
-            (change)="save(participant)"
+            type="text"
+            [(ngModel)]="participant.name"
+            (focusout)="save(participant)"
+            />
+        }
+      </td>
+      <td>
+        <button class="small-button" (click)="takeTime(participant)">
+          {{ location }} {{ participant.numberPlate }}
+        </button>
+      </td>
+      <td>
+        <input
+          type="text"
+          [ngModel]="participant.time | dateToTimeString"
+          (change)="setManualTime($event, participant)"
           />
-          <b>{{ category }}</b>
-        </label>
-      </div>
-    </td>
-    <td>
-      <div *ngIf="nameEditIsEnabled(participant) === false" class="name-column">
-        {{ participant.name }}
-      </div>
-      <input
-        *ngIf="nameEditIsEnabled(participant) === true"
-        type="text"
-        [(ngModel)]="participant.name"
-        (focusout)="save(participant)"
-      />
-    </td>
-    <td>
-      <button class="small-button" (click)="takeTime(participant)">
-        {{ location }} {{ participant.numberPlate }}
-      </button>
-    </td>
-    <td>
-      <input
-        type="text"
-        [ngModel]="participant.time | dateToTimeString"
-        (change)="setManualTime($event, participant)"
-      />
-    </td>
-  </tr>
+      </td>
+    </tr>
+  }
 </table>
-<app-start-countdown *ngIf="location === 'Start'"></app-start-countdown>
+@if (location === 'Start') {
+  <app-start-countdown></app-start-countdown>
+}
