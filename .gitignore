@@ -43,6 +43,8 @@ lerna-debug.log*
 !.vscode/extensions.json
 .history/*
 
+eslint-out.txt
+
 # System files
 .DS_Store
 Thumbs.db

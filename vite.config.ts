@@ -6,6 +6,9 @@ import { viteSingleFile } from 'vite-plugin-singlefile';
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react(), viteSingleFile()],
+  // Treat the Excel result template as a static asset so it can be imported
+  // as a URL (inlined as a data URI by viteSingleFile).
+  assetsInclude: ['**/*.xlsx'],
   build: {
     outDir: 'dist/app',
     // Emit a single self-contained index.html (all JS/CSS inlined).

@@ -5,6 +5,7 @@ import { ResultCalculator } from "../lib/result-calculator";
 import { ReferenceTimeResultCalculator } from "../lib/result-calculator-with-reference-time";
 import { validateResults } from "../lib/result-validation";
 import { FileDownloader } from "../lib/file-downloader";
+import { exportRanglisteAsExcel as exportFullResultsAsExcel } from "../lib/full-results-exporter";
 import { messageBus } from "../state/message-bus";
 
 const calculator = new ResultCalculator();
@@ -16,10 +17,12 @@ function getUniqueCategories(timings: Timing[]): string[] {
     .filter((category, i, cats) => cats.indexOf(category) === i);
 }
 
-function exportResults(title: string, categoryResults: Result[]): void {
+function exportResultsPerCategory(
+  title: string,
+  categoryResults: Result[],
+): void {
   const fileName = `Resultate_${title}_${Date.now()}`;
   FileDownloader.exportAsJson(categoryResults, fileName + ".json");
-  FileDownloader.exportAsCsv(categoryResults, fileName + ".csv");
 }
 
 export function Evaluation() {
@@ -75,8 +78,9 @@ export function Evaluation() {
               refTimeMs,
             )
           : calculator.calculateRankAndSort(categoryTimings);
-      exportResults(category, nextResults[category]);
+      exportResultsPerCategory(category, nextResults[category]);
     }
+    await exportFullResultsAsExcel(nextResults);
     setCategories(uniqueCategories);
     setResults(nextResults);
   };
