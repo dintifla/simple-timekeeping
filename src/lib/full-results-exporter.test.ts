@@ -36,7 +36,7 @@ describe('rangliste-exporter', () => {
       };
 
       expect(resultToRowValues(result)).toEqual([
-        '-',
+        '',
         7,
         'DNF Runner',
         'DNF',
