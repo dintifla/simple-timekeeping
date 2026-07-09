@@ -3,15 +3,16 @@
   "version": "0.2.0",
   "description": "Simple time keeping to be used on two computers",
   "private": true,
+  "type": "module",
   "scripts": {
-    "ng": "ng",
-    "start": "ng serve",
-    "build": "ng build --output-hashing=none",
+    "start": "vite",
+    "dev": "vite",
+    "build": "tsc && vite build",
     "bundle": "npm run build && node deploy.js",
-    "watch": "ng build --watch --configuration development",
-    "test": "ng test",
-    "lint": "eslint --ext .js --ext .ts src/",
-    "prettier": "prettier --write \"**/*.+(js|ts|json)\""
+    "preview": "vite preview",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "prettier": "prettier --write \"**/*.+(js|ts|tsx|json)\""
   },
   "repository": {
     "type": "git",
@@ -24,34 +25,23 @@
   },
   "homepage": "https://github.com/dintifla/simple-timekeeping#readme",
   "dependencies": {
-    "@angular/animations": "^20.1.6",
-    "@angular/common": "^20.1.6",
-    "@angular/compiler": "^20.1.6",
-    "@angular/core": "^20.1.6",
-    "@angular/forms": "^20.1.6",
-    "@angular/platform-browser": "^20.1.6",
-    "@angular/platform-browser-dynamic": "^20.1.6",
-    "@angular/router": "^20.1.6",
-    "rxjs": "~7.8.2",
-    "tslib": "^2.3.0",
-    "zone.js": "~0.15.0"
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
   },
   "devDependencies": {
-    "@angular/cli": "~20.1.5",
-    "@angular/compiler-cli": "^20.1.6",
-    "@angular/build": "^20.1.5",
-    "@types/jasmine": "^5.1.4",
-    "@typescript-eslint/eslint-plugin": "^8.27.0",
-    "@typescript-eslint/parser": "^8.27.0",
-    "eslint": "^9.23.0",
-    "globals": "^16.0.0",
-    "jasmine-core": "~5.6.0",
-    "karma": "~6.4.4",
-    "karma-chrome-launcher": "~3.2.0",
-    "karma-coverage": "~2.2.0",
-    "karma-jasmine": "~5.1.0",
-    "karma-jasmine-html-reporter": "~2.1.0",
+    "@testing-library/jest-dom": "^6.6.3",
+    "@testing-library/react": "^16.1.0",
+    "@types/react": "^18.3.18",
+    "@types/react-dom": "^18.3.5",
+    "@vitejs/plugin-react": "^4.3.4",
+    "autoprefixer": "^10.4.20",
+    "jsdom": "^25.0.1",
+    "postcss": "^8.4.49",
     "prettier": "^3.6.2",
-    "typescript": "~5.8.2"
+    "tailwindcss": "^3.4.17",
+    "typescript": "~5.8.2",
+    "vite": "^6.0.7",
+    "vite-plugin-singlefile": "^2.1.0",
+    "vitest": "^2.1.8"
   }
 }
