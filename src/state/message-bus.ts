@@ -1,10 +1,12 @@
 import { useSyncExternalStore } from 'react';
 
-type Listener = () => void;
+export type MessageType = 'error' | 'success' | 'info';
 
 export interface Message {
   /** The message text. */
   value: string;
+  /** Severity, used by the Snackbar for styling and aria-live politeness. */
+  type: MessageType;
   /**
    * A monotonically increasing id. It changes on every `add` even when the
    * text is identical, so consumers (e.g. the Snackbar) can re-trigger their
@@ -12,6 +14,8 @@ export interface Message {
    */
   id: number;
 }
+
+type Listener = () => void;
 
 /**
  * External store for user-facing messages. Mirrors the Angular MessageService,
@@ -28,10 +32,11 @@ class MessageStore {
   private nextId = 0;
   private listeners = new Set<Listener>();
 
-  add = (message: string): void => {
+  add = (message: string, type: MessageType = 'error'): void => {
     this.logs = [...this.logs, message];
-    this.latest = { value: message, id: this.nextId++ };
-    console.error(message);
+    this.latest = { value: message, type, id: this.nextId++ };
+    if (type === 'error') console.error(message);
+    else console.log(message);
     this.emit();
   };
 

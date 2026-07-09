@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { AlertTriangle } from "lucide-react";
 import { configuration } from "../lib/config";
 import { useCountdownStart } from "../state/countdown-bus";
 
@@ -37,9 +38,27 @@ export function StartCountdown() {
   );
 
   return (
-    <div className={`start-countdown${blink ? " blink" : ""}`}>
-      <p>Nächster Start in:</p>
-      <div className="start-countdown-time">
+    <div
+      role="timer"
+      aria-live="assertive"
+      aria-atomic="true"
+      aria-label={
+        remainingTimeSeconds
+          ? `Nächster Start in ${remainingTimeSeconds} Sekunden`
+          : "Kein Start geplant"
+      }
+      className={[
+        "z-30 mx-auto mt-4 w-full max-w-[200px] rounded-xl border p-4 text-center shadow-card transition-colors sm:fixed sm:right-4 sm:top-24 sm:mt-0",
+        blink
+          ? "animate-pulse-urgent border-danger bg-danger text-danger-fg"
+          : "border-border bg-surface text-text",
+      ].join(" ")}
+    >
+      <p className="flex items-center justify-center gap-1.5 text-sm font-medium">
+        {blink && <AlertTriangle className="h-4 w-4" aria-hidden="true" />}
+        Nächster Start in:
+      </p>
+      <div className="mt-1 text-5xl font-bold tabular-nums">
         {remainingTimeSeconds ? `${remainingTimeSeconds} s` : "---"}
       </div>
     </div>
