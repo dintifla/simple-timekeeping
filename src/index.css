@@ -165,6 +165,7 @@
   .start-countdown-time {
     font-size: 60px;
     font-weight: 600;
+    white-space: nowrap;
   }
 
   .snackbar {
