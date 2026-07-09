@@ -21,10 +21,10 @@ const YEAR_TITLE_CELLS = ['D10', 'I10', 'N10'];
 /** Maps a result to the five cell values written into a template block row. */
 export function resultToRowValues(
   result: Result,
-): [number | string, number, string, string | number, string] {
+): [number | string, number | string, string, string | number, string] {
   return [
-    result.rank,
-    result.numberPlate,
+    result.rank !== '-' ? result.rank : '',
+    result.numberPlate > 0 ? result.numberPlate : '',
     result.name,
     result.result,
     result.delay,
