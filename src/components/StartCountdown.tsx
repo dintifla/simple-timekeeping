@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { getConfig } from "../lib/config";
+import { configuration } from "../lib/config";
 import { useCountdownStart } from "../state/countdown-bus";
 
 const BLINK_FOR_LAST_SECONDS = 5;
@@ -12,7 +12,7 @@ export function StartCountdown() {
   );
 
   useCountdownStart(() => {
-    const intervalTimeSeconds = getConfig().startIntervalSeconds;
+    const intervalTimeSeconds = configuration.startIntervalSeconds;
     if (intervalRef.current) clearInterval(intervalRef.current);
     let current = intervalTimeSeconds;
     setRemainingTimeSeconds(current);

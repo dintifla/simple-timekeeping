@@ -20,5 +20,7 @@ export function Snackbar() {
 
   if (!latest || !visible) return null;
 
-  return <div className={`snackbar${visible ? " show" : ""}`}>{latest.value}</div>;
+  return (
+    <div className={`snackbar${visible ? " show" : ""}`}>{latest.value}</div>
+  );
 }

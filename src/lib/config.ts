@@ -3,9 +3,7 @@ export interface Configuration {
   startIntervalSeconds: number;
 }
 
-export function getConfig(): Configuration {
-  return {
-    categories: ['Male', 'Female', 'E-Bike'],
-    startIntervalSeconds: 30,
-  };
-}
+export const configuration: Configuration = {
+  categories: ['Male', 'Female', 'E-Bike'],
+  startIntervalSeconds: 30,
+};

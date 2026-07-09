@@ -1,94 +1,43 @@
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { Participant } from "../lib/participant";
-import { getConfig } from "../lib/config";
-import { FileDownloader } from "../lib/file-downloader";
+import { configuration } from "../lib/config";
 import { parseTime, roundTo100Ms } from "../lib/time";
 import { formatDateToTimeString } from "../lib/format-date-to-timestring";
-import { measurementStore } from "../services/measurement-store";
+import { useMeasurements } from "../hooks/useMeasurements";
 import { countdownBus } from "../state/countdown-bus";
 import { StartCountdown } from "./StartCountdown";
 
+const categories = configuration.categories;
+
 export function Timekeeping() {
-  const [participants, setParticipants] = useState<Participant[]>([]);
-  const [categories, setCategories] = useState<string[]>([]);
   const [location, setLocation] = useState("Start");
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const participantsRef = useRef(participants);
-  participantsRef.current = participants;
+  const { entries, load, loadFromFile, updateEntry, exportEntries } =
+    useMeasurements(location);
 
-  useEffect(() => {
-    setCategories(getConfig().categories);
-  }, []);
-
-  const reset = (nextLocation: string) => {
+  const changeLocation = (nextLocation: string) => {
     setLocation(nextLocation);
-    setParticipants([]);
     if (fileInputRef.current) fileInputRef.current.value = "";
   };
 
-  const getEntries = () => {
-    setParticipants([...measurementStore.getEntries(location)]);
-  };
-
-  const loadFromFile = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setParticipants([]);
+  const handleFile = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.item(0);
-    if (file) {
-      measurementStore
-        .getEntriesFromFile(file, location)
-        .then((e) => setParticipants([...e]));
-    }
-  };
-
-  const exportMeasurements = () => {
-    FileDownloader.exportAsJson(participants, `${location}_${Date.now()}.json`);
-  };
-
-  const save = (participant: Participant) => {
-    measurementStore.update(participant, location);
-  };
-
-  const applyChange = (
-    participant: Participant,
-    changes: Partial<Participant>,
-  ) => {
-    const updated = { ...participant, ...changes };
-    setParticipants((prev) =>
-      prev.map((p) =>
-        p.numberPlate === participant.numberPlate ? updated : p,
-      ),
-    );
-    return updated;
+    if (file) loadFromFile(file);
   };
 
   const takeTime = (participant: Participant) => {
-    const timestamp = roundTo100Ms(new Date());
-    const updated = applyChange(participant, { time: timestamp });
-    save(updated);
+    updateEntry(participant.numberPlate, { time: roundTo100Ms(new Date()) });
     countdownBus.start();
   };
 
   const setManualTime = (value: string, participant: Participant) => {
-    const time = value ? parseTime(value) : "";
-    const updated = applyChange(participant, { time });
-    save(updated);
+    updateEntry(participant.numberPlate, {
+      time: value ? parseTime(value) : "",
+    });
   };
 
-  const setName = (numberPlate: number, name: string) => {
-    setParticipants((prev) =>
-      prev.map((p) => (p.numberPlate === numberPlate ? { ...p, name } : p)),
-    );
-  };
-
-  const setCategory = (participant: Participant, category: string) => {
-    const updated = applyChange(participant, { category });
-    save(updated);
-  };
-
-  const nameEditIsEnabled = (participant: Participant): boolean => {
-    if (location !== "Start") return false;
-    return participant.isSpare !== undefined && participant.isSpare === true;
-  };
+  const nameEditIsEnabled = (participant: Participant): boolean =>
+    location === "Start" && participant.isSpare === true;
 
   return (
     <>
@@ -99,7 +48,7 @@ export function Timekeeping() {
         id="select-measurement-location"
         className="big-select"
         value={location}
-        onChange={(e) => reset(e.target.value)}
+        onChange={(e) => changeLocation(e.target.value)}
       >
         <option>Start</option>
         <option>Ziel</option>
@@ -112,24 +61,14 @@ export function Timekeeping() {
         id="load-file"
         accept=".json"
         ref={fileInputRef}
-        onChange={loadFromFile}
+        onChange={handleFile}
       />
 
-      <button
-        type="button"
-        id="load-measurements"
-        className="big-button"
-        onClick={getEntries}
-      >
+      <button type="button" className="big-button" onClick={load}>
         Laden
       </button>
 
-      <button
-        type="button"
-        id="export-measurements"
-        className="big-button"
-        onClick={exportMeasurements}
-      >
+      <button type="button" className="big-button" onClick={exportEntries}>
         Exportieren
       </button>
 
@@ -142,7 +81,7 @@ export function Timekeeping() {
             <th></th>
             <th>Zeit</th>
           </tr>
-          {participants.map((participant) => (
+          {entries.map((participant) => (
             <tr key={participant.numberPlate}>
               <td>{participant.numberPlate}</td>
               <td>
@@ -155,7 +94,9 @@ export function Timekeeping() {
                           name={`category-${participant.numberPlate}`}
                           value={category}
                           checked={participant.category === category}
-                          onChange={() => setCategory(participant, category)}
+                          onChange={() =>
+                            updateEntry(participant.numberPlate, { category })
+                          }
                         />
                         <b>{category}</b>
                       </label>
@@ -172,14 +113,10 @@ export function Timekeeping() {
                     type="text"
                     value={participant.name}
                     onChange={(e) =>
-                      setName(participant.numberPlate, e.target.value)
+                      updateEntry(participant.numberPlate, {
+                        name: e.target.value,
+                      })
                     }
-                    onBlur={() => {
-                      const current = participantsRef.current.find(
-                        (p) => p.numberPlate === participant.numberPlate,
-                      );
-                      if (current) save(current);
-                    }}
                   />
                 )}
               </td>
