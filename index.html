@@ -1,9 +1,29 @@
 <!doctype html>
-<html lang="en">
+<html lang="de">
   <head>
     <meta charset="utf-8" />
-    <title>Timekeeping</title>
+    <title>Zeitmessung</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="Einfache Zeitmessung für Sportveranstaltungen – Startliste, Zeitmessung und Auswertung."
+    />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="theme-color" content="#101114" />
+    <script>
+      // Apply the persisted / preferred theme before first paint to avoid a flash.
+      (function () {
+        try {
+          var stored = localStorage.getItem('theme');
+          var prefersDark = window.matchMedia(
+            '(prefers-color-scheme: dark)',
+          ).matches;
+          if (stored === 'dark' || (!stored && prefersDark)) {
+            document.documentElement.classList.add('dark');
+          }
+        } catch (e) {}
+      })();
+    </script>
   </head>
   <body>
     <div id="root"></div>
