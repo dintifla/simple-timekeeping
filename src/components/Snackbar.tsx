@@ -1,5 +1,5 @@
-import { useEffect, useRef, useState } from 'react';
-import { messageBus } from '../state/message-bus';
+import { useEffect, useRef, useState } from "react";
+import { messageBus } from "../state/message-bus";
 
 export function Snackbar() {
   const [message, setMessage] = useState<string | undefined>(undefined);
@@ -26,7 +26,5 @@ export function Snackbar() {
 
   if (!message) return null;
 
-  return (
-    <div className={`snackbar${visible ? ' show' : ''}`}>{message}</div>
-  );
+  return <div className={`snackbar${visible ? " show" : ""}`}>{message}</div>;
 }

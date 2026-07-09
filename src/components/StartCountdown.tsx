@@ -1,6 +1,6 @@
-import { useEffect, useRef, useState } from 'react';
-import { getConfig } from '../lib/config';
-import { countdownBus } from '../state/countdown-bus';
+import { useEffect, useRef, useState } from "react";
+import { getConfig } from "../lib/config";
+import { countdownBus } from "../state/countdown-bus";
 
 const BLINK_FOR_LAST_SECONDS = 5;
 
@@ -39,10 +39,10 @@ export function StartCountdown() {
   }, []);
 
   return (
-    <div className={`start-countdown${blink ? ' blink' : ''}`}>
+    <div className={`start-countdown${blink ? " blink" : ""}`}>
       <p>Nächster Start in:</p>
       <div className="start-countdown-time">
-        {remainingTimeSeconds ? `${remainingTimeSeconds} s` : '---'}
+        {remainingTimeSeconds ? `${remainingTimeSeconds} s` : "---"}
       </div>
     </div>
   );

@@ -8,7 +8,9 @@ const outFile = "./dist/Zeitmessung.html";
 
 try {
   if (!fs.existsSync(inFile)) {
-    throw new Error(`Build output not found: ${inFile}. Run "npm run build" first.`);
+    throw new Error(
+      `Build output not found: ${inFile}. Run "npm run build" first.`,
+    );
   }
   if (fs.existsSync(outFile)) fs.unlinkSync(outFile);
   fs.copyFileSync(inFile, outFile);

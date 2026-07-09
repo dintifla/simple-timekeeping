@@ -1,17 +1,17 @@
-import { useEffect, useRef, useState } from 'react';
-import { Participant } from '../lib/participant';
-import { getConfig } from '../lib/config';
-import { FileDownloader } from '../lib/file-downloader';
-import { parseTime, roundTo100Ms } from '../lib/time';
-import { formatDateToTimeString } from '../lib/format-date-to-timestring';
-import { measurementStore } from '../services/measurement-store';
-import { countdownBus } from '../state/countdown-bus';
-import { StartCountdown } from './StartCountdown';
+import { useEffect, useRef, useState } from "react";
+import { Participant } from "../lib/participant";
+import { getConfig } from "../lib/config";
+import { FileDownloader } from "../lib/file-downloader";
+import { parseTime, roundTo100Ms } from "../lib/time";
+import { formatDateToTimeString } from "../lib/format-date-to-timestring";
+import { measurementStore } from "../services/measurement-store";
+import { countdownBus } from "../state/countdown-bus";
+import { StartCountdown } from "./StartCountdown";
 
 export function Timekeeping() {
   const [participants, setParticipants] = useState<Participant[]>([]);
   const [categories, setCategories] = useState<string[]>([]);
-  const [location, setLocation] = useState('Start');
+  const [location, setLocation] = useState("Start");
   const fileInputRef = useRef<HTMLInputElement>(null);
   const participantsRef = useRef(participants);
   participantsRef.current = participants;
@@ -23,7 +23,7 @@ export function Timekeeping() {
   const reset = (nextLocation: string) => {
     setLocation(nextLocation);
     setParticipants([]);
-    if (fileInputRef.current) fileInputRef.current.value = '';
+    if (fileInputRef.current) fileInputRef.current.value = "";
   };
 
   const getEntries = () => {
@@ -41,20 +41,22 @@ export function Timekeeping() {
   };
 
   const exportMeasurements = () => {
-    FileDownloader.exportAsJson(
-      participants,
-      `${location}_${Date.now()}.json`,
-    );
+    FileDownloader.exportAsJson(participants, `${location}_${Date.now()}.json`);
   };
 
   const save = (participant: Participant) => {
     measurementStore.update(participant, location);
   };
 
-  const applyChange = (participant: Participant, changes: Partial<Participant>) => {
+  const applyChange = (
+    participant: Participant,
+    changes: Partial<Participant>,
+  ) => {
     const updated = { ...participant, ...changes };
     setParticipants((prev) =>
-      prev.map((p) => (p.numberPlate === participant.numberPlate ? updated : p)),
+      prev.map((p) =>
+        p.numberPlate === participant.numberPlate ? updated : p,
+      ),
     );
     return updated;
   };
@@ -67,7 +69,7 @@ export function Timekeeping() {
   };
 
   const setManualTime = (value: string, participant: Participant) => {
-    const time = value ? parseTime(value) : '';
+    const time = value ? parseTime(value) : "";
     const updated = applyChange(participant, { time });
     save(updated);
   };
@@ -84,13 +86,13 @@ export function Timekeeping() {
   };
 
   const nameEditIsEnabled = (participant: Participant): boolean => {
-    if (location !== 'Start') return false;
+    if (location !== "Start") return false;
     return participant.isSpare !== undefined && participant.isSpare === true;
   };
 
   return (
     <>
-      <h2>Zeitmessung</h2>
+      <h1>Zeitmessung</h1>
 
       <label htmlFor="select-measurement-location">Mess-Ort:</label>
       <select
@@ -201,7 +203,7 @@ export function Timekeeping() {
           ))}
         </tbody>
       </table>
-      {location === 'Start' && <StartCountdown />}
+      {location === "Start" && <StartCountdown />}
     </>
   );
 }

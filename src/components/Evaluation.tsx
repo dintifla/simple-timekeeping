@@ -1,11 +1,11 @@
-import { useRef, useState } from 'react';
-import { Result } from '../lib/result';
-import { Timing } from '../lib/timing';
-import { ResultCalculator } from '../lib/result-calculator';
-import { ReferenceTimeResultCalculator } from '../lib/result-calculator-with-reference-time';
-import { validateResults } from '../lib/result-validation';
-import { FileDownloader } from '../lib/file-downloader';
-import { messageBus } from '../state/message-bus';
+import { useRef, useState } from "react";
+import { Result } from "../lib/result";
+import { Timing } from "../lib/timing";
+import { ResultCalculator } from "../lib/result-calculator";
+import { ReferenceTimeResultCalculator } from "../lib/result-calculator-with-reference-time";
+import { validateResults } from "../lib/result-validation";
+import { FileDownloader } from "../lib/file-downloader";
+import { messageBus } from "../state/message-bus";
 
 export function Evaluation() {
   const [categories, setCategories] = useState<string[]>([]);
@@ -19,11 +19,11 @@ export function Evaluation() {
 
   const validateFiles = (): boolean => {
     if (!startFileRef.current?.value) {
-      messageBus.add('Start file fehlt!');
+      messageBus.add("Start file fehlt!");
       return false;
     }
     if (!finishFileRef.current?.value) {
-      messageBus.add('Ziel file fehlt!');
+      messageBus.add("Ziel file fehlt!");
       return false;
     }
     return true;
@@ -34,14 +34,14 @@ export function Evaluation() {
       return true;
     }
     messageBus.add(
-      'Ungültiges Format für die Referenzzeit. Erwartet wird HH:mm:ss.s',
+      "Ungültiges Format für die Referenzzeit. Erwartet wird HH:mm:ss.s",
     );
     return false;
   };
 
   const getRefTimeMs = (fieldValue: string): number => {
-    const refTime = fieldValue ?? '00:00:00.0';
-    return Date.parse('1970-01-01T' + refTime + 'Z');
+    const refTime = fieldValue ?? "00:00:00.0";
+    return Date.parse("1970-01-01T" + refTime + "Z");
   };
 
   const getUniqueCategories = (timings: Timing[]): string[] => {
@@ -52,19 +52,19 @@ export function Evaluation() {
 
   const exportResults = (title: string, categoryResults: Result[]) => {
     const fileName = `Resultate_${title}_${Date.now()}`;
-    FileDownloader.exportAsJson(categoryResults, fileName + '.json');
-    FileDownloader.exportAsCsv(categoryResults, fileName + '.csv');
+    FileDownloader.exportAsJson(categoryResults, fileName + ".json");
+    FileDownloader.exportAsCsv(categoryResults, fileName + ".csv");
   };
 
   const calculate = () => {
     if (!validateFiles()) return;
-    const refTimeValue = refTimeRef.current?.value ?? '';
+    const refTimeValue = refTimeRef.current?.value ?? "";
     if (!validateRefTime(refTimeValue)) return;
 
     const startFile = startFileRef.current?.files;
     const finishFile = finishFileRef.current?.files;
-    if (!startFile) throw Error('Start file not found');
-    if (!finishFile) throw Error('Finish file not found');
+    if (!startFile) throw Error("Start file not found");
+    if (!finishFile) throw Error("Finish file not found");
 
     const refTimeMs = getRefTimeMs(refTimeValue);
     Promise.all([startFile[0].text(), finishFile[0].text()]).then(
@@ -72,7 +72,7 @@ export function Evaluation() {
         const starts = JSON.parse(fileContents[0]);
         const finishes = JSON.parse(fileContents[1]);
         if (starts.length != finishes.length) {
-          messageBus.add('Start und Ziel file sind nicht gleich lang');
+          messageBus.add("Start und Ziel file sind nicht gleich lang");
           return;
         }
 
@@ -82,7 +82,7 @@ export function Evaluation() {
         const uniqueCategories = getUniqueCategories(timings);
         const nextResults: { [category: string]: Result[] } = {};
         for (const category of uniqueCategories) {
-          if (category === 'E-Bike') {
+          if (category === "E-Bike") {
             nextResults[category] =
               eBikeCalculator.calculateAndSortToReferenceTime(
                 timings.filter((t) => t.category === category),
@@ -103,7 +103,7 @@ export function Evaluation() {
 
   return (
     <>
-      <h2>Auswertung</h2>
+      <h1>Auswertung</h1>
 
       <label htmlFor="start-file">Startzeiten:</label>
       <input type="file" id="start-file" accept=".json" ref={startFileRef} />

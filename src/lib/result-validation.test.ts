@@ -31,9 +31,9 @@ describe('validateResults', () => {
   });
 
   it('rejects when finish is not an array', () => {
-    expect(
-      validateResults(starts, undefined as unknown as Participant[]),
-    ).toBe(false);
+    expect(validateResults(starts, undefined as unknown as Participant[])).toBe(
+      false,
+    );
   });
 
   it('rejects when start file has wrong format', () => {

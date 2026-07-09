@@ -1,9 +1,9 @@
-import { useEffect, useRef, useState } from 'react';
-import { Participant } from '../lib/participant';
-import { getConfig } from '../lib/config';
-import { FileDownloader } from '../lib/file-downloader';
-import { participantStore } from '../services/participant-store';
-import { messageBus } from '../state/message-bus';
+import { useEffect, useRef, useState } from "react";
+import { Participant } from "../lib/participant";
+import { getConfig } from "../lib/config";
+import { FileDownloader } from "../lib/file-downloader";
+import { participantStore } from "../services/participant-store";
+import { messageBus } from "../state/message-bus";
 
 export function StartList() {
   const [participants, setParticipants] = useState<Participant[]>([]);
@@ -47,14 +47,14 @@ export function StartList() {
     clearParticipants();
 
     if (categories && categories.length <= 0) {
-      messageBus.add('StartList: Configuriere mindestens eine Kategorie');
-      throw Error('no categories configured');
+      messageBus.add("StartList: Configuriere mindestens eine Kategorie");
+      throw Error("no categories configured");
     }
     setParticipants([...participantStore.getParticipants()]);
   };
 
   const addParticipant = () => {
-    participantStore.add({ name: '', category: categories[0] } as Participant);
+    participantStore.add({ name: "", category: categories[0] } as Participant);
     setParticipants([...participantStore.participants]);
   };
 
@@ -71,14 +71,16 @@ export function StartList() {
   const setCategory = (participant: Participant, category: string) => {
     const updated = { ...participant, category };
     setParticipants((prev) =>
-      prev.map((p) => (p.numberPlate === participant.numberPlate ? updated : p)),
+      prev.map((p) =>
+        p.numberPlate === participant.numberPlate ? updated : p,
+      ),
     );
     save(updated);
   };
 
   return (
     <>
-      <h2>Startliste</h2>
+      <h1>Startliste</h1>
 
       <button
         type="button"
