@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { getConfig } from "../lib/config";
-import { countdownBus } from "../state/countdown-bus";
+import { useCountdownStart } from "../state/countdown-bus";
 
 const BLINK_FOR_LAST_SECONDS = 5;
 
@@ -11,32 +11,30 @@ export function StartCountdown() {
     undefined,
   );
 
-  useEffect(() => {
+  useCountdownStart(() => {
     const intervalTimeSeconds = getConfig().startIntervalSeconds;
-
-    const start = () => {
-      if (intervalRef.current) clearInterval(intervalRef.current);
-      let current = intervalTimeSeconds;
+    if (intervalRef.current) clearInterval(intervalRef.current);
+    let current = intervalTimeSeconds;
+    setRemainingTimeSeconds(current);
+    setBlink(current <= BLINK_FOR_LAST_SECONDS);
+    intervalRef.current = setInterval(() => {
+      current -= 1;
+      if (current < 0) {
+        clearInterval(intervalRef.current);
+        intervalRef.current = undefined;
+        return;
+      }
       setRemainingTimeSeconds(current);
-      setBlink(current <= BLINK_FOR_LAST_SECONDS);
-      intervalRef.current = setInterval(() => {
-        current -= 1;
-        if (current < 0) {
-          clearInterval(intervalRef.current);
-          intervalRef.current = undefined;
-          return;
-        }
-        setRemainingTimeSeconds(current);
-        if (current <= BLINK_FOR_LAST_SECONDS) setBlink(true);
-      }, 1000);
-    };
+      if (current <= BLINK_FOR_LAST_SECONDS) setBlink(true);
+    }, 1000);
+  });
 
-    const unsubscribe = countdownBus.subscribe(start);
-    return () => {
-      unsubscribe();
+  useEffect(
+    () => () => {
       if (intervalRef.current) clearInterval(intervalRef.current);
-    };
-  }, []);
+    },
+    [],
+  );
 
   return (
     <div className={`start-countdown${blink ? " blink" : ""}`}>
