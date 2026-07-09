@@ -55,7 +55,7 @@ Once all participants are registered at the start and finished and both files ar
 2. Select "Auswertung" from the top menu
 3. Import start- and finishing time files (the ones generated above)
 4. Click "Auswerten" ("Evaluate")
-5. See the result table as well the exported results as `.json` and `.csv`
+5. See the result table as well the exported results as `.json` and the ranking list `Rangliste_<year>.xlsx`
 
 ## Possible improvements
 

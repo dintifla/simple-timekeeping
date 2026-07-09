@@ -10,15 +10,6 @@ export class FileDownloader {
     );
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  static exportAsCsv(data: any, fileName: string): void {
-    const dataStr = `data:text/csv;charset=utf-8,${this.toCsv(data)}`;
-    this.downloadAsFile(
-      dataStr,
-      fileName.endsWith('.csv') ? fileName : `${fileName}.csv`,
-    );
-  }
-
   private static downloadAsFile(
     data: string,
     fileNameWithEnding: string,
@@ -30,19 +21,5 @@ export class FileDownloader {
     document.body.appendChild(dlAnchorElem);
     dlAnchorElem.click();
     document.body.removeChild(dlAnchorElem);
-  }
-
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  private static toCsv(data: any): string {
-    const csvRows = [];
-
-    const headers = Object.keys(data[0]);
-    csvRows.push(headers.join(','));
-
-    for (const row of data) {
-      const values = headers.map((header) => row[header]);
-      csvRows.push(values.join(','));
-    }
-    return csvRows.join('\n');
   }
 }
